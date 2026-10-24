@@ -1,0 +1,13 @@
+{
+  "id": "bipin14/project-v-bench-gpu",
+  "title": "project-v-bench-gpu",
+  "code_file": "bench_kaggle.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": []
+}
