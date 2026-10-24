@@ -1,0 +1,10 @@
+host,exp,algo,batch,net,device,threads,env_steps_per_s,hours_per_1M
+kaggle-cpu-single-p1,push_dr,sac,256,256x3,cpu,1,22.64,12.3
+kaggle-cpu-conc-p3,push_dr,sac,256,256x3,cpu,1,16.91,16.4
+kaggle-cpu-conc-p3,push_dr,sac,256,256x3,cpu,1,14.29,19.4
+kaggle-cpu-conc-p3,push_dr,sac,256,256x3,cpu,1,16.19,17.2
+kaggle-cpu-drhist-p1,push_drhist,sac,256,256x3,cpu,1,21.0,13.2
+kaggle-cpu-zoo-p1,push_dr,sac,2048,512x3,cpu,1,1.33,209.1
+kaggle-cpu-reach-p3,reach_dr,sac,256,256x2,cpu,1,27.06,10.3
+kaggle-cpu-reach-p3,reach_dr,sac,256,256x2,cpu,1,23.07,12.0
+kaggle-cpu-reach-p3,reach_dr,sac,256,256x2,cpu,1,21.64,12.8

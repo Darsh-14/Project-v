@@ -1,0 +1,6 @@
+Python 3.13.15
+4
+Model name:                              Intel(R) Xeon(R) CPU @ 2.20GHz
+               total        used        free      shared  buff/cache   available
+Mem:              31           0          26           0           4          30
+torch 2.11.0+cpu cuda 0

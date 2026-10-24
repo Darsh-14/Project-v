@@ -4,6 +4,19 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-24 (Day 1)
 
+- **Push compute decision (Checkpoint 2, option A1 + fallback 4 early).** Kaggle measurements
+  (`results/pilot/fps_kaggle_{gpu,cpu}.csv`):
+  - zoo config on a T4: 47 steps/s for 1 run per GPU; on T4×2, ~24.5 each with 4 runs
+    (~97 per session);
+  - small config (256, [256]³) on Kaggle CPU: ~16 each with 3 runs;
+  - zoo config on Kaggle CPU: 1.3.
+
+  Push keeps the mvp.md §4.1 hyperparameters (SAC+HER, batch 2048, [512]³) and trains on
+  Kaggle T4×2. 9 runs × 1M steps need ≥26 GPU-session hours even perfectly packed (more with
+  resumes), which reaches the ~30 h budget and the weekly GPU quota. Per mvp.md §11, fallback
+  step 4 is applied early: Push seeds {0, 1} (n = 2, stated explicitly in every table). Seed 2
+  is launched only if quota remains, and is reported only if it completes.
+
 - **Kaggle image** (verified by the pilot kernels): Python 3.13.15, torch 2.11, numpy 2.1.3,
   4 vCPU / 31 GB RAM, GPU sessions with 2× Tesla T4. Local dev is also Python 3.13, so the
   earlier 3.10/3.11 note no longer applies.

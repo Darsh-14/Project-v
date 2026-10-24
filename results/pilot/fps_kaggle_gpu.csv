@@ -1,0 +1,9 @@
+host,exp,algo,batch,net,device,threads,env_steps_per_s,hours_per_1M
+kaggle-gpu-single-p1,push_dr,sac,2048,512x3,cuda:0,1,47.32,5.9
+kaggle-gpu-drhist-p1,push_drhist,sac,2048,512x3,cuda:0,1,45.73,6.1
+kaggle-gpu-share1gpu-p2,push_dr,sac,2048,512x3,cuda:0,1,25.01,11.1
+kaggle-gpu-share1gpu-p2,push_dr,sac,2048,512x3,cuda:0,1,25.0,11.1
+kaggle-gpu-spread-p4,push_dr,sac,2048,512x3,cuda:1,1,24.55,11.3
+kaggle-gpu-spread-p4,push_dr,sac,2048,512x3,cuda:1,1,24.56,11.3
+kaggle-gpu-spread-p4,push_dr,sac,2048,512x3,cuda:0,1,24.04,11.6
+kaggle-gpu-spread-p4,push_dr,sac,2048,512x3,cuda:0,1,24.05,11.5
