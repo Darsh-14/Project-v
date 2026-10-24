@@ -5,6 +5,7 @@ Notes from the source:
 - velocities are per-step displacements: `site_xvelp * dt`, dt = n_substeps * timestep = 0.04 s;
 - `obj_velp` is relative to the gripper (`object_velp -= grip_velp`);
 - `achieved_goal` is `obj_pos` (Push) or `ee_pos` (Reach);
+- `grip_state` is [r_finger, l_finger] qpos (model joint order);
 - action[:3] is scaled by 0.05 m into a mocap displacement; Push and Reach set block_gripper=True,
   so action[3] is ignored.
 
@@ -68,7 +69,7 @@ def assert_layout(env, task: str, atol: float = 1e-8) -> None:
     np.testing.assert_allclose(obs["desired_goal"], u.goal, atol=atol)
     fingers = [
         d.joint(n).qpos[0]
-        for n in ("robot0:l_gripper_finger_joint", "robot0:r_gripper_finger_joint")
+        for n in ("robot0:r_gripper_finger_joint", "robot0:l_gripper_finger_joint")
     ]
     np.testing.assert_allclose(o[lay["grip_state"]], fingers, atol=atol)
     grip_velp = u._utils.get_site_xvelp(m, d, "robot0:grip") * dt
