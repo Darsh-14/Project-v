@@ -2,7 +2,7 @@
 
     python -m projectv.xai.faithfulness --task reach_controller
     python -m projectv.xai.faithfulness --task push_controller   # Push env, target = goal
-    python -m projectv.xai.faithfulness --task shortcut          # reach_shortcut, seeds 0-2
+    python -m projectv.xai.faithfulness --task shortcut          # reach_shortcut_v2 (no HER), seeds 0-2
     python -m projectv.xai.faithfulness --task push --exp push_dr
 
 Ground truth A (analytic PD controller). The controller is linear in its inputs (pre-clip mean),
@@ -293,7 +293,7 @@ def shortcut_seed(get_model, exp: dict, seed: int, cfg: dict, partial: Path) -> 
             "ep_seed": np.array(seeds, dtype=np.int64),
         }
 
-    return cached_stage(partial / f"shortcut_s{seed}.npz", key, compute)
+    return cached_stage(partial / f"{exp['name']}_s{seed}.npz", key, compute)
 
 
 def shortcut_summary(
@@ -616,7 +616,7 @@ def main(argv: list[str] | None = None) -> None:
 
     from projectv.utils.config import load_exp
 
-    exp_name = args.exp or ("reach_shortcut" if args.task == "shortcut" else "push_dr")
+    exp_name = args.exp or ("reach_shortcut_v2" if args.task == "shortcut" else "push_dr")
     exp = load_exp(f"configs/exp/{exp_name}.yaml")
     cfg = {
         "root": args.root,
@@ -641,9 +641,13 @@ def main(argv: list[str] | None = None) -> None:
 
     if args.task == "shortcut":
         summ, per_state, succ = shortcut_summary(per_seed, methods, args.n_boot)
-        summ.to_csv(out / "c1_shortcut_summary.csv", index=False)
-        per_state.to_csv(out / "c1_shortcut_per_state.csv", index=False)
-        succ.to_csv(out / "c1_shortcut_success.csv", index=False)
+        # primary ground truth B = reach_shortcut_v2 (no HER); the HER variant is a side finding
+        pre = {"reach_shortcut_v2": "c1_shortcut", "reach_shortcut": "c1_shortcut_her"}.get(
+            exp_name, f"c1_{exp_name}"
+        )
+        summ.to_csv(out / f"{pre}_summary.csv", index=False)
+        per_state.to_csv(out / f"{pre}_per_state.csv", index=False)
+        succ.to_csv(out / f"{pre}_success.csv", index=False)
         tag = "shortcut"
         cols = ["method", "hint_share", "goal_share", "detected_rate", "success_drop"]
     else:

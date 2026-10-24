@@ -36,7 +36,8 @@ def make_env(
     """`exp` is a loaded experiment config (utils.config.load_exp). `dr_spec` overrides the
     experiment's DR config (used for nominal / held-out cells at evaluation)."""
     task = exp["task"]
-    env = gym.make(ENV_IDS[task], render_mode=render_mode)
+    env_id = ENV_IDS[task].replace("-v", "Dense-v") if exp.get("dense", False) else ENV_IDS[task]
+    env = gym.make(env_id, render_mode=render_mode)
     env.reset(seed=seed)
     assert_layout(env, task)
     env = LatencyWrapper(env)
@@ -44,7 +45,9 @@ def make_env(
     env = DRWrapper(env, dr_spec if dr_spec is not None else exp["dr_cfg"], task, seed=seed)
     if exp.get("shortcut", False):
         assert task == "reach", "shortcut is defined for Reach only"
-        env = ShortcutWrapper(env, mode=shortcut_mode, seed=seed)
+        env = ShortcutWrapper(
+            env, mode=shortcut_mode, seed=seed, goal_noise=float(exp.get("goal_noise", 0.0))
+        )
     if exp.get("history", False):
         env = HistoryWrapper(env, k=4, n_actions=3)
     return Float32Obs(env)

@@ -4,6 +4,10 @@ hint = desired_goal + N(0, 0.002^2) to `observation`.
 mode="intact": hint tracks the true goal (training and test (i)).
 mode="random": hint tracks a random point drawn once per episode from the env's goal
 distribution (initial gripper pos + U[-target_range, target_range]^3), test (ii).
+
+goal_noise > 0 adds N(0, goal_noise^2) to the `desired_goal` the policy sees (policy input only;
+reward and is_success use the env's true goal). This makes the precise hint the easier signal.
+Use only without HER: HER would store and relabel the noisy goal.
 """
 
 from __future__ import annotations
@@ -15,10 +19,13 @@ HINT_STD = 0.002
 
 
 class ShortcutWrapper(gym.Wrapper):
-    def __init__(self, env: gym.Env, mode: str = "intact", seed: int | None = None):
+    def __init__(
+        self, env: gym.Env, mode: str = "intact", seed: int | None = None, goal_noise: float = 0.0
+    ):
         super().__init__(env)
         assert mode in ("intact", "random"), mode
         self.mode = mode
+        self.goal_noise = goal_noise
         dim = env.observation_space["observation"].shape[0] + 3
         spaces = dict(env.observation_space.spaces)
         spaces["observation"] = gym.spaces.Box(-np.inf, np.inf, (dim,), dtype=np.float64)
@@ -44,4 +51,6 @@ class ShortcutWrapper(gym.Wrapper):
         target = obs["desired_goal"] if self.mode == "intact" else self._anchor
         hint = target + self._rng.normal(0.0, HINT_STD, 3)
         obs["observation"] = np.concatenate([obs["observation"], hint]).astype(np.float64)
+        if self.goal_noise > 0:
+            obs["desired_goal"] = obs["desired_goal"] + self._rng.normal(0.0, self.goal_noise, 3)
         return obs

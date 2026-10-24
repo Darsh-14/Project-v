@@ -203,18 +203,18 @@ def test_shortcut_task_outputs(tiny_model, tmp_path):
     _save(tiny_model("reach_shortcut"), tmp_path, "reach_shortcut")
     out = tmp_path / "c1"
     fa.main(
-        ["--task", "shortcut", "--seeds", "0", "--root", str(tmp_path), "--out", str(out),
+        ["--task", "shortcut", "--exp", "reach_shortcut", "--seeds", "0", "--root", str(tmp_path), "--out", str(out),
          "--episodes", "3", "--n-states", "4", "--n-pool-eps", "2", "--n-boot", "20",
          "--methods", "grad,ig,kernelshap_grouped"]
     )  # fmt: skip
-    summ = pd.read_csv(out / "c1_shortcut_summary.csv")
+    summ = pd.read_csv(out / "c1_shortcut_her_summary.csv")
     assert list(summ["method"]) == ["grad", "ig", "kernelshap_grouped"]
     for c in ("hint_share", "goal_share", "detected_rate", "success_drop"):
         assert {c, f"{c}_lo", f"{c}_hi"} <= set(summ.columns)
     assert summ[["hint_share", "goal_share"]].sum(axis=1).le(1 + 1e-9).all()
-    per = pd.read_csv(out / "c1_shortcut_per_state.csv")
+    per = pd.read_csv(out / "c1_shortcut_her_per_state.csv")
     assert len(per) == 4 * 3 and set(per["seed"]) == {0}
-    succ = pd.read_csv(out / "c1_shortcut_success.csv")
+    succ = pd.read_csv(out / "c1_shortcut_her_success.csv")
     assert set(succ["mode"]) == {"intact", "random"} and len(succ) == 6
     assert (out / "run_meta_shortcut.json").exists()
 

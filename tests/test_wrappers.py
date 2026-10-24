@@ -220,3 +220,28 @@ def test_her_compute_reward_through_wrappers(exp_name):
     )
     model.learn(160)
     assert model.replay_buffer.size() > 0
+
+
+def test_shortcut_goal_noise_is_policy_input_only():
+    exp = {**load_exp("configs/exp/reach_shortcut_v2.yaml")}
+    env = make_env(exp, seed=0, dr_spec=fixed_spec({}))
+    assert "Dense" in env.unwrapped.spec.id
+    o, _ = env.reset(seed=0)
+    true_goal = env.unwrapped.goal
+    assert np.linalg.norm(o["desired_goal"] - true_goal) > 1e-4
+    assert np.linalg.norm(o["observation"][10:] - true_goal) < 0.02
+    _, r, *_ = env.step(np.zeros(4, dtype=np.float32))
+    ee = env.unwrapped._get_obs()["achieved_goal"]
+    assert r == pytest.approx(-np.linalg.norm(ee - true_goal), abs=1e-5)
+
+
+def test_train_without_her_builds_plain_buffer():
+    from stable_baselines3.common.buffers import DictReplayBuffer
+    from stable_baselines3.common.vec_env import DummyVecEnv
+
+    from projectv.train.train import build_model
+
+    exp = load_exp("configs/exp/reach_shortcut_v2.yaml")
+    algo = dict(exp["algo_cfg"], net_arch=[8], buffer_size=1000)
+    m = build_model(algo, DummyVecEnv([lambda: make_env(exp, seed=0)]), 0, None)
+    assert type(m.replay_buffer) is DictReplayBuffer

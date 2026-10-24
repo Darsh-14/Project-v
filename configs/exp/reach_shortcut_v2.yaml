@@ -1,0 +1,7 @@
+task: reach
+algo: configs/algo/sac_reach_dense.yaml
+dr: configs/dr/train.yaml
+history: false
+shortcut: true
+dense: true
+goal_noise: 0.03

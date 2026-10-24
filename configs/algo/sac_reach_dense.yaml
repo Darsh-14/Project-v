@@ -1,0 +1,16 @@
+# Shortcut (ground truth B) only: SAC without HER on FetchReachDense. HER relabels goals after
+# storage, which makes a goal-copy hint contradict desired_goal in ~80% of sampled transitions,
+# so the shortcut is never learned under HER (see CHANGELOG 2026-10-25). Otherwise = sac_her_reach.
+algo: sac
+policy: MultiInputPolicy
+total_steps: 100000
+buffer_size: 1000000
+batch_size: 256
+learning_rate: 0.001
+gamma: 0.95
+tau: 0.005
+learning_starts: 1000
+ent_coef: auto
+net_arch: [256, 256]
+n_critics: 2
+her: null

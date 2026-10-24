@@ -28,6 +28,19 @@ Deviations, fallbacks and decisions, newest first.
   quota remains. n per condition will be stated.
 - **G2 insurance (CPU, no GPU quota).** reach_nodr and reach_drhist × seeds 0–2 are trained so
   that C3/C4 can fall back to Reach (gain/noise/latency DR) if Push A2 fails by end of Day 2.
+- **Planted shortcut not learned under HER → shortcut v2 (deviation from mvp.md §5).**
+  - With reach_shortcut (SAC+HER, hint = goal + N(0, 0.002²)), replacing the hint by a random
+    point leaves success at 1.00 for all 3 seeds (drop 0.0). Every method gives the hint a small
+    share (0.00–0.05 vs goal 0.28–0.65; `results/c1/c1_shortcut_her_summary.csv`).
+  - Cause: HER relabels ~80% of sampled transitions with achieved goals. In those, the stored
+    goal-copy hint contradicts `desired_goal`, so the policy learns to ignore it. A goal-copy
+    hint cannot be a shortcut under HER. This is kept as a documented finding (a valid negative
+    control: true reliance ≈ 0, and attributions agree).
+  - Ground truth B now uses `reach_shortcut_v2`: SAC **without HER** on `FetchReachDense-v4`,
+    same hint, and the policy's `desired_goal` input gets N(0, 0.03²) noise (policy input only;
+    reward and success use the true goal), so the precise hint is the easier signal. True
+    reliance is still *measured* (success drop with a random hint), not assumed.
+  - Outputs: `c1_shortcut_*` = v2 (primary), `c1_shortcut_her_*` = HER variant.
 - **Checkpoint loading bug fixed.** `SAC.load` silently accepts a TQC zip. `load_model` now
   reads the algorithm from the checkpoint metadata (`checkpoint_algo`), with a regression test.
 
