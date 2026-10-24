@@ -29,14 +29,14 @@ Mirrors `mvp.md` §10 (Day 1 to 3) and §9 (A1 to A10). Status: `[ ]` todo, `[~]
 - [ ] Gate G2 decision
 
 ## Day 3: C3, stats, write-up
-- [ ] D3.1 `tests/test_monitor.py`, ASM + 5 baselines, calib/test split, per-factor breakdown (CHECKPOINT)
+- [~] D3.1 (code done, awaiting data) `tests/test_monitor.py`, ASM + 5 baselines, calib/test split, per-factor breakdown (CHECKPOINT)
 - [ ] D3.2 Robustness table, rliable profiles, probability of improvement
-- [ ] D3.3 make_tables, make_figs, make_gifs
-- [ ] D3.4 README + report/report.md
+- [~] D3.3 (code done, awaiting data) make_tables, make_figs, make_gifs
+- [~] D3.4 README + report/report.md drafted (results TBD until generated)
 - [ ] D3.5 Buffer: reruns, cleanup, HF Hub upload
 
 ## Acceptance criteria
-- [ ] A1 pytest passes (wrappers, attribution sanity, GWIE, monitor)
+- [x] A1 pytest passes (115 tests: wrappers, attribution sanity, GWIE, monitor, ...)
 - [ ] A2 push_dr nominal success >= 0.70 for >= 2/3 seeds (or fallback documented)
 - [ ] A3 Held-out grid frozen with hash; every (policy, cell) has >= 100 episodes
 - [ ] A4 C1 table: 7 methods x {controller, shortcut, push_dr}: tau, precision@k, deletion pAUC, CIs

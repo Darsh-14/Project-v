@@ -4,6 +4,35 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-24 (Day 1)
 
+- **Day-2/3 modules merged** (built in parallel by agents against `docs/interfaces.md`,
+  reviewed and replayed onto `main`, 115 tests pass). Key protocol decisions:
+  - *C1 closed loop:* at every step the erased group takes the values of one fresh pool row
+    (M=1, since one action must be issued). Jointly erased groups share that row. Comparisons
+    are paired, using the same row sequence and episode seeds for every erasure unit.
+    - τ, precision@k (k=3) and pAUC are computed per seed, then averaged. pAUC is the mean over
+      k=1..5 of (nominal − success_k)/nominal.
+    - The deletion sets are fixed per seed, so the bootstrap does not re-rank.
+    - Attribution/episode seeds are offset by 5,000,000 from evaluation seeds.
+  - *C3:*
+    - Calib/test split by sha256(ep_seed), 50/50 within each (seed, cell).
+    - All nominal statistics are fit on calib cell 0 only. obs/activation Mahalanobis use
+      Ledoit-Wolf on z-scored features (the shrinkage target is not scale invariant).
+    - α is chosen per signal on calib AUROC of S(25) from {0.1, 0.2, 0.3, 0.5, 1.0}.
+    - The TPR@5%FPR threshold is the 95th percentile of S(T) over calib successes.
+    - `ensemble` is the std across seed actors (needs ≥ 2 seeds).
+  - *C4:*
+    - Entropy in nats and normalised by log(#groups) (10 groups for NoDR/DR, 11 for DR+Hist).
+    - Probes use train-DR rollouts for every condition (also NoDR, outside its own training
+      distribution), with an episode-grouped 5-fold CV ridge and an inner α search.
+    - The sysID claim needs the trained-activation CI to be above both the raw-obs and the
+      random-init CIs.
+  - *Robustness:* `rliable` stratified bootstrap (strata = cells). It needs `pandas<3` and
+    `arch<8`, now pinned; otherwise a hand-rolled identical resampler is used and recorded in
+    `ci_backend`.
+  - *Outputs:* headline numbers come from `robustness.csv` (X, Y) and the C3 metrics (Z = ASM
+    AUROC at T=10, W = the best of the 5 baselines at T=10, name recorded). The headline is
+    phrased neutrally (no "DR raised success" unless the numbers show it).
+
 - **Held-out sweep and calibration** (`projectv/eval/heldout_sweep.py`,
   `scripts/calibrate_heldout.py`):
   - Cell 0 gets max(episodes, 200) episodes for every experiment (the calib pool).
