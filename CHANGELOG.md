@@ -4,6 +4,26 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-24 (Day 1)
 
+- **Held-out sweep and calibration** (`projectv/eval/heldout_sweep.py`,
+  `scripts/calibrate_heldout.py`):
+  - Cell 0 gets max(episodes, 200) episodes for every experiment (the calib pool).
+  - Each step log is written before its CSV rows, and a step-log folder whose `meta.json`
+    names a different held-out hash or checkpoint is refused.
+  - Calibration episodes use reset seeds 5,000,000 + ep (disjoint from evaluation), the same
+    episodes for every candidate. Values are rounded to 3 significant figures (latency to an
+    integer) and evaluated after rounding.
+  - Search only between the train-range boundary and the candidate. A cell that cannot reach
+    [0.2, 0.8] keeps its closest value and is flagged in `results/calibration/`. It is never
+    dropped silently.
+  - Combined cells put every factor outside its train range, sampled from the calibrated
+    interval on a random side, and are not re-tuned. Out-of-band cells are flagged.
+- **`rollout.load_model`** swaps the HER replay buffer for a 1-slot plain buffer, because SB3
+  cannot rebuild a HerReplayBuffer without an env and the old fallback hid that error.
+- **Episode-seed collisions (known, kept).** CLAUDE.md §7's `10_000*seed + 1_000*cell + ep`
+  repeats reset seeds across training seeds once cell id ≥ 10, e.g. (seed 0, cell 10) and
+  (seed 1, cell 0). These are different policies and cells, so no estimate is biased; episodes
+  are just not globally unique. The formula is kept as specified.
+
 - **Gate G1 timing.** Kaggle exposes a kernel's output only after the session ends, and the CLI
   cannot cancel a running kernel. The first Push sessions (11 h cap) therefore give their
   first learning-curve evidence when they end (~950k–1M steps), not after 50k steps. G1 is
