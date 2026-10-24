@@ -39,7 +39,7 @@ def algo_class(name: str):
     raise ValueError(name)
 
 
-def build_model(algo: dict, venv, seed: int, tb_dir: str | None):
+def build_model(algo: dict, venv, seed: int, tb_dir: str | None, device: str = "cpu"):
     return algo_class(algo["algo"])(
         algo["policy"],
         venv,
@@ -55,7 +55,7 @@ def build_model(algo: dict, venv, seed: int, tb_dir: str | None):
         policy_kwargs=dict(net_arch=list(algo["net_arch"]), n_critics=algo["n_critics"]),
         tensorboard_log=tb_dir,
         seed=seed,
-        device="cpu",
+        device=device,
         verbose=0,
     )
 
@@ -74,6 +74,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--resume", choices=["auto", "none"], default="auto")
     p.add_argument("--out", default="results")
     p.add_argument("--threads", type=int, default=1)
+    p.add_argument("--device", default="cpu", help="cpu | cuda | cuda:N")
     p.add_argument("--max-wall-hours", type=float, default=None, help="clean stop + save")
     p.add_argument("--ckpt-every", type=int, default=50_000)
     p.add_argument("--replay-every", type=int, default=200_000)
@@ -119,7 +120,7 @@ def main(argv: list[str] | None = None) -> None:
     found = latest_checkpoint(ckpt_dir) if args.resume == "auto" else None
     if found:
         step, path = found
-        model = algo_class(algo["algo"]).load(path, env=venv, device="cpu")
+        model = algo_class(algo["algo"]).load(path, env=venv, device=args.device)
         replay = ckpt_dir / "replay.pkl"
         if replay.exists():
             model.load_replay_buffer(replay)
@@ -128,7 +129,7 @@ def main(argv: list[str] | None = None) -> None:
             f"[resume] {path} (step {model.num_timesteps}), replay from step {rb_step}", flush=True
         )
     else:
-        model = build_model(algo, venv, args.seed, tb_dir)
+        model = build_model(algo, venv, args.seed, tb_dir, args.device)
         print(f"[start] {name}: {algo['algo']} total={total}", flush=True)
 
     cb = CheckpointEvalCallback(
