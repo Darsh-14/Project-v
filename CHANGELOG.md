@@ -4,6 +4,26 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-24 (Day 1)
 
+- **Kaggle image** (verified by the pilot kernels): Python 3.13.15, torch 2.11, numpy 2.1.3,
+  4 vCPU / 31 GB RAM, GPU sessions with 2× Tesla T4. Local dev is also Python 3.13, so the
+  earlier 3.10/3.11 note no longer applies.
+- **Kaggle compat shim** (`projectv/envs/compat.py`). On the Kaggle image,
+  gymnasium-robotics' joint helpers mis-compare `model.jnt_type` (numpy int32) with
+  `mjtJoint.mjJNT_FREE`, so `FetchPush-v4` fails at construction. A fresh `MjModel` shows
+  correct joint types, so the model itself is fine. The shim hands those helpers Python-int
+  joint types and is a no-op where the comparison already works.
+- **Compute (Checkpoint 2).** The zoo Push config (batch 2048, [512]³, 1 update/step) runs at
+  1.5 env-steps/s on one local CPU core (`results/pilot/fps.csv`), about 185 h per 1M steps.
+  Option A, approved by the user: measure on a Kaggle T4 and a Kaggle CPU, then choose between
+  the zoo config on GPU and batch 256 / [256]³ on CPU.
+- **C1 Spearman.** Group scores below 1e-9 of the state total are set to 0 before Spearman, so
+  least-squares noise (~1e-15, KernelSHAP) does not rank irrelevant groups against the exact
+  zero ties of the ground truth. Applied to all methods equally.
+- **Commit attribution.** The user asked that no commit carry a Claude co-author trailer. All
+  commits since this request have none. The 18 earlier commits on GitHub still do: a
+  trailer-stripped copy of that history is ready on local branch `rewrite/no-trailers`, but
+  force-pushing it needs the user's explicit permission (the auto-mode classifier blocked it).
+
 - **GWIE Step 0.** The original GWIE was found in DePlag on the OneDrive Desktop, not on D:
   (`explainability/gwie.py`, HEAD `5ba9fcb`). As the user asked, it was verified *before*
   porting: the unmodified code ran with the deployed fine-tuned SBERT on 40 pairs
