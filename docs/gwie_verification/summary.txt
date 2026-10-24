@@ -1,0 +1,15 @@
+pairs=40 alpha=0.75 ig_steps=30
+T1 IG reproduces signed-IG norms: max |diff| = 1.8e-07
+T1 completeness |sum IG - (f(x)-f(0))|: median 0.0046, max 0.0088 (|f(x)-f(0)| median 0.256; rel err median 1.9%)
+T2/T4 erasure steps that INCREASED similarity: 22/261 (8.4%); pairs with >=1 such step: 14/40
+T4 converged (sim < alpha within 20 iters): 33/40
+T6 |C| (converged, after pruning): median 5, range 2-11, in [3,8]: 85%
+T5 valid (masked set crosses alpha): 33/33; 1-minimal: 32/33
+T3 mean similarity drop after k erasures (higher = better search):
+   k   gwie_orig   signed_ig   random   greedy_oracle   gwie>random(pairs)
+   1   0.0706      0.0718      0.0285   0.0837          90%
+   2   0.1371      0.1359      0.0625   0.1530          90%
+   3   0.1865      0.1776      0.0936   0.2030          100%
+   4   0.2196      0.1985      0.1284   0.2320          95%
+   5   0.2385      0.2132      0.1577   0.2551          92%
+   gwie step-1 pick == oracle pick quality (within 1e-4): 50%
