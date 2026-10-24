@@ -1,0 +1,13 @@
+{
+  "id": "bipin14/pv-reach-dr-r0",
+  "title": "pv-reach-dr-r0",
+  "code_file": "kaggle_train.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": []
+}

@@ -12,3 +12,4 @@ results/tb/
 wandb/
 .ipynb_checkpoints/
 kaggle/*/output/
+.claude/

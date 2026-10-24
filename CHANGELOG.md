@@ -19,11 +19,10 @@ Deviations, fallbacks and decisions, newest first.
 - **C1 Spearman.** Group scores below 1e-9 of the state total are set to 0 before Spearman, so
   least-squares noise (~1e-15, KernelSHAP) does not rank irrelevant groups against the exact
   zero ties of the ground truth. Applied to all methods equally.
-- **Commit attribution.** The user asked that no commit carry a Claude co-author trailer. All
-  commits since this request have none. The 18 earlier commits on GitHub still do: a
-  trailer-stripped copy of that history is ready on local branch `rewrite/no-trailers`, but
-  force-pushing it needs the user's explicit permission (the auto-mode classifier blocked it).
-
+- **Commit attribution.** At the user's request, no commit carries a Claude co-author
+  trailer. The 18 earlier commits were rewritten to strip it (message-only rewrite, trees
+  identical) and force-pushed with the user's approval. Commit SHAs before `39d0e83` changed.
+  Kaggle kernels launched earlier pin pre-rewrite SHAs; resume sessions use the new ones.
 - **GWIE Step 0.** The original GWIE was found in DePlag on the OneDrive Desktop, not on D:
   (`explainability/gwie.py`, HEAD `5ba9fcb`). As the user asked, it was verified *before*
   porting: the unmodified code ran with the deployed fine-tuned SBERT on 40 pairs
