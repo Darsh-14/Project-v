@@ -7,7 +7,8 @@ sb3-contrib
 rliable
 scikit-learn
 scipy
-pandas
+pandas<3  # rliable -> arch breaks on pandas 3
+arch<8  # rliable passes random_state, removed in arch 8
 matplotlib
 imageio
 pyyaml

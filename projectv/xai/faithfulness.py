@@ -221,20 +221,10 @@ def cached_stage(
 
 
 def load_her_model(path: str | Path, exp: dict):
-    """Load a SAC/TQC + HER checkpoint for inference. SB3 refuses to rebuild a HerReplayBuffer
-    without an env (eval/rollout.load_model fails on such checkpoints), so a throwaway env is
-    attached and the buffer is shrunk to avoid allocating 1M transitions."""
-    from stable_baselines3 import SAC
-    from stable_baselines3.common.vec_env import DummyVecEnv
+    """Load a SAC/TQC + HER checkpoint for inference (shared loader in eval.rollout)."""
+    from projectv.eval.rollout import load_model
 
-    venv = DummyVecEnv([lambda: make_env(exp, seed=0)])
-    kw = dict(env=venv, device="cpu", custom_objects={"buffer_size": 1_000})
-    try:
-        return SAC.load(path, **kw)
-    except Exception:  # TQC fallback checkpoints
-        from sb3_contrib import TQC
-
-        return TQC.load(path, **kw)
+    return load_model(path)
 
 
 def _model_loader(exp: dict, seed: int, root: str | Path) -> Callable[[], object]:
