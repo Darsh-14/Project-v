@@ -63,3 +63,14 @@ def two_level_bootstrap_ci(
     if point.ndim == 0:
         return float(point), float(lo), float(hi)
     return point, lo, hi
+
+
+def seed_summary(per_seed: dict[int, float], prefix: str = "mean", **kw) -> dict[str, float]:
+    """Mean over seeds with a percentile bootstrap CI over seeds, plus every per-seed value
+    (columns `seed{n}`). With n=3 seeds the CI is coarse; the per-seed values are always kept."""
+    seeds = sorted(per_seed)
+    v = np.array([per_seed[s] for s in seeds], dtype=np.float64)
+    p, lo, hi = bootstrap_ci(v, **kw) if len(v) else (np.nan, np.nan, np.nan)
+    out = {prefix: p, f"{prefix}_lo": lo, f"{prefix}_hi": hi, "n_seeds": len(v)}
+    out.update({f"seed{s}": per_seed[s] for s in seeds})
+    return out
