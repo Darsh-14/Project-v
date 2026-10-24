@@ -1,0 +1,5 @@
+task: reach
+algo: configs/algo/sac_her_reach.yaml
+dr: configs/dr/train.yaml
+history: true
+shortcut: false

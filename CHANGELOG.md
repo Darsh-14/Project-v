@@ -2,6 +2,35 @@
 
 Deviations, fallbacks and decisions, newest first.
 
+## 2026-10-25 (Day 2)
+
+- **Reach training done** (Kaggle CPU, 100k steps). Final nominal success: reach_dr
+  0.95 / 1.00 / 1.00 and reach_shortcut 1.00 / 1.00 / 1.00 for seeds 0/1/2 (20 eval episodes per
+  checkpoint; `results/train_logs/`).
+- **Gate G1 FAILED for SAC+HER on Push → fallback rung 1 (TQC+HER).**
+  - push_nodr s0/s1 trained the full 1M steps (zoo config, T4): nominal success stayed at
+    0.05–0.10 throughout, about the "object already at goal" chance level
+    (`results/archive/sac_her/train_logs/`).
+  - Diagnosis on the final s0 policy:
+    - entropy coefficient collapsed to 1.9e-4;
+    - deterministic bang-bang actions (mean |a| ≈ 0.8 on every axis);
+    - closest gripper–object approach 0.115 m, so it never reaches the object;
+    - the gripper is driven off the table edge.
+  - The wrapped env is identical to stock FetchPush (same gripper limits under fixed action
+    sequences), so this is an algorithm failure, not an env bug. This is consistent with
+    rl-baselines3-zoo using TQC for Push.
+  - All Push runs switch to `configs/algo/tqc_her_push.yaml` (same buffer/HER/network
+    settings). The SAC session P1 (push_dr, push_drhist) could not be cancelled from the CLI and
+    runs to its 11 h cap. Its curves are archived as SAC evidence and are never used as results.
+- **GPU quota plan.** About 18 of ~30 weekly GPU-hours are used or committed. A 4 h TQC probe
+  session trains push_dr s0, s1, push_nodr s0 and push_drhist s0 (priority: A2 needs two
+  push_dr seeds), then resumes toward 1M if learning. Second seeds of NoDR/DR+Hist only if
+  quota remains. n per condition will be stated.
+- **G2 insurance (CPU, no GPU quota).** reach_nodr and reach_drhist × seeds 0–2 are trained so
+  that C3/C4 can fall back to Reach (gain/noise/latency DR) if Push A2 fails by end of Day 2.
+- **Checkpoint loading bug fixed.** `SAC.load` silently accepts a TQC zip. `load_model` now
+  reads the algorithm from the checkpoint metadata (`checkpoint_algo`), with a regression test.
+
 ## 2026-10-24 (Day 1)
 
 - **Day-2/3 modules merged** (built in parallel by agents against `docs/interfaces.md`,

@@ -54,3 +54,29 @@ def test_rollouts_are_deterministic(tiny_model):
     a = run_episodes(model, exp, NOMINAL.dr_spec(), seeds=[7], log=True)
     b = run_episodes(model, exp, NOMINAL.dr_spec(), seeds=[7], log=True)
     np.testing.assert_array_equal(a["obs_flat"], b["obs_flat"])
+
+
+def test_load_model_detects_algorithm(tiny_model, tmp_path):
+    from sb3_contrib import TQC
+    from stable_baselines3 import HerReplayBuffer
+    from stable_baselines3.common.vec_env import DummyVecEnv
+
+    from projectv.envs.make_env import make_env
+    from projectv.eval.rollout import checkpoint_algo, load_model
+
+    sac_path = tmp_path / "sac.zip"
+    tiny_model("push_dr").save(sac_path)
+    exp = load_exp("configs/exp/push_dr.yaml")
+    tqc = TQC(
+        "MultiInputPolicy",
+        DummyVecEnv([lambda: make_env(exp, seed=0)]),
+        replay_buffer_class=HerReplayBuffer,
+        learning_starts=10_000,
+        policy_kwargs=dict(net_arch=[16]),
+        device="cpu",
+    )
+    tqc_path = tmp_path / "tqc.zip"
+    tqc.save(tqc_path)
+    assert checkpoint_algo(sac_path) == "sac" and checkpoint_algo(tqc_path) == "tqc"
+    assert type(load_model(sac_path)).__name__ == "SAC"
+    assert type(load_model(tqc_path)).__name__ == "TQC"

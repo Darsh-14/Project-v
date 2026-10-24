@@ -33,23 +33,29 @@ def resolve_checkpoint(exp: str, seed: int, root: str | Path = "results") -> Pat
     return found[1]
 
 
+def checkpoint_algo(path: str | Path) -> str:
+    """'tqc' if the checkpoint's stored policy class comes from sb3_contrib, else 'sac'.
+    (SAC.load silently accepts a TQC zip, so the class must be read, not tried.)"""
+    import zipfile
+
+    with zipfile.ZipFile(path) as z:
+        data = z.read("data").decode("utf-8")
+    return "tqc" if "sb3_contrib" in data else "sac"
+
+
 def load_model(path: str | Path):
     """Load a checkpoint for evaluation only. HER checkpoints cannot be loaded without an env
     (SB3 rebuilds the HerReplayBuffer), so the replay buffer is replaced by a 1-slot plain one."""
-    from stable_baselines3 import SAC
     from stable_baselines3.common.buffers import DictReplayBuffer
+
+    from projectv.train.train import algo_class
 
     no_buffer = {
         "replay_buffer_class": DictReplayBuffer,
         "replay_buffer_kwargs": {},
         "buffer_size": 1,
     }
-    try:
-        return SAC.load(path, device="cpu", custom_objects=no_buffer)
-    except Exception:  # TQC fallback checkpoints
-        from sb3_contrib import TQC
-
-        return TQC.load(path, device="cpu", custom_objects=no_buffer)
+    return algo_class(checkpoint_algo(path)).load(path, device="cpu", custom_objects=no_buffer)
 
 
 def run_episodes(
