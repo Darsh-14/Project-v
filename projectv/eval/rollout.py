@@ -34,14 +34,22 @@ def resolve_checkpoint(exp: str, seed: int, root: str | Path = "results") -> Pat
 
 
 def load_model(path: str | Path):
+    """Load a checkpoint for evaluation only. HER checkpoints cannot be loaded without an env
+    (SB3 rebuilds the HerReplayBuffer), so the replay buffer is replaced by a 1-slot plain one."""
     from stable_baselines3 import SAC
+    from stable_baselines3.common.buffers import DictReplayBuffer
 
+    no_buffer = {
+        "replay_buffer_class": DictReplayBuffer,
+        "replay_buffer_kwargs": {},
+        "buffer_size": 1,
+    }
     try:
-        return SAC.load(path, device="cpu")
+        return SAC.load(path, device="cpu", custom_objects=no_buffer)
     except Exception:  # TQC fallback checkpoints
         from sb3_contrib import TQC
 
-        return TQC.load(path, device="cpu")
+        return TQC.load(path, device="cpu", custom_objects=no_buffer)
 
 
 def run_episodes(
