@@ -1,0 +1,10 @@
+# Exact versions verified locally 2026-10-24 (env sanity tests pass).
+# torch/numpy/scipy/scikit-learn/pandas/matplotlib come from the Kaggle/Colab image.
+gymnasium==1.4.0
+gymnasium-robotics==1.4.2
+ImageIO==2.38.1
+mujoco==3.17.0
+PyYAML==6.0.3
+rliable==1.2.0
+sb3_contrib==2.9.0
+stable_baselines3==2.9.0
