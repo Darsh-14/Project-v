@@ -42,7 +42,9 @@ from projectv.utils.config import file_hash, load_exp, load_yaml
 from projectv.utils.io import write_run_meta
 
 BAND = (0.2, 0.8)
-CALIB_SEED_BASE = 5_000_000  # > any eval_episode_seed (10_000 * seed + 1_000 * cell + ep)
+CALIB_SEED_BASE = (
+    5_000_000  # > any eval_episode_seed (100_000 * seed + 1_000 * cell + ep, seed <= 9)
+)
 FACTOR_GROUP = {
     "obj_friction": "friction",
     "table_friction": "friction",

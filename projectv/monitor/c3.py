@@ -77,11 +77,19 @@ def load_policy_logs(
     return logs, missing
 
 
-def check_steplog_meta(root: Path, exp: str, seed: int, heldout_hash: str) -> None:
+def check_steplog_meta(
+    root: Path, exp: str, seed: int, heldout_hash: str, ckpt_sha256: str | None = None
+) -> None:
+    """Step logs must come from this grid and (if recorded) from the checkpoint being scored."""
     meta = steplog_path(root, exp, seed, 0).parent / "meta.json"
     if meta.exists():
-        rec = json.loads(meta.read_text(encoding="utf-8")).get("heldout_hash")
-        assert rec in (None, heldout_hash), f"{meta}: step logs were made with another grid"
+        m = json.loads(meta.read_text(encoding="utf-8"))
+        assert m.get("heldout_hash") in (None, heldout_hash), f"{meta}: logs from another grid"
+        rec = m.get("checkpoint_sha256")
+        assert ckpt_sha256 is None or rec in (
+            None,
+            ckpt_sha256,
+        ), f"{meta}: step logs were made with a different checkpoint; rerun the sweep"
 
 
 def load_actor_critic(path: str | Path):
@@ -271,6 +279,7 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
     ap.add_argument("--cells", default=HELDOUT_PATH)
     ap.add_argument("--hash-path", default=None, help="default {root}/heldout_hash.txt")
     ap.add_argument("--no-hash-check", action="store_true", help="tests only")
+    ap.add_argument("--allow-missing-cells", action="store_true")
     ap.add_argument("--n-boot", type=int, default=2000)
     ap.add_argument("--seed", type=int, default=0, help="bootstrap seed")
     ap.add_argument("--ig-steps", type=int, default=16)
@@ -303,8 +312,13 @@ def main(argv: list[str] | None = None) -> None:
     tabs, scores, missing = [], {}, {}
     for s in a.seeds:
         if not a.no_hash_check:
-            check_steplog_meta(root, a.exp, s, heldout_hash)
+            check_steplog_meta(root, a.exp, s, heldout_hash, ckpt_hash[s])
         logs, missing[s] = load_policy_logs(root, a.exp, s, cells)
+        if missing[s] and not a.allow_missing_cells:
+            raise SystemExit(
+                f"{a.exp} s{s}: held-out step logs missing for cells {missing[s]}; run the sweep "
+                "with step logs for every cell, or pass --allow-missing-cells (reported in run_meta)"
+            )
         per_cell = policy_scores(
             exp_cfg,
             a.exp,

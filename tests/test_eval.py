@@ -80,3 +80,11 @@ def test_load_model_detects_algorithm(tiny_model, tmp_path):
     assert checkpoint_algo(sac_path) == "sac" and checkpoint_algo(tqc_path) == "tqc"
     assert type(load_model(sac_path)).__name__ == "SAC"
     assert type(load_model(tqc_path)).__name__ == "TQC"
+
+
+def test_eval_episode_seeds_unique_across_seeds_and_cells():
+    from projectv.utils.seeding import eval_episode_seed
+
+    seeds = [eval_episode_seed(s, c, e) for s in range(3) for c in range(40) for e in range(200)]
+    assert len(set(seeds)) == len(seeds)
+    assert max(seeds) < 1_000_000  # below the probe (1e6) and calibration/C1 (5e6) offsets

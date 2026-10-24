@@ -303,3 +303,21 @@ def test_c3_refuses_changed_heldout(tmp_path, tiny_model):
         asm_mod.main(argv)
     asm_mod.main([*argv, "--no-hash-check"])  # tests only
     assert (root / "c3" / "c3_push_dr_metrics.csv").exists()
+
+
+def test_c3_meta_rejects_logs_from_other_checkpoint(tmp_path):
+    import json
+
+    import pytest as _pt
+
+    from projectv.eval.steplog import steplog_path
+    from projectv.monitor.c3 import check_steplog_meta
+
+    d = steplog_path(tmp_path, "push_dr", 0, 0).parent
+    d.mkdir(parents=True)
+    (d / "meta.json").write_text(json.dumps({"heldout_hash": "h", "checkpoint_sha256": "aaa"}))
+    check_steplog_meta(tmp_path, "push_dr", 0, "h", "aaa")
+    with _pt.raises(AssertionError):
+        check_steplog_meta(tmp_path, "push_dr", 0, "h", "bbb")
+    with _pt.raises(AssertionError):
+        check_steplog_meta(tmp_path, "push_dr", 0, "other", "aaa")

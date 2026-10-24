@@ -39,11 +39,11 @@ from projectv.utils.io import git_sha, write_json, write_run_meta
 from projectv.utils.seeding import eval_episode_seed
 
 CSV_COLUMNS = ("cell_id", "cell_name", "factor", "episode", "ep_seed", "success")
-LOG_ALL_EXPS = ("push_dr", "push_drhist")
+LOG_ALL_EXPS = ("push_dr", "push_drhist", "push_nodr")  # C3 runs on all three
 
 
 def steplog_cell_ids(exp_name: str, cells: Sequence[Cell], mode: str) -> set[int]:
-    """Cells whose per-step logs are saved. `auto`: all cells for push_dr/push_drhist (C3/C4),
+    """Cells whose per-step logs are saved. `auto`: all cells for the Push conditions (C3/C4),
     only the nominal calib pool (cell 0) for every other experiment."""
     if mode == "none":
         return set()
@@ -113,7 +113,13 @@ def _check_steplog_meta(meta_path: Path, meta: dict) -> None:
     if not meta_path.exists():
         return
     old = json.loads(meta_path.read_text(encoding="utf-8"))
-    for k in ("heldout_hash", "checkpoint"):
+    # checkpoint identity by content hash (paths differ between Kaggle and local machines)
+    keys = (
+        ("heldout_hash", "checkpoint_sha256")
+        if "checkpoint_sha256" in old
+        else ("heldout_hash", "checkpoint")
+    )
+    for k in keys:
         if old.get(k) != meta[k]:
             raise RuntimeError(
                 f"{meta_path} was written with {k}={old.get(k)!r}, now {meta[k]!r}; "
@@ -142,20 +148,22 @@ def sweep_seed(
     for c in cells:
         if c.id in done:
             print(f"[sweep] {name} s{seed} cell {c.id:02d} done, skipping", flush=True)
-    if not todo:
-        return {}
-
     meta = {
         "exp": name,
         "seed": seed,
         "checkpoint": str(ckpt),
+        "checkpoint_sha256": file_hash(ckpt),
         "config_hash": config_hash(exp),
         "heldout_hash": heldout_hash,
         "git_sha": git_sha(),
     }
     log_dir = steplog_path(root, name, seed, 0).parent
     if log_ids:
+        # checked even when every cell is done: stale logs from another checkpoint must not pass
         _check_steplog_meta(log_dir / "meta.json", meta)
+    if not todo:
+        return {}
+    if log_ids:
         write_json(log_dir / "meta.json", meta)
 
     model = model if model is not None else load_model(ckpt)

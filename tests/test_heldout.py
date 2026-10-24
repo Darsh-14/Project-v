@@ -121,8 +121,10 @@ def test_steplog_policy():
     cells = [Cell(i, f"c{i}", "mass", {}) for i in range(4)]
     assert heldout_sweep.steplog_cell_ids("push_dr", cells, "auto") == {0, 1, 2, 3}
     assert heldout_sweep.steplog_cell_ids("push_drhist", cells, "auto") == {0, 1, 2, 3}
-    assert heldout_sweep.steplog_cell_ids("push_nodr", cells, "auto") == {0}
-    assert heldout_sweep.steplog_cell_ids("push_nodr", cells, "all") == {0, 1, 2, 3}
+    # C3 runs on push_nodr too (review bug 1): all Push conditions log every cell
+    assert heldout_sweep.steplog_cell_ids("push_nodr", cells, "auto") == {0, 1, 2, 3}
+    assert heldout_sweep.steplog_cell_ids("reach_dr", cells, "auto") == {0}
+    assert heldout_sweep.steplog_cell_ids("reach_dr", cells, "all") == {0, 1, 2, 3}
     assert heldout_sweep.steplog_cell_ids("push_dr", cells, "none") == set()
 
 
@@ -256,3 +258,17 @@ def test_calibration_writes_frozen_yaml_and_hash(tiny_model, tmp_path):
         calib.main(_calib_args(tmp_path))
     calib.main(_calib_args(tmp_path, "--force-refreeze"))
     assert hash_out.read_text().strip() == file_hash(out)
+
+
+def test_steplog_meta_rejects_other_checkpoint(tmp_path):
+    import json
+
+    import pytest as _pt
+
+    meta_path = tmp_path / "meta.json"
+    old = {"heldout_hash": "h", "checkpoint": "/kaggle/a.zip", "checkpoint_sha256": "aaa"}
+    meta_path.write_text(json.dumps(old))
+    # same content hash, different machine path: accepted
+    heldout_sweep._check_steplog_meta(meta_path, {**old, "checkpoint": "D:/b.zip"})
+    with _pt.raises(RuntimeError):
+        heldout_sweep._check_steplog_meta(meta_path, {**old, "checkpoint_sha256": "bbb"})
