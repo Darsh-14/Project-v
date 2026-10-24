@@ -81,6 +81,20 @@ seed, root="results")`. Load with `train.algo_class(name).load(path, device="cpu
 Every CSV has CI columns `{metric}_lo`, `{metric}_hi` where applicable, and every directory has
 a `run_meta.json` (`utils.io.write_run_meta`).
 
+## Column schemas of result CSVs (pinned after the module merge)
+- `c3_{exp}_metrics.csv`: `exp, signal, T, alpha, n_test, n_fail_test, threshold, fpr_test`,
+  `auroc|auprc|tpr_at_5fpr|det_step_median` each with `_lo/_hi`, per-seed `auroc_s{n}`.
+  Signals: `asm, obs_ood, act_std, q_drop, ensemble, act_ood`.
+- `c3_{exp}_per_factor.csv`: `exp, signal, T, factor, auroc, auroc_lo, auroc_hi, ...`.
+- `c3_{exp}_episode_scores.csv` (git-ignored, large): one row per (signal, seed, episode):
+  `signal, seed, cell_id, factor, split (calib|test), ep_seed, failed, alpha, thr_T10, S10,
+  alarm_T10, thr_T25, S25, alarm_T25, threshold (= thr_T25), e_0..e_49` (EWMA scores).
+- ASM groups: 10 for Push; for push_drhist the slots are merged into base groups and the past
+  actions form one `act` group (11) (`monitor/asm.py::monitor_groups`).
+- `c1_push_dr_deletion.csv`: `method, k, seed, success, erased`. Reliance:
+  `condition, method, level, group, share, ...`. Robustness: `exp, split, success[_lo,_hi],
+  success_s{n}, ci_backend`. Consumers accept the aliases listed in `scripts/make_tables.py`.
+
 ## Test fixture
 `tests/conftest.py::tiny_model(exp_name)` returns a SAC model with a [16] net, trained for 300
 steps on that experiment's env. Modules are tested on it, never on Kaggle checkpoints.

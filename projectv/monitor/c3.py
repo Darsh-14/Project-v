@@ -356,6 +356,7 @@ def main(argv: list[str] | None = None) -> None:
             epf[f"thr_T{T}"] = ep[f"thr_T{T}"]
             epf[f"S{T}"] = ep[f"S{T}"]
             epf[f"alarm_T{T}"] = ep[f"S{T}"] > ep[f"thr_T{T}"]
+        epf["threshold"] = ep["thr_T25"]  # alarm level for the GIF overlay (docs/interfaces.md)
         e = pd.DataFrame(ep["e"], columns=[f"e_{t}" for t in range(ep["e"].shape[1])])
         ep_frames.append(pd.concat([epf, e], axis=1))
 
