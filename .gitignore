@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+results/ckpt/
+results/steplogs/
+results/tb/
+*.npz
+*.pkl
+wandb/
+.ipynb_checkpoints/
+kaggle/*/output/

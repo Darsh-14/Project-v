@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "projectv"
+version = "0.1.0"
+description = "Faithfulness of RL manipulation-policy explanations under held-out dynamics (sim-to-sim)"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+include = ["projectv*"]
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,15 @@
+# Torch and numpy are taken from the Kaggle/Colab image; install CPU torch locally.
+mujoco>=3.1
+gymnasium>=1.0
+gymnasium-robotics
+stable-baselines3>=2.3
+sb3-contrib
+rliable
+scikit-learn
+scipy
+pandas
+matplotlib
+imageio
+pyyaml
+tensorboard
+pytest
