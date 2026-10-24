@@ -42,7 +42,9 @@ def main() -> None:
         algo = dict(
             exp["algo_cfg"], batch_size=batch, net_arch=[width] * depth, learning_starts=args.warmup
         )
-        model = build_model(algo, DummyVecEnv([lambda: make_env(exp, seed=0)]), 0, None, args.device)
+        model = build_model(
+            algo, DummyVecEnv([lambda: make_env(exp, seed=0)]), 0, None, args.device
+        )
         model.learn(args.warmup)
         t = time.time()
         model.learn(args.timed, reset_num_timesteps=False)
