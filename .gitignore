@@ -13,3 +13,5 @@ wandb/
 .ipynb_checkpoints/
 kaggle/*/output/
 .claude/
+results/c3/cache/
+results/c3/*_episode_scores.csv

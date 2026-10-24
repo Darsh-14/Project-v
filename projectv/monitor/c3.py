@@ -85,18 +85,10 @@ def check_steplog_meta(root: Path, exp: str, seed: int, heldout_hash: str) -> No
 
 
 def load_actor_critic(path: str | Path):
-    """Load a SAC/TQC(+HER) checkpoint for inference only. `rollout.load_model` cannot load HER
-    checkpoints without an env (SB3 asserts an env for HerReplayBuffer); the replay buffer is not
-    needed here, so it is replaced by a 1-slot DictReplayBuffer."""
-    from stable_baselines3 import SAC
+    """Load a SAC/TQC(+HER) checkpoint for inference only (shared loader in eval.rollout)."""
+    from projectv.eval.rollout import load_model
 
-    co = {"replay_buffer_class": None, "replay_buffer_kwargs": {}, "buffer_size": 1}
-    try:
-        return SAC.load(path, device="cpu", custom_objects=co)
-    except Exception:  # TQC fallback checkpoints
-        from sb3_contrib import TQC
-
-        return TQC.load(path, device="cpu", custom_objects=co)
+    return load_model(path)
 
 
 # --- cache --------------------------------------------------------------------------------------
