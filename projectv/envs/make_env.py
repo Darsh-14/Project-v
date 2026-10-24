@@ -1,6 +1,6 @@
 """Build the wrapper stack for an experiment.
 
-Order (inner -> outer): base env -> Latency -> Noise -> DR -> [Shortcut] -> [History].
+Order (inner -> outer): base env -> Latency -> Noise -> DR -> [Shortcut] -> [History] -> Float32.
 Actions flow outer -> inner, so History records the issued action and Latency delays it;
 observations flow inner -> outer, so Noise corrupts what Shortcut/History and the policy see,
 and the shortcut hint is built from the clean desired_goal.
@@ -12,6 +12,7 @@ from typing import Any
 
 import gymnasium as gym
 import gymnasium_robotics
+import numpy as np
 
 from projectv.envs.dr_wrapper import DRWrapper
 from projectv.envs.history_wrapper import HistoryWrapper
@@ -44,4 +45,23 @@ def make_env(
         env = ShortcutWrapper(env, mode=shortcut_mode, seed=seed)
     if exp.get("history", False):
         env = HistoryWrapper(env, k=4, n_actions=3)
-    return env
+    return Float32Obs(env)
+
+
+class Float32Obs(gym.ObservationWrapper):
+    """Cast every obs key to float32: halves HER replay-buffer memory (obs and next_obs are both
+    stored; 1M x 118-D float64 would be ~1.9 GB for DR+Hist). The policy is float32 anyway."""
+
+    def __init__(self, env: gym.Env):
+        super().__init__(env)
+        self.observation_space = gym.spaces.Dict(
+            {
+                k: gym.spaces.Box(
+                    s.low.astype(np.float32), s.high.astype(np.float32), s.shape, np.float32
+                )
+                for k, s in env.observation_space.spaces.items()
+            }
+        )
+
+    def observation(self, obs):
+        return {k: np.asarray(v, dtype=np.float32) for k, v in obs.items()}
