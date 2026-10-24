@@ -4,7 +4,7 @@ import torch
 
 from projectv.control.analytic_controller import RELEVANT_GROUPS, PDController
 from projectv.xai.attributions import (
-    METHODS,
+    ALL_METHODS,
     attribute,
     gaussian_kl,
     grad_x_delta,
@@ -78,7 +78,7 @@ def test_kl_zero_iff_equal_and_matches_closed_form():
 
 
 # --- analytic controller: object groups get zero attribution from every method ---------------
-@pytest.mark.parametrize("method", METHODS)
+@pytest.mark.parametrize("method", ALL_METHODS)
 def test_controller_zero_attribution_on_object_groups(method):
     task = "push"
     groups = make_groups(task)

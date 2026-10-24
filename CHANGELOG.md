@@ -4,6 +4,22 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-24 (Day 1)
 
+- **GWIE Step 0.** The original GWIE was found in DePlag on the OneDrive Desktop, not on D:
+  (`explainability/gwie.py`, HEAD `5ba9fcb`). As the user asked, it was verified *before*
+  porting: the unmodified code ran with the deployed fine-tuned SBERT on 40 pairs
+  (`docs/gwie_verification/`). Results:
+  - IG is correct.
+  - The search beats random erasure (0.071 vs 0.029 similarity drop at k=1) and reaches
+    84–94% of a brute-force greedy oracle.
+  - The paper's "monotonically non-increasing" claim is false (8.4% of erasure steps raised
+    similarity), and convergence is not guaranteed (33/40 converged).
+
+  GWIE is a counterfactual-set search, not a full attribution method, so the CLAUDE.md
+  pseudocode is a non-trivial deviation. Both `gwie_orig_port` (direct port) and `gwie_c` (full
+  ranking + KL gains) are implemented. The deviations table is in `docs/gwie_original.md`.
+  `gwie_c` scores pivots with IG on the current erased state, as the original does, not with
+  CLAUDE.md's provisional grad×delta.
+
 - **Friction DR implementation.** MuJoCo combines contact friction as the element-wise max of
   the two geoms. Scaling only the object geom (mvp.md §4.2 literally) would make low-friction
   cells (0.2, 0.3) no-ops against the table at 1.0. Both the object geom and the (unnamed)

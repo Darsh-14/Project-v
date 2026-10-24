@@ -21,6 +21,8 @@ import numpy as np
 import torch
 
 METHODS = ("grad", "grad_x_delta", "ig", "smoothgrad", "occlusion", "kernelshap_grouped")
+GWIE_METHODS = ("gwie_c", "gwie_orig_port")
+ALL_METHODS = METHODS + GWIE_METHODS
 DT = torch.float64
 
 
@@ -208,4 +210,13 @@ def attribute(
     if method == "kernelshap_grouped":
         phi = kernelshap_grouped(pol, s, groups, pool, rng, kw.get("M", 8))
         return {g: abs(v) for g, v in phi.items()}
+    if method in GWIE_METHODS:
+        from projectv.xai import gwie_c as gw
+
+        if method == "gwie_c":
+            return {
+                g: abs(v)
+                for g, v in gw.gwie_c(pol, s, groups, pool, rng, kw.get("M", 8)).gains.items()
+            }
+        return dict(gw.gwie_orig_port(pol, s, groups, pool, rng, M=kw.get("M", 8)).scores)
     raise ValueError(f"unknown method {method}")
