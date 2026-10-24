@@ -15,9 +15,9 @@ Mirrors `mvp.md` §10 (Day 1 to 3) and §9 (A1 to A10). Status: `[ ]` todo, `[~]
 - [x] D1.2 Analytic controller, Reach nominal success 1.00 over 100 eps
 - [x] D1.3 `train.py` + `callbacks.py` (ckpt 50k, replay 200k, `--resume auto`, run_meta.json); algo configs incl. TQC
 - [!] D1.3 Pilot: fps measured (zoo Push config 1.4 steps/s on CPU, infeasible); needs decision + Kaggle GPU measurement (CHECKPOINT 2)
-- [ ] D1.4 Kaggle notebook + kernel push for 9 Push + 6 Reach runs (CHECKPOINT 3)
+- [x] D1.4 Kaggle notebook + kernels launched: Reach 6 runs (CPU), Push seeds {0,1} 6 runs (T4x2) (CHECKPOINT 3)
 - [x] D1.5 `policy_fn`, `groups`, `attributions`, `gwie_c` + `tests/test_attr_sanity.py`
-- [ ] D1.5 C1 on analytic controller, first C1 table in `results/`
+- [x] D1.5 C1 on analytic controller, first C1 table in `results/c1/`
 - [ ] Gate G1 decision (CHECKPOINT 4)
 
 ## Day 2: Evaluate + C1/C4
