@@ -55,7 +55,12 @@ def write_json(path: str | Path, obj: Any) -> None:
 
 
 def write_run_meta(
-    out_dir: str | Path, cfg: dict[str, Any], argv: list[str], t_start: float, **extra: Any
+    out_dir: str | Path,
+    cfg: dict[str, Any],
+    argv: list[str],
+    t_start: float,
+    filename: str = "run_meta.json",
+    **extra: Any,
 ) -> dict[str, Any]:
     meta = {
         "git_sha": git_sha(),
@@ -65,5 +70,5 @@ def write_run_meta(
         "wall_clock_s": round(time.time() - t_start, 2),
         **extra,
     }
-    write_json(Path(out_dir) / "run_meta.json", meta)
+    write_json(Path(out_dir) / filename, meta)
     return meta
