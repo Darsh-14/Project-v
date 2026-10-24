@@ -1,0 +1,12 @@
+# PRE-CALIBRATION held-out values (mvp.md §4.2). scripts/calibrate_heldout.py adjusts values
+# only and writes the frozen configs/dr/heldout.yaml. Do not use this file for C3/C4 results.
+one_factor:
+  obj_friction: [0.2, 0.3, 2.0, 2.5]
+  table_friction: [0.4, 1.8]
+  obj_mass: [0.25, 3.0, 4.0]
+  gain: [0.5, 0.6, 1.5, 1.8]
+  obs_noise: [0.01, 0.02]
+  latency: [2, 3]
+combined:
+  n_cells: 20
+  seed: 20261024

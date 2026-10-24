@@ -1,0 +1,7 @@
+# Nominal dynamics: every factor at its nominal value.
+obj_friction: {type: fixed, value: 1.0}
+table_friction: {type: fixed, value: 1.0}
+obj_mass: {type: fixed, value: 1.0}
+gain: {type: fixed, value: 1.0}
+obs_noise: {type: fixed, value: 0.0}
+latency: {type: fixed, value: 0}

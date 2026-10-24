@@ -1,0 +1,18 @@
+# SAC+HER for FetchReach. Base: rl-baselines3-zoo sac.yml FetchReach-v1 (batch 256, lr 1e-3,
+# gamma 0.95, learning_starts 1000), net [256, 256] per mvp.md §4.1. Zoo's VecNormalize is
+# dropped so attributions stay in raw observation units (CLAUDE.md §8).
+algo: sac
+policy: MultiInputPolicy
+total_steps: 100000
+buffer_size: 1000000
+batch_size: 256
+learning_rate: 0.001
+gamma: 0.95
+tau: 0.005
+learning_starts: 1000
+ent_coef: auto
+net_arch: [256, 256]
+n_critics: 2
+her:
+  n_sampled_goal: 4
+  goal_selection_strategy: future

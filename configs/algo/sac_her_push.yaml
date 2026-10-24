@@ -1,0 +1,17 @@
+# SAC+HER for FetchPush. Values copied from the rl-baselines3-zoo TQC FetchPush-v1 entry
+# (tqc.yml; the zoo has no SAC Push entry), with mvp.md §4.1 learning_starts=1000.
+algo: sac
+policy: MultiInputPolicy
+total_steps: 1000000
+buffer_size: 1000000
+batch_size: 2048
+learning_rate: 0.001
+gamma: 0.95
+tau: 0.05
+learning_starts: 1000
+ent_coef: auto
+net_arch: [512, 512, 512]
+n_critics: 2
+her:
+  n_sampled_goal: 4
+  goal_selection_strategy: future

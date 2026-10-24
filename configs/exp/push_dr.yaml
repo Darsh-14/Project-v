@@ -1,0 +1,5 @@
+task: push
+algo: configs/algo/sac_her_push.yaml
+dr: configs/dr/train.yaml
+history: false
+shortcut: false
