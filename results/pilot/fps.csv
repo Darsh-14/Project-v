@@ -1,0 +1,6 @@
+host,exp,algo,batch,net,device,threads,env_steps_per_s,hours_per_1M
+local-dev,push_dr,sac,2048,512x3,cpu,1,1.5,185.3
+local-dev,push_dr,sac,256,256x3,cpu,1,30.26,9.2
+local-dev,push_drhist,sac,2048,512x3,cpu,1,1.19,234.0
+local-dev,push_drhist,sac,256,256x3,cpu,1,24.56,11.3
+local-dev,reach_dr,sac,256,256x2,cpu,1,45.51,6.1

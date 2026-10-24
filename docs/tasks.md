@@ -3,20 +3,20 @@
 Mirrors `mvp.md` §10 (Day 1 to 3) and §9 (A1 to A10). Status: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked.
 
 ## Step 0: GWIE
-- [!] Get DePlag repo path from user
-- [ ] Read original GWIE, write `docs/gwie_original.md` (score, erasure op, order, stop rule, final attribution, deviations)
-- [ ] `tests/test_gwie.py` then `projectv/xai/gwie_c.py` (+ `gwie_orig_port` if deviations non-trivial)
+- [x] Get DePlag repo path (found on OneDrive Desktop, not D:)
+- [x] Read original GWIE, verify it empirically (docs/gwie_verification), write `docs/gwie_original.md`
+- [x] `tests/test_gwie.py` then `projectv/xai/gwie_c.py` + `gwie_orig_port`
 
 ## Day 1: Build, pilot, launch
-- [~] D1.1 Scaffold (CLAUDE.md §4), venv, requirements.txt, pyproject.toml, .gitignore
+- [x] D1.1 Scaffold (CLAUDE.md §4), venv, requirements.txt, pyproject.toml, .gitignore
 - [!] D1.1 GitHub repo (need name + visibility), push
-- [ ] D1.1 Env sanity: env IDs, `obs_layout.py` asserts, `tests/test_envs.py` (CHECKPOINT 1), `requirements.lock`
-- [ ] D1.2 Wrappers: dr, latency, noise, history, shortcut + `tests/test_wrappers.py`
-- [ ] D1.2 Analytic controller, Reach nominal success >= 0.95 over 100 eps
-- [ ] D1.3 `train.py` + `callbacks.py` (ckpt 50k, replay 200k, `--resume auto`, run_meta.json); algo configs incl. TQC
-- [ ] D1.3 Pilot push_dr s0 50k steps, fps + wall-clock projection (CHECKPOINT 2)
+- [x] D1.1 Env sanity: env IDs, `obs_layout.py` asserts, `tests/test_envs.py` (CHECKPOINT 1), `requirements.lock`
+- [x] D1.2 Wrappers: dr, latency, noise, history, shortcut + `tests/test_wrappers.py`
+- [x] D1.2 Analytic controller, Reach nominal success 1.00 over 100 eps
+- [x] D1.3 `train.py` + `callbacks.py` (ckpt 50k, replay 200k, `--resume auto`, run_meta.json); algo configs incl. TQC
+- [!] D1.3 Pilot: fps measured (zoo Push config 1.4 steps/s on CPU, infeasible); needs decision + Kaggle GPU measurement (CHECKPOINT 2)
 - [ ] D1.4 Kaggle notebook + kernel push for 9 Push + 6 Reach runs (CHECKPOINT 3)
-- [ ] D1.5 `policy_fn`, `groups`, `attributions`, `gwie_c` + `tests/test_attr_sanity.py`
+- [x] D1.5 `policy_fn`, `groups`, `attributions`, `gwie_c` + `tests/test_attr_sanity.py`
 - [ ] D1.5 C1 on analytic controller, first C1 table in `results/`
 - [ ] Gate G1 decision (CHECKPOINT 4)
 
