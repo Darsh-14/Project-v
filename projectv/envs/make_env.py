@@ -14,6 +14,7 @@ import gymnasium as gym
 import gymnasium_robotics
 import numpy as np
 
+from projectv.envs import compat
 from projectv.envs.dr_wrapper import DRWrapper
 from projectv.envs.history_wrapper import HistoryWrapper
 from projectv.envs.latency_wrapper import LatencyWrapper
@@ -22,6 +23,7 @@ from projectv.envs.obs_layout import ENV_IDS, assert_layout
 from projectv.envs.shortcut_wrapper import ShortcutWrapper
 
 gym.register_envs(gymnasium_robotics)
+compat.apply()
 
 
 def make_env(
