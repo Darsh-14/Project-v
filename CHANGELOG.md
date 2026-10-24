@@ -4,6 +4,12 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-24 (Day 1)
 
+- **Gate G1 timing.** Kaggle exposes a kernel's output only after the session ends, and the CLI
+  cannot cancel a running kernel. The first Push sessions (11 h cap) therefore give their
+  first learning-curve evidence when they end (~950k–1M steps), not after 50k steps. G1 is
+  judged then. If SAC+HER is not learning, rung 1 (TQC+HER) costs one more session. Future
+  first sessions should use a short `--max-hours` probe to get earlier visibility.
+
 - **Push compute decision (Checkpoint 2, option A1 + fallback 4 early).** Kaggle measurements
   (`results/pilot/fps_kaggle_{gpu,cpu}.csv`):
   - zoo config on a T4: 47 steps/s for 1 run per GPU; on T4×2, ~24.5 each with 4 runs
