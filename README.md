@@ -115,7 +115,7 @@ in `results/`.
 ## Results
 
 All tables below are generated. Format: mean [95% CI low, high]. Seeds: 3 training seeds per
-condition (n=3). With n=3, interquartile means are degenerate, so per-seed values are also shown.
+condition (Push n=2, Reach n=3). With so few seeds, interquartile means are degenerate, so per-seed values are also shown.
 
 ### C1: faithfulness on the analytic controller (ground truth A)
 
