@@ -28,7 +28,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from projectv.analysis.stats import seed_summary
+from projectv.analysis.stats import parse_skip, seed_summary
 from projectv.eval.cells import HELDOUT_PATH, load_cells
 from projectv.eval.steplog import load_steplog, steplog_path
 from projectv.utils.config import load_exp
@@ -280,6 +280,7 @@ def run_reliance(
     n_states_cell: int = 100,
     base_seed: int = 0,
     exp_cfgs: dict[str, dict] | None = None,
+    skip: frozenset[tuple[str, int]] = frozenset(),
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     rel, tmp = [], []
     for exp in exps:
@@ -289,6 +290,9 @@ def run_reliance(
         names = list(groups)
         per_seed = {}
         for seed in seeds:
+            if (exp, seed) in skip:
+                print(f"[reliance] skip {exp} s{seed}: --skip")
+                continue
             logs = load_logs(root, exp, seed, with_heldout=hist)
             if logs is None:
                 print(f"[reliance] skip {exp} s{seed}: no step log cell00")
@@ -335,6 +339,7 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--n-states", type=int, default=300)
     p.add_argument("--n-states-cell", type=int, default=100)
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--skip", nargs="*", default=[], help="exp:seed runs to leave out")
     p.add_argument("--no-wandb", action="store_true")
     args = p.parse_args(argv)
     t0 = time.time()
@@ -359,6 +364,7 @@ def main(argv: list[str] | None = None) -> None:
         args.n_states,
         args.n_states_cell,
         args.seed,
+        skip=parse_skip(args.skip),
     )
     rel.to_csv(out / "reliance.csv", index=False)
     tmp.to_csv(out / "temporal.csv", index=False)

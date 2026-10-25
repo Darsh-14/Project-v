@@ -74,3 +74,12 @@ def seed_summary(per_seed: dict[int, float], prefix: str = "mean", **kw) -> dict
     out = {prefix: p, f"{prefix}_lo": lo, f"{prefix}_hi": hi, "n_seeds": len(v)}
     out.update({f"seed{s}": per_seed[s] for s in seeds})
     return out
+
+
+def parse_skip(items: list[str]) -> frozenset[tuple[str, int]]:
+    """CLI `--skip exp:seed ...` -> {(exp, seed)} (e.g. a seed that never learned)."""
+    out = set()
+    for it in items:
+        exp, seed = it.rsplit(":", 1)
+        out.add((exp, int(seed)))
+    return frozenset(out)

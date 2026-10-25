@@ -44,6 +44,7 @@ from sklearn.model_selection import GridSearchCV, GroupKFold
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
+from projectv.analysis.stats import parse_skip
 from projectv.eval.steplog import load_steplog, save_steplog
 from projectv.utils.config import load_exp, load_yaml
 from projectv.utils.io import write_json, write_run_meta
@@ -323,6 +324,7 @@ def run_probes(
     exp_cfgs: dict[str, dict] | None = None,
     n_splits: int = 5,
     n_boot: int = 2000,
+    skip: frozenset[tuple[str, int]] = frozenset(),
 ) -> pd.DataFrame:
     if load_model_fn is None:
         from projectv.eval.rollout import load_model, resolve_checkpoint
@@ -337,6 +339,9 @@ def run_probes(
         groups = make_groups(cfg["task"], history=hist, shortcut=bool(cfg.get("shortcut", False)))
         per_seed = {}
         for seed in seeds:
+            if (exp, seed) in skip:
+                print(f"[probes] skip {exp} s{seed}: --skip")
+                continue
             try:
                 model = load_model_fn(exp, seed)
             except FileNotFoundError as e:
@@ -370,6 +375,7 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--n-eps", type=int, default=200)
     p.add_argument("--max-states", type=int, default=10_000)
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--skip", nargs="*", default=[], help="exp:seed runs to leave out")
     p.add_argument("--no-wandb", action="store_true")
     args = p.parse_args(argv)
     t0 = time.time()
@@ -389,6 +395,7 @@ def main(argv: list[str] | None = None) -> None:
         args.source,
         args.n_eps,
         args.max_states,
+        skip=parse_skip(args.skip),
     )
     df.to_csv(out / "probes.csv", index=False)
     meta = write_run_meta(out, vars(args), sys.argv, t0, task=args.task, analysis="probes")
