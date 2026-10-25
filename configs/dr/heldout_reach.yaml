@@ -1,0 +1,196 @@
+frozen: true
+source_policy: results/ckpt/reach_dr_s0_final.zip
+calibration:
+  episodes: 50
+  band:
+  - 0.2
+  - 0.8
+  max_evals: 6
+  candidates: configs/dr/heldout_candidates_reach.yaml
+  candidates_hash: 7cb697a4733bbb5648cb36b6c34dad745b5df0c70dd4ef392b1e6ef8a235424b
+  log: results/calibration/calibration_log_reach.csv
+cells:
+- id: 0
+  name: nominal
+  factor: nominal
+  params: {}
+- id: 1
+  name: gain=0.5
+  factor: gain
+  params:
+    gain: 0.5
+- id: 2
+  name: gain=0.6
+  factor: gain
+  params:
+    gain: 0.6
+- id: 3
+  name: gain=1.5
+  factor: gain
+  params:
+    gain: 1.5
+- id: 4
+  name: gain=1.8
+  factor: gain
+  params:
+    gain: 1.8
+- id: 5
+  name: obs_noise=0.01
+  factor: noise
+  params:
+    obs_noise: 0.01
+- id: 6
+  name: obs_noise=0.02
+  factor: noise
+  params:
+    obs_noise: 0.02
+- id: 7
+  name: latency=2
+  factor: latency
+  params:
+    latency: 2
+- id: 8
+  name: latency=3
+  factor: latency
+  params:
+    latency: 3
+- id: 9
+  name: combined_00
+  factor: combined
+  params:
+    gain: 1.64
+    latency: 3
+    obs_noise: 0.0134
+- id: 10
+  name: combined_01
+  factor: combined
+  params:
+    gain: 0.563
+    latency: 3
+    obs_noise: 0.0104
+- id: 11
+  name: combined_02
+  factor: combined
+  params:
+    gain: 0.537
+    latency: 3
+    obs_noise: 0.0131
+- id: 12
+  name: combined_03
+  factor: combined
+  params:
+    gain: 1.8
+    latency: 2
+    obs_noise: 0.0149
+- id: 13
+  name: combined_04
+  factor: combined
+  params:
+    gain: 1.61
+    latency: 2
+    obs_noise: 0.0155
+- id: 14
+  name: combined_05
+  factor: combined
+  params:
+    gain: 1.73
+    latency: 3
+    obs_noise: 0.0162
+- id: 15
+  name: combined_06
+  factor: combined
+  params:
+    gain: 0.526
+    latency: 3
+    obs_noise: 0.0186
+- id: 16
+  name: combined_07
+  factor: combined
+  params:
+    gain: 1.69
+    latency: 2
+    obs_noise: 0.0195
+- id: 17
+  name: combined_08
+  factor: combined
+  params:
+    gain: 1.67
+    latency: 3
+    obs_noise: 0.0127
+- id: 18
+  name: combined_09
+  factor: combined
+  params:
+    gain: 0.559
+    latency: 3
+    obs_noise: 0.0181
+- id: 19
+  name: combined_10
+  factor: combined
+  params:
+    gain: 1.51
+    latency: 3
+    obs_noise: 0.0131
+- id: 20
+  name: combined_11
+  factor: combined
+  params:
+    gain: 0.577
+    latency: 2
+    obs_noise: 0.0128
+- id: 21
+  name: combined_12
+  factor: combined
+  params:
+    gain: 0.557
+    latency: 3
+    obs_noise: 0.0169
+- id: 22
+  name: combined_13
+  factor: combined
+  params:
+    gain: 0.554
+    latency: 3
+    obs_noise: 0.0117
+- id: 23
+  name: combined_14
+  factor: combined
+  params:
+    gain: 0.598
+    latency: 2
+    obs_noise: 0.013
+- id: 24
+  name: combined_15
+  factor: combined
+  params:
+    gain: 0.586
+    latency: 3
+    obs_noise: 0.0171
+- id: 25
+  name: combined_16
+  factor: combined
+  params:
+    gain: 0.591
+    latency: 2
+    obs_noise: 0.0145
+- id: 26
+  name: combined_17
+  factor: combined
+  params:
+    gain: 1.76
+    latency: 2
+    obs_noise: 0.0135
+- id: 27
+  name: combined_18
+  factor: combined
+  params:
+    gain: 0.597
+    latency: 3
+    obs_noise: 0.0192
+- id: 28
+  name: combined_19
+  factor: combined
+  params:
+    gain: 0.574
+    latency: 3
+    obs_noise: 0.0148

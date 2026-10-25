@@ -1,0 +1,11 @@
+# PRE-CALIBRATION held-out values for the Reach track (Gate G2, mvp.md §4.2 / §10): only the
+# factors that affect Reach (control gain, obs noise, latency). scripts/calibrate_heldout.py
+# adjusts values only and writes the frozen configs/dr/heldout_reach.yaml. Do not use this file
+# for C3/C4 results.
+one_factor:
+  gain: [0.5, 0.6, 1.5, 1.8]
+  obs_noise: [0.01, 0.02]
+  latency: [2, 3]
+combined:
+  n_cells: 20
+  seed: 20261024

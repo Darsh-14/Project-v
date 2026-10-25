@@ -1,0 +1,85 @@
+{
+  "git_sha": "0cd1d575fcef4834458912f73a3bbbb4d42b7347",
+  "config_hash": "cf749c5b244b",
+  "argv": [
+    "calibrate_heldout",
+    "--policy",
+    "results/ckpt/reach_dr_s0_final.zip",
+    "--exp",
+    "configs/exp/reach_dr.yaml",
+    "--candidates",
+    "configs/dr/heldout_candidates_reach.yaml",
+    "--out",
+    "configs/dr/heldout_reach.yaml",
+    "--hash-out",
+    "results/heldout_reach_hash.txt",
+    "--log-out",
+    "results/calibration/calibration_log_reach.csv"
+  ],
+  "versions": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.9.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 116.09,
+  "heldout_hash": "1ecade9020ed13ebe536fe5d2df3ed9991bf02ac2783a3526c3a935cdca8fc0a",
+  "nominal_success": 1.0,
+  "one_factor": [
+    {
+      "cell": "gain=0.5",
+      "candidate": 0.5,
+      "success": 1.0,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "gain=0.6",
+      "candidate": 0.6,
+      "success": 1.0,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "gain=1.5",
+      "candidate": 1.5,
+      "success": 0.82,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "gain=1.8",
+      "candidate": 1.8,
+      "success": 0.58,
+      "flag": ""
+    },
+    {
+      "cell": "obs_noise=0.01",
+      "candidate": 0.01,
+      "success": 1.0,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "obs_noise=0.02",
+      "candidate": 0.02,
+      "success": 0.96,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "latency=2",
+      "candidate": 2,
+      "success": 0.88,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "latency=3",
+      "candidate": 3,
+      "success": 0.22,
+      "flag": ""
+    }
+  ]
+}
