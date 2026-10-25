@@ -386,6 +386,7 @@ def main(argv: list[str] | None = None) -> None:
         {"exp": exp, "candidates": cand},
         ["calibrate_heldout", *argv],
         t_start,
+        filename=f"{Path(args.log_out).stem}_run_meta.json",  # one per grid, next to its log
         heldout_hash=digest,
         nominal_success=nominal_success,
         one_factor=summary,
