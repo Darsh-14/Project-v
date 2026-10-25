@@ -47,6 +47,20 @@ def sample_params(spec: dict[str, dict], rng: np.random.Generator) -> dict[str, 
     return out
 
 
+DR_STREAM_TAG = 0x44_52  # "DR"
+
+
+def dr_rng(seed: int | None) -> np.random.Generator:
+    """RNG for DR sampling, independent of the env's own stream for the same reset seed.
+
+    Gymnasium seeds the env's np_random from SeedSequence(seed); default_rng(seed) would give
+    the *same* stream, making the first DR draw equal the env's first draw (e.g. Reach gain ==
+    goal x offset, Push obj_friction == object x position). A distinct spawn key avoids that."""
+    return np.random.default_rng(
+        None if seed is None else np.random.SeedSequence([seed, DR_STREAM_TAG])
+    )
+
+
 def fixed_spec(values: dict[str, float]) -> dict[str, dict]:
     """A spec that pins each factor (held-out cells, nominal)."""
     return {k: {"type": "fixed", "value": v} for k, v in values.items()}
@@ -65,7 +79,7 @@ class DRWrapper(gym.Wrapper):
         super().__init__(env)
         self.task = task
         self.dr_spec = {k: v for k, v in spec.items() if task == "push" or k not in OBJECT_FACTORS}
-        self._rng = np.random.default_rng(seed)
+        self._rng = dr_rng(seed)
         self._latency = find_wrapper(env, LatencyWrapper)
         self._noise = find_wrapper(env, NoiseWrapper)
         assert "latency" not in self.dr_spec or self._latency is not None
@@ -97,7 +111,7 @@ class DRWrapper(gym.Wrapper):
 
     def reset(self, *, seed: int | None = None, options: dict[str, Any] | None = None):
         if seed is not None:
-            self._rng = np.random.default_rng(seed)
+            self._rng = dr_rng(seed)
         self.params = sample_params(self.dr_spec, self._rng)
         self._apply(self.params)
         obs, info = self.env.reset(seed=seed, options=options)

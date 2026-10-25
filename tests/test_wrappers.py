@@ -245,3 +245,22 @@ def test_train_without_her_builds_plain_buffer():
     algo = dict(exp["algo_cfg"], net_arch=[8], buffer_size=1000)
     m = build_model(algo, DummyVecEnv([lambda: make_env(exp, seed=0)]), 0, None)
     assert type(m.replay_buffer) is DictReplayBuffer
+
+
+@pytest.mark.parametrize("exp_name", ["reach_dr", "push_dr"])
+def test_dr_params_independent_of_initial_state(exp_name):
+    """Regression: DR draws must not reuse the env's random stream for the same reset seed."""
+    env = make_env(load_exp(f"configs/exp/{exp_name}.yaml"), seed=0)
+    params, init = [], []
+    for sd in range(300):
+        o, info = env.reset(seed=1000 + sd)
+        params.append([info["dr_params"][k] for k in sorted(info["dr_params"])])
+        init.append(np.concatenate([o["observation"], o["desired_goal"]]))
+    P, X = np.array(params), np.array(init)
+    for i in range(P.shape[1]):
+        if np.std(P[:, i]) == 0:
+            continue
+        for j in range(X.shape[1]):
+            if np.std(X[:, j]) < 1e-9:
+                continue
+            assert abs(np.corrcoef(P[:, i], X[:, j])[0, 1]) < 0.3, (i, j)

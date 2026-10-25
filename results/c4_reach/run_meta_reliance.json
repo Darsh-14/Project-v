@@ -1,0 +1,29 @@
+{
+  "git_sha": "559c1e1d50d81ebb66557bf1d498c2408197dd58",
+  "config_hash": "cbecdad506e3",
+  "argv": [
+    "D:\\Project V\\projectv\\analysis\\reliance.py",
+    "--task",
+    "reach",
+    "--cells",
+    "configs/dr/heldout_reach.yaml",
+    "--out",
+    "results/c4_reach"
+  ],
+  "versions": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.9.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 572.73,
+  "task": "reach",
+  "analysis": "reliance"
+}

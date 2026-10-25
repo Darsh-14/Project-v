@@ -4,6 +4,32 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-25 (Day 2)
 
+- **BUG: DR parameters were drawn from the env's own random stream (probe leak).**
+  - `DRWrapper` seeded its RNG with `default_rng(seed)`, which is the same stream Gymnasium
+    uses for the env's `np_random` on a seeded reset. The first DR draw equalled the env's first
+    draw: on Reach, gain was an exact function of the goal's x offset (corr 1.0); on Push,
+    obj_friction tracked the object's x position.
+  - Found because the first Reach probe run gave gain R² = 1.000 from a single raw observation
+    *and* from a random-init network.
+  - Fixed: `dr_rng` uses `SeedSequence([seed, tag])`. A regression test asserts |corr| < 0.3
+    between every DR parameter and every initial-state feature over 300 seeded resets (it fails
+    on the old code for both Reach and Push).
+  - Impact. Probes are invalid: they use per-episode-seeded train-DR rollouts. The Reach probe
+    results were deleted and rerun; Push probes will only ever run with the fix.
+  - Not affected: held-out sweeps, calibration, C1, C3, robustness. Every cell there fixes the DR
+    values, so no DR draws occur and existing results are reproducible bit-for-bit.
+  - Training: only the first reset is seeded. After it the DR and env streams consume different
+    numbers of draws per episode and desynchronise. Training runs (including the TQC runs in
+    flight on Kaggle with the old code) are kept, and this is noted as a limitation.
+- **Reach G2 track computed** (3 seeds per condition; `results/robustness_reach/`,
+  `results/c3/c3_reach_*`, `results/c4_reach/`).
+  - Held-out success: NoDR 0.505 [0.497, 0.514], DR 0.661 [0.652, 0.670], DR+Hist 0.740
+    [0.732, 0.748].
+  - Probability of improvement on held-out: DR > NoDR 0.887, DR+Hist > DR 0.748.
+  - C3 AUROC at T=10: ASM 0.629 / 0.593 / 0.673 (NoDR / DR / DR+Hist). The best baseline is
+    act_ood 0.720 / 0.818 and obs_ood 0.668 (DR+Hist), so ASM does not beat the best baseline on
+    Reach DR or NoDR and roughly ties on DR+Hist. Reported as is.
+
 - **Held-out grid hash made line-ending agnostic (portability bug).** The freeze hash was a
   byte-exact sha256 of the YAML. Windows writes CRLF and git stores LF, so a Kaggle/Colab clone
   hashed `heldout_reach.yaml` to `860a59…`, not the recorded `1ecade…`, and `assert_frozen`

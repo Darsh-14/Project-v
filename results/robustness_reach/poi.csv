@@ -1,0 +1,13 @@
+x,y,split,n_cells,n_seeds_x,n_seeds_y,poi,poi_lo,poi_hi,ci_backend
+reach_dr,reach_nodr,nominal,1,3,3,0.3333333333333333,0.0,0.5,rliable
+reach_drhist,reach_dr,nominal,1,3,3,0.6666666666666666,0.5,1.0,rliable
+reach_dr,reach_nodr,heldout,28,3,3,0.886904761904762,0.8730158730158729,0.8928571428571429,rliable
+reach_drhist,reach_dr,heldout,28,3,3,0.7480158730158729,0.7083333333333333,0.7916666666666666,rliable
+reach_dr,reach_nodr,factor:combined,20,3,3,1.0,1.0,1.0,rliable
+reach_drhist,reach_dr,factor:combined,20,3,3,0.7055555555555555,0.6527777777777777,0.7583333333333333,rliable
+reach_dr,reach_nodr,factor:gain,4,3,3,0.25,0.25,0.25,rliable
+reach_drhist,reach_dr,factor:gain,4,3,3,0.75,0.75,0.75,rliable
+reach_dr,reach_nodr,factor:latency,2,3,3,1.0,1.0,1.0,rliable
+reach_drhist,reach_dr,factor:latency,2,3,3,1.0,1.0,1.0,rliable
+reach_dr,reach_nodr,factor:noise,2,3,3,0.9166666666666666,0.7222222222222222,1.0,rliable
+reach_drhist,reach_dr,factor:noise,2,3,3,0.9166666666666667,0.75,1.0,rliable
