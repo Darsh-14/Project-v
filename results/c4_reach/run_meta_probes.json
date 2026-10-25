@@ -1,0 +1,27 @@
+{
+  "git_sha": "9143745f92b1a688e8ef18e6a05930f65412c111",
+  "config_hash": "d4538a6e389f",
+  "argv": [
+    "D:\\Project V\\projectv\\analysis\\probes.py",
+    "--task",
+    "reach",
+    "--out",
+    "results/c4_reach"
+  ],
+  "versions": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.9.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 354.22,
+  "task": "reach",
+  "analysis": "probes"
+}
