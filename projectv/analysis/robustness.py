@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import functools
+import warnings
 import sys
 import time
 from pathlib import Path
@@ -64,7 +65,15 @@ def score_matrix(df: pd.DataFrame, exp: str, cells: list[int]) -> tuple[np.ndarr
     """(seeds x cells) per-cell success rate. Only seeds that have every cell are kept."""
     d = df[(df.exp == exp) & df.cell_id.isin(cells)]
     tab = d.groupby(["seed", "cell_id"])["success"].mean().unstack("cell_id")
-    tab = tab.reindex(columns=cells).dropna(axis=0, how="any")
+    tab = tab.reindex(columns=cells)
+    incomplete = [int(s) for s in tab.index[tab.isna().any(axis=1)]]
+    if incomplete:
+        warnings.warn(
+            f"{exp}: seeds {incomplete} lack some cells of this split and are excluded from it "
+            "(stratified bootstrap needs complete rows); n_seeds in the output reflects this",
+            stacklevel=2,
+        )
+    tab = tab.dropna(axis=0, how="any")
     return tab.to_numpy(dtype=np.float64), [int(s) for s in tab.index]
 
 

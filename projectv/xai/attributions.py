@@ -218,5 +218,14 @@ def attribute(
                 g: abs(v)
                 for g, v in gw.gwie_c(pol, s, groups, pool, rng, kw.get("M", 8)).gains.items()
             }
-        return dict(gw.gwie_orig_port(pol, s, groups, pool, rng, M=kw.get("M", 8)).scores)
+        # The port outputs a counterfactual set, not scores. C1 uses its ranking adapter
+        # (erasure order, then not-erased groups by last IG score) as Borda points (n - rank)/n;
+        # a never-erased group whose last IG score is exactly 0 gets 0 (a true tie, no evidence).
+        res = gw.gwie_orig_port(pol, s, groups, pool, rng, M=kw.get("M", 8))
+        n = len(res.ranking)
+        erased = set(res.erasure_order)
+        return {
+            g: (n - i) / n if g in erased or res.last_ig.get(g, 0.0) > 0 else 0.0
+            for i, g in enumerate(res.ranking)
+        }
     raise ValueError(f"unknown method {method}")

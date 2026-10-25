@@ -85,3 +85,17 @@ def test_orig_port_pruned_set_is_valid_subset(seed):
     if res.converged:
         assert res.similarity_of_set(res.counterfactual_set) < 0.75
     assert res.sims[0] == pytest.approx(1.0)
+
+
+def test_c1_scores_for_port_follow_its_ranking():
+    from projectv.xai.attributions import attribute
+
+    pol = _only_group_policy("obj_rel")
+    s, pool = _state("obj_rel"), _pool()
+    res = gwie_orig_port(pol, s, GROUPS, pool, np.random.default_rng(0))
+    scores = attribute("gwie_orig_port", pol, s, GROUPS, pool, np.random.default_rng(0))
+    nonzero = [g for g in res.ranking if scores[g] > 0]
+    assert sorted(nonzero, key=lambda g: -scores[g]) == nonzero  # follows the ranking
+    assert nonzero[0] == "obj_rel"
+    # groups the policy ignores have zero IG at the last iteration -> score 0, not a rank
+    assert all(scores[g] == 0.0 for g in GROUPS if g not in nonzero)

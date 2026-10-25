@@ -116,6 +116,7 @@ class GWIEPortResult:
     sims: list[float]
     converged: bool
     similarity_of_set: Callable[[list[str]], float] = field(repr=False)
+    last_ig: dict[str, float] = field(default_factory=dict)  # pivot scores at the last iteration
 
 
 def gwie_orig_port(
@@ -184,5 +185,5 @@ def gwie_orig_port(
     rest.sort(key=lambda c: last_scores.get(c, 0.0), reverse=True)
     scores = {g: drops.get(g, 0.0) for g in groups}
     return GWIEPortResult(
-        retained, chosen, chosen + rest, scores, sims, converged, similarity_of_set
+        retained, chosen, chosen + rest, scores, sims, converged, similarity_of_set, last_scores
     )

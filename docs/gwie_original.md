@@ -123,7 +123,7 @@ original in several non-trivial ways.
 | Stopping | S < alpha (0.75), or no candidates, or max_iter (20) | S < alpha (0.75; same constant, not calibrated for action space), or all groups erased, or max_iter (20) | no threshold: erase all groups | `gwie_c` needs a score for every group |
 | Pruning | one pass, drop words not needed to stay below alpha | same | none | without a threshold there is no set to minimise |
 | Output | ordered counterfactual set + per-step log | set C (pruned), erasure order, per-step S trajectory | A[g] = D(π(s)‖π(s_after g)) − D(π(s)‖π(s_before g)) (KL, chain-averaged), shares \|A\|/Σ\|A\|, erasure order | `gwie_c`: CLAUDE.md marginal divergence gain, the analogue of the original's logged `sim_before − sim_after` with KL instead of cosine |
-| Ranking for C1 metrics | n/a | erasure order (pre-pruning), then not-erased groups by their last IG score | erasure order | evaluation adapter only; the port's group score = its per-step S drop (0 if never erased) |
+| Scores used by C1 | n/a | Borda points (n − rank)/n from the ranking adapter: erasure order (pre-pruning), then not-erased groups by their last IG score; a never-erased group with last IG score exactly 0 scores 0 | \|A[g]\| (marginal KL gain), aggregated over states like every other method; erasure order is reported separately | evaluation adapter only. The port has no per-group scores, so ranks are used; its per-step S drop is kept in `scores` for inspection |
 
 The README and report may call `gwie_c` "adapted from GWIE (DePlag)" with a link to this
 table. They must not say it *is* GWIE, and must not repeat the monotonicity or convergence claims.

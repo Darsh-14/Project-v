@@ -235,6 +235,8 @@ def headline_numbers(root: Path) -> dict[str, dict | None]:
 
 def _val(row: pd.Series, col: str, src: str, desc: str) -> dict:
     d = {"value": float(row[col]), "lo": None, "hi": None, "source": src, "description": desc}
+    if "n_seeds" in row.index and not pd.isna(row["n_seeds"]):
+        d["n_seeds"] = int(row["n_seeds"])
     for k in ("lo", "hi"):
         if f"{col}_{k}" in row.index and not pd.isna(row[f"{col}_{k}"]):
             d[k] = float(row[f"{col}_{k}"])
@@ -279,8 +281,10 @@ def headline_block(nums: dict[str, dict | None]) -> str:
     """Neutral wording: the sentence does not claim a direction the numbers might not show."""
     w = nums.get("W")
     wname = f" ({w['monitor']})" if w else ""
+    ns = sorted({v["n_seeds"] for v in (nums.get("X"), nums.get("Y")) if v and "n_seeds" in v})
+    n_txt = "n=" + "/".join(map(str, ns)) + " seeds" if ns else "n=TBD seeds"
     return (
-        f"- Held-out-dynamics (sim-to-sim) success on FetchPush, mean over 3 seeds "
+        f"- Held-out-dynamics (sim-to-sim) success on FetchPush, mean over {n_txt} "
         f"[95% bootstrap CI]: NoDR **{_pct(nums.get('X'))}**, DR **{_pct(nums.get('Y'))}**.\n"
         f"- Failure prediction from the first 10 of 50 steps (push_dr, test split): ASM AUROC "
         f"**{_auc(nums.get('Z'))}** vs best baseline{wname} **{_auc(w)}**."
