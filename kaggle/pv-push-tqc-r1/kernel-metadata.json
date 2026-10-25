@@ -1,0 +1,15 @@
+{
+  "id": "bipin14/pv-push-tqc-r1",
+  "title": "pv-push-tqc-r1",
+  "code_file": "kaggle_train.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "kernel_sources": [
+    "bipin14/pv-push-tqc-r0"
+  ],
+  "competition_sources": []
+}

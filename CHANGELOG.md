@@ -4,6 +4,23 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-25 (Day 2)
 
+- **TQC+HER probe (4 h, ~258k steps per run, ~18 steps/s per run on T4×2 with 4 runs).**
+  Nominal eval success / train success at the end:
+  - push_dr s1: 0.15 / 0.40, rising;
+  - push_drhist s0: 0.40 / 0.56, rising;
+  - push_dr s0: 0.05 / 0.05, flat;
+  - push_nodr s0: 0.00 / 0.04, flat.
+
+  TQC learns Push where SAC never did (2 of 4 runs by 258k). All 4 runs are resumed unchanged
+  in `pv-push-tqc-r1` (7.5 h cap, remaining GPU quota). Seeds are not replaced: swapping the
+  flat seed would be cherry-picking.
+- **Resume guard.** Resume sessions now assert that every run's checkpoint is present after the
+  input copy (`RESUME_REQUIRED`), so a broken input path fails in minutes instead of silently
+  retraining from step 0.
+- **Local machine stall.** A ~3 h test run (normally ~2 min) and a stalled agent indicate the
+  dev machine slept or hung between ~06:00 and 18:30 IST. Kaggle sessions were unaffected. The
+  TQC resume launched ~18:50 IST, about 9 h later than it could have.
+
 - **Reach training done** (Kaggle CPU, 100k steps). Final nominal success: reach_dr
   0.95 / 1.00 / 1.00 and reach_shortcut 1.00 / 1.00 / 1.00 for seeds 0/1/2 (20 eval episodes per
   checkpoint; `results/train_logs/`).
