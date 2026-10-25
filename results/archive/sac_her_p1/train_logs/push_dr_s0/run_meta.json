@@ -1,0 +1,43 @@
+{
+  "git_sha": "65bf7be2a978ea13de14b9a7a04545b9f07f99e4",
+  "config_hash": "692fb095f5d7",
+  "argv": [
+    "/kaggle/tmp/pv/projectv/train/train.py",
+    "--exp",
+    "configs/exp/push_dr.yaml",
+    "--seed",
+    "0",
+    "--resume",
+    "auto",
+    "--out",
+    "/kaggle/working/results",
+    "--threads",
+    "1",
+    "--device",
+    "cuda:0",
+    "--max-wall-hours",
+    "11.0",
+    "--no-wandb"
+  ],
+  "versions": {
+    "python": "3.13.15",
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "numpy": "2.1.3",
+    "torch": "2.11.0+cu128",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.6.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 39621.27,
+  "run": "push_dr_s0",
+  "seed": 0,
+  "total_steps": 1000000,
+  "num_timesteps": 933092,
+  "finished": false,
+  "stopped_on_wall_clock": true,
+  "session_fps": 23.6
+}

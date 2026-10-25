@@ -4,6 +4,20 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-25 (Day 2)
 
+- **CORRECTION to the G1 entry below.** The SAC session P1 finished (11 h, ~933k steps).
+  push_dr s1 *did* learn: 0.50 nominal success at 150k, 0.95 at 600k–934k. push_dr s0 and
+  push_drhist s0/s1 stayed at 0.05 (`results/archive/sac_her_p1/train_logs/`). So SAC+HER
+  learned in 1 of 6 Push runs, not 0 of 6 as stated below. The G1 rule still triggers (any Push
+  run not learning → switch all to TQC), and all reported Push results use TQC for every
+  condition. The SAC runs are archived evidence only.
+- **Reach NoDR / DR+Hist / shortcut v2 done** (Kaggle CPU, 100k steps): every seed ends at 1.00
+  nominal success (20 eval episodes).
+- **Resume bug confirmed.** The `reach_dr` s0 resume test in `pv-reach-nodr-r0` silently
+  retrained from scratch: attached outputs mount under `/kaggle/input/notebooks/...`, deeper
+  than the copy step searched. That duplicate is discarded (the original `reach_dr` s0 is kept).
+  The notebook now searches recursively, and `RESUME_REQUIRED` caught the same bug in the first
+  TQC resume attempt within 2 minutes.
+
 - **TQC+HER probe (4 h, ~258k steps per run, ~18 steps/s per run on T4×2 with 4 runs).**
   Nominal eval success / train success at the end:
   - push_dr s1: 0.15 / 0.40, rising;
