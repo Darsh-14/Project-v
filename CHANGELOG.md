@@ -29,6 +29,11 @@ Deviations, fallbacks and decisions, newest first.
   - C3 AUROC at T=10: ASM 0.629 / 0.593 / 0.673 (NoDR / DR / DR+Hist). The best baseline is
     act_ood 0.720 / 0.818 and obs_ood 0.668 (DR+Hist), so ASM does not beat the best baseline on
     Reach DR or NoDR and roughly ties on DR+Hist. Reported as is.
+  - Probes, rerun after the RNG fix: gain R² ≈ 0 for every feature set.
+    - Trained penultimate activations: 0.009 / 0.070 / −0.402 (NoDR / DR / DR+Hist).
+    - Raw single obs ≈ −0.03; raw stacked obs −0.034; random-init activations < 0.
+    - No implicit system identification of gain is claimed on Reach. Gain is identifiable only
+      as a ratio (displacement / (0.05·action)), which a linear probe cannot represent.
 
 - **Held-out grid hash made line-ending agnostic (portability bug).** The freeze hash was a
   byte-exact sha256 of the YAML. Windows writes CRLF and git stores LF, so a Kaggle/Colab clone
