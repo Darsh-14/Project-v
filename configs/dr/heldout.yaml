@@ -1,0 +1,301 @@
+frozen: true
+source_policy: results/ckpt/push_dr_s1/step_759108.zip
+calibration:
+  episodes: 50
+  band:
+  - 0.2
+  - 0.8
+  max_evals: 6
+  candidates: configs/dr/heldout_candidates.yaml
+  candidates_hash: 936849ded7d3469f0b930966fab7ae877cb667416b6ab083cf88123cc320b95a
+  log: results/calibration/calibration_log.csv
+cells:
+- id: 0
+  name: nominal
+  factor: nominal
+  params: {}
+- id: 1
+  name: obj_friction=0.316
+  factor: friction
+  params:
+    obj_friction: 0.316
+- id: 2
+  name: obj_friction=0.3
+  factor: friction
+  params:
+    obj_friction: 0.3
+- id: 3
+  name: obj_friction=2.0
+  factor: friction
+  params:
+    obj_friction: 2.0
+- id: 4
+  name: obj_friction=2.5
+  factor: friction
+  params:
+    obj_friction: 2.5
+- id: 5
+  name: table_friction=0.4
+  factor: friction
+  params:
+    table_friction: 0.4
+- id: 6
+  name: table_friction=1.8
+  factor: friction
+  params:
+    table_friction: 1.8
+- id: 7
+  name: obj_mass=0.354
+  factor: mass
+  params:
+    obj_mass: 0.354
+- id: 8
+  name: obj_mass=3.0
+  factor: mass
+  params:
+    obj_mass: 3.0
+- id: 9
+  name: obj_mass=4.0
+  factor: mass
+  params:
+    obj_mass: 4.0
+- id: 10
+  name: gain=0.5
+  factor: gain
+  params:
+    gain: 0.5
+- id: 11
+  name: gain=0.6
+  factor: gain
+  params:
+    gain: 0.6
+- id: 12
+  name: gain=1.5
+  factor: gain
+  params:
+    gain: 1.5
+- id: 13
+  name: gain=1.8
+  factor: gain
+  params:
+    gain: 1.8
+- id: 14
+  name: obs_noise=0.01
+  factor: noise
+  params:
+    obs_noise: 0.01
+- id: 15
+  name: obs_noise=0.02
+  factor: noise
+  params:
+    obs_noise: 0.02
+- id: 16
+  name: latency=2
+  factor: latency
+  params:
+    latency: 2
+- id: 17
+  name: latency=2#17
+  factor: latency
+  params:
+    latency: 2
+- id: 18
+  name: combined_00
+  factor: combined
+  params:
+    gain: 1.64
+    latency: 2
+    obj_friction: 2.16
+    obj_mass: 0.354
+    obs_noise: 0.0104
+    table_friction: 1.8
+- id: 19
+  name: combined_01
+  factor: combined
+  params:
+    gain: 0.529
+    latency: 2
+    obj_friction: 0.308
+    obj_mass: 3.46
+    obs_noise: 0.0108
+    table_friction: 1.8
+- id: 20
+  name: combined_02
+  factor: combined
+  params:
+    gain: 0.57
+    latency: 2
+    obj_friction: 2.39
+    obj_mass: 3.66
+    obs_noise: 0.0128
+    table_friction: 1.8
+- id: 21
+  name: combined_03
+  factor: combined
+  params:
+    gain: 1.69
+    latency: 2
+    obj_friction: 0.315
+    obj_mass: 3.57
+    obs_noise: 0.0127
+    table_friction: 1.8
+- id: 22
+  name: combined_04
+  factor: combined
+  params:
+    gain: 1.74
+    latency: 2
+    obj_friction: 2.37
+    obj_mass: 3.28
+    obs_noise: 0.0119
+    table_friction: 0.4
+- id: 23
+  name: combined_05
+  factor: combined
+  params:
+    gain: 0.565
+    latency: 2
+    obj_friction: 0.309
+    obj_mass: 3.46
+    obs_noise: 0.0156
+    table_friction: 1.8
+- id: 24
+  name: combined_06
+  factor: combined
+  params:
+    gain: 0.598
+    latency: 2
+    obj_friction: 0.305
+    obj_mass: 0.354
+    obs_noise: 0.0171
+    table_friction: 1.8
+- id: 25
+  name: combined_07
+  factor: combined
+  params:
+    gain: 1.63
+    latency: 2
+    obj_friction: 2.08
+    obj_mass: 3.32
+    obs_noise: 0.0191
+    table_friction: 1.8
+- id: 26
+  name: combined_08
+  factor: combined
+  params:
+    gain: 1.77
+    latency: 2
+    obj_friction: 2.37
+    obj_mass: 3.26
+    obs_noise: 0.0134
+    table_friction: 0.4
+- id: 27
+  name: combined_09
+  factor: combined
+  params:
+    gain: 0.583
+    latency: 2
+    obj_friction: 2.07
+    obj_mass: 3.81
+    obs_noise: 0.0115
+    table_friction: 0.4
+- id: 28
+  name: combined_10
+  factor: combined
+  params:
+    gain: 1.8
+    latency: 2
+    obj_friction: 2.49
+    obj_mass: 3.25
+    obs_noise: 0.0109
+    table_friction: 0.4
+- id: 29
+  name: combined_11
+  factor: combined
+  params:
+    gain: 1.62
+    latency: 2
+    obj_friction: 0.306
+    obj_mass: 3.33
+    obs_noise: 0.0149
+    table_friction: 0.4
+- id: 30
+  name: combined_12
+  factor: combined
+  params:
+    gain: 0.514
+    latency: 2
+    obj_friction: 0.305
+    obj_mass: 3.2
+    obs_noise: 0.0195
+    table_friction: 0.4
+- id: 31
+  name: combined_13
+  factor: combined
+  params:
+    gain: 0.518
+    latency: 2
+    obj_friction: 2.44
+    obj_mass: 3.59
+    obs_noise: 0.0188
+    table_friction: 1.8
+- id: 32
+  name: combined_14
+  factor: combined
+  params:
+    gain: 1.72
+    latency: 2
+    obj_friction: 0.302
+    obj_mass: 3.7
+    obs_noise: 0.0174
+    table_friction: 0.4
+- id: 33
+  name: combined_15
+  factor: combined
+  params:
+    gain: 1.53
+    latency: 2
+    obj_friction: 2.41
+    obj_mass: 0.354
+    obs_noise: 0.0116
+    table_friction: 0.4
+- id: 34
+  name: combined_16
+  factor: combined
+  params:
+    gain: 0.523
+    latency: 2
+    obj_friction: 0.307
+    obj_mass: 3.12
+    obs_noise: 0.0145
+    table_friction: 1.8
+- id: 35
+  name: combined_17
+  factor: combined
+  params:
+    gain: 1.61
+    latency: 2
+    obj_friction: 0.307
+    obj_mass: 3.91
+    obs_noise: 0.0192
+    table_friction: 1.8
+- id: 36
+  name: combined_18
+  factor: combined
+  params:
+    gain: 1.67
+    latency: 2
+    obj_friction: 2.41
+    obj_mass: 0.354
+    obs_noise: 0.0136
+    table_friction: 0.4
+- id: 37
+  name: combined_19
+  factor: combined
+  params:
+    gain: 1.65
+    latency: 2
+    obj_friction: 0.307
+    obj_mass: 3.63
+    obs_noise: 0.013
+    table_friction: 1.8

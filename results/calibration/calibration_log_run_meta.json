@@ -1,0 +1,138 @@
+{
+  "git_sha": "0950d58d91d066d259f7b5d8e201e72f3a7c7459",
+  "config_hash": "52ac54312b5a",
+  "argv": [
+    "calibrate_heldout",
+    "--policy",
+    "results/ckpt/push_dr_s1/step_759108.zip",
+    "--exp",
+    "configs/exp/push_dr.yaml",
+    "--candidates",
+    "configs/dr/heldout_candidates.yaml",
+    "--episodes",
+    "50",
+    "--out",
+    "configs/dr/heldout.yaml",
+    "--no-wandb"
+  ],
+  "versions": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.9.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 220.76,
+  "heldout_hash": "6e9b1e89dba6229b19e77c6f71e01070ff881652f1a215fe89f20cea2c20d221",
+  "nominal_success": 0.8,
+  "one_factor": [
+    {
+      "cell": "obj_friction=0.316",
+      "candidate": 0.2,
+      "success": 0.24,
+      "flag": ""
+    },
+    {
+      "cell": "obj_friction=0.3",
+      "candidate": 0.3,
+      "success": 0.2,
+      "flag": ""
+    },
+    {
+      "cell": "obj_friction=2.0",
+      "candidate": 2.0,
+      "success": 0.9,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "obj_friction=2.5",
+      "candidate": 2.5,
+      "success": 0.8,
+      "flag": ""
+    },
+    {
+      "cell": "table_friction=0.4",
+      "candidate": 0.4,
+      "success": 0.44,
+      "flag": ""
+    },
+    {
+      "cell": "table_friction=1.8",
+      "candidate": 1.8,
+      "success": 0.92,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "obj_mass=0.354",
+      "candidate": 0.25,
+      "success": 0.2,
+      "flag": ""
+    },
+    {
+      "cell": "obj_mass=3.0",
+      "candidate": 3.0,
+      "success": 1.0,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "obj_mass=4.0",
+      "candidate": 4.0,
+      "success": 1.0,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "gain=0.5",
+      "candidate": 0.5,
+      "success": 0.92,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "gain=0.6",
+      "candidate": 0.6,
+      "success": 0.94,
+      "flag": "no_value_in_band_kept_closest"
+    },
+    {
+      "cell": "gain=1.5",
+      "candidate": 1.5,
+      "success": 0.4,
+      "flag": ""
+    },
+    {
+      "cell": "gain=1.8",
+      "candidate": 1.8,
+      "success": 0.22,
+      "flag": ""
+    },
+    {
+      "cell": "obs_noise=0.01",
+      "candidate": 0.01,
+      "success": 0.74,
+      "flag": ""
+    },
+    {
+      "cell": "obs_noise=0.02",
+      "candidate": 0.02,
+      "success": 0.38,
+      "flag": ""
+    },
+    {
+      "cell": "latency=2",
+      "candidate": 2,
+      "success": 0.26,
+      "flag": ""
+    },
+    {
+      "cell": "latency=2#17",
+      "candidate": 3,
+      "success": 0.26,
+      "flag": ""
+    }
+  ]
+}
