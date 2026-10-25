@@ -11,7 +11,7 @@ import yaml
 from projectv.eval import heldout_sweep
 from projectv.eval.cells import Cell, load_cells, write_cells
 from projectv.eval.steplog import load_steplog, steplog_path
-from projectv.utils.config import file_hash
+from projectv.utils.config import text_hash
 from projectv.utils.seeding import eval_episode_seed
 from projectv.xai.groups import flat_dim
 
@@ -137,7 +137,7 @@ def test_sweep_asserts_heldout_hash(sweep_root):
     (root / "heldout_hash.txt").write_text("0" * 64)
     with pytest.raises(AssertionError):  # wrong hash
         heldout_sweep.main(args)
-    (root / "heldout_hash.txt").write_text(file_hash(cells_yaml))
+    (root / "heldout_hash.txt").write_text(text_hash(cells_yaml))
     heldout_sweep.main(args + ["--only-cells", "1", "--steplog", "none"])
     assert len(_rows(root / "eval" / "push_dr_s0.csv")) == 1
 
@@ -239,7 +239,7 @@ def test_calibration_writes_frozen_yaml_and_hash(tiny_model, tmp_path):
     out, hash_out = tmp_path / "heldout.yaml", tmp_path / "heldout_hash.txt"
     doc = yaml.safe_load(out.read_text())
     assert doc["frozen"] is True and doc["source_policy"].endswith("pol.zip")
-    assert hash_out.read_text().strip() == file_hash(out)
+    assert hash_out.read_text().strip() == text_hash(out)
     cells = load_cells(out, check_hash=False)
     assert [c.id for c in cells] == [0, 1, 2, 3, 4]
     assert [c.factor for c in cells] == ["nominal", "mass", "latency", "combined", "combined"]
@@ -257,7 +257,7 @@ def test_calibration_writes_frozen_yaml_and_hash(tiny_model, tmp_path):
     with pytest.raises(SystemExit, match="REFUSING"):
         calib.main(_calib_args(tmp_path))
     calib.main(_calib_args(tmp_path, "--force-refreeze"))
-    assert hash_out.read_text().strip() == file_hash(out)
+    assert hash_out.read_text().strip() == text_hash(out)
 
 
 def test_steplog_meta_rejects_other_checkpoint(tmp_path):
@@ -272,3 +272,15 @@ def test_steplog_meta_rejects_other_checkpoint(tmp_path):
     heldout_sweep._check_steplog_meta(meta_path, {**old, "checkpoint": "D:/b.zip"})
     with _pt.raises(RuntimeError):
         heldout_sweep._check_steplog_meta(meta_path, {**old, "checkpoint_sha256": "bbb"})
+
+
+def test_grid_hash_ignores_line_endings(tmp_path):
+    from projectv.eval.cells import Cell, write_cells
+    from projectv.utils.config import text_hash
+
+    p = tmp_path / "grid.yaml"
+    write_cells([Cell(0, "nominal", "nominal", {})], p, frozen=True)
+    assert b"\r" not in p.read_bytes()  # always written with LF
+    crlf = tmp_path / "grid_crlf.yaml"
+    crlf.write_bytes(p.read_bytes().replace(b"\n", b"\r\n"))
+    assert text_hash(p) == text_hash(crlf)  # Windows checkout == Linux clone

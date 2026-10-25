@@ -38,7 +38,7 @@ import numpy as np
 
 from projectv.eval.cells import NOMINAL, Cell, write_cells
 from projectv.eval.rollout import load_model, run_episodes
-from projectv.utils.config import file_hash, load_exp, load_yaml
+from projectv.utils.config import load_exp, load_yaml, text_hash
 from projectv.utils.io import write_run_meta
 
 BAND = (0.2, 0.8)
@@ -374,12 +374,12 @@ def main(argv: list[str] | None = None) -> None:
             band=list(band),
             max_evals=args.max_evals,
             candidates=Path(args.candidates).as_posix(),
-            candidates_hash=file_hash(args.candidates),
+            candidates_hash=text_hash(args.candidates),
             log=Path(args.log_out).as_posix(),
         ),
     )
     hash_out.parent.mkdir(parents=True, exist_ok=True)
-    digest = file_hash(out)
+    digest = text_hash(out)
     hash_out.write_text(digest + "\n", encoding="utf-8")
     write_run_meta(
         Path(args.log_out).parent,

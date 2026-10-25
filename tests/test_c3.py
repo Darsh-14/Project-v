@@ -14,7 +14,7 @@ from projectv.monitor import baselines as bl
 from projectv.monitor.asm import fit_nominal, mahalanobis
 from projectv.monitor.metrics import ALPHAS, auroc, ewma, prefix_score, select_alpha
 from projectv.monitor.splits import CALIB, TEST, assign_splits, calib_mask
-from projectv.utils.config import file_hash
+from projectv.utils.config import text_hash
 from projectv.utils.seeding import eval_episode_seed
 from projectv.xai.groups import flat_dim, make_groups
 from projectv.xai.policy_fn import LinearGaussian
@@ -221,7 +221,7 @@ def _write_world(tmp_path, tiny_model):
     cells_path.write_text(yaml.safe_dump({"frozen": True, "cells": cells}, sort_keys=False))
     root = tmp_path / "results"
     root.mkdir()
-    (root / "heldout_hash.txt").write_text(file_hash(cells_path))
+    (root / "heldout_hash.txt").write_text(text_hash(cells_path))
 
     model = tiny_model("push_dr")
     (root / "ckpt").mkdir()

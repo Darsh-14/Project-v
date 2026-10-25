@@ -43,7 +43,14 @@ def config_hash(cfg: dict[str, Any]) -> str:
 
 
 def file_hash(path: str | Path) -> str:
+    """Byte-exact sha256 (binary files such as checkpoints)."""
     return hashlib.sha256(_resolve(path).read_bytes()).hexdigest()
+
+
+def text_hash(path: str | Path) -> str:
+    """sha256 of a text file with CRLF normalised to LF. Used to freeze config files such as the
+    held-out grid, so a Windows checkout and a Linux (Kaggle/Colab) clone give the same hash."""
+    return hashlib.sha256(_resolve(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def _resolve(path: str | Path) -> Path:

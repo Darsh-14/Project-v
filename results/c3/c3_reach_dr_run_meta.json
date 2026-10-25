@@ -1,0 +1,59 @@
+{
+  "git_sha": "2f4cd6425d45fda0263296e96056fe0f7c87c023",
+  "config_hash": "d3d1f586d0ff",
+  "argv": [
+    "--exp",
+    "reach_dr",
+    "--seeds",
+    "0",
+    "1",
+    "2",
+    "--cells",
+    "configs/dr/heldout_reach.yaml",
+    "--hash-path",
+    "results/heldout_reach_hash.txt"
+  ],
+  "versions": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.9.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 507.09,
+  "exp": "reach_dr",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "heldout_hash": "1ecade9020ed13ebe536fe5d2df3ed9991bf02ac2783a3526c3a935cdca8fc0a",
+  "hash_checked": true,
+  "checkpoints": {
+    "0": "results\\ckpt\\reach_dr_s0_final.zip",
+    "1": "results\\ckpt\\reach_dr_s1_final.zip",
+    "2": "results\\ckpt\\reach_dr_s2_final.zip"
+  },
+  "missing_cells": {},
+  "signals": [
+    "asm",
+    "obs_ood",
+    "act_std",
+    "q_drop",
+    "ensemble",
+    "act_ood"
+  ],
+  "groups": [
+    "ee_pos",
+    "grip_state",
+    "ee_vel",
+    "grip_vel",
+    "goal"
+  ]
+}

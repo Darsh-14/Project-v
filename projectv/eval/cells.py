@@ -9,7 +9,7 @@ from pathlib import Path
 import yaml
 
 from projectv.envs.dr_wrapper import fixed_spec
-from projectv.utils.config import file_hash, load_yaml
+from projectv.utils.config import load_yaml, text_hash
 
 HELDOUT_PATH = "configs/dr/heldout.yaml"
 HASH_PATH = "results/heldout_hash.txt"
@@ -47,10 +47,10 @@ def write_cells(cells: list[Cell], path: str | Path, **header) -> None:
         **header,
         "cells": [dict(id=c.id, name=c.name, factor=c.factor, params=c.params) for c in cells],
     }
-    Path(path).write_text(yaml.safe_dump(doc, sort_keys=False), encoding="utf-8")
+    Path(path).write_text(yaml.safe_dump(doc, sort_keys=False), encoding="utf-8", newline="\n")
 
 
 def assert_frozen(path: str | Path = HELDOUT_PATH, hash_path: str | Path = HASH_PATH) -> None:
     recorded = Path(hash_path).read_text().strip()
-    actual = file_hash(path)
+    actual = text_hash(path)
     assert recorded == actual, f"{path} changed after freeze ({actual} != {recorded})"

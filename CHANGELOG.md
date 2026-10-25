@@ -4,6 +4,24 @@ Deviations, fallbacks and decisions, newest first.
 
 ## 2026-10-25 (Day 2)
 
+- **Held-out grid hash made line-ending agnostic (portability bug).** The freeze hash was a
+  byte-exact sha256 of the YAML. Windows writes CRLF and git stores LF, so a Kaggle/Colab clone
+  hashed `heldout_reach.yaml` to `860a59…`, not the recorded `1ecade…`, and `assert_frozen`
+  would refuse every off-machine run (the Push grid would be affected the same way).
+  - Grid files are now hashed with `utils.config.text_hash` (CRLF → LF before sha256) and always
+    written with LF. Checkpoints keep byte-exact `file_hash`.
+  - The Reach grid's *values* are unchanged. Only the recorded fingerprint is re-computed with
+    the new function (`860a59…`), and the step-log `meta.json` `heldout_hash` fields of the
+    reach sweeps are migrated to it. This is not an edit of the frozen grid.
+- **Reach G2 track.** `configs/dr/heldout_reach.yaml` was calibrated on reach_dr s0
+  (`results/calibration/calibration_log_reach.csv`). The low-gain cells (0.5, 0.6) cannot be
+  brought into the 20–80% band (Reach is robust to them, success 1.00); they are kept and
+  flagged, not dropped.
+  - Held-out success for reach_dr spans 0.04–1.00, with failures concentrated in gain 1.8,
+    latency 3 and half of the combined cells (`results/eval/reach_dr_s*.csv`).
+- **TQC resume (`pv-push-tqc-r1` v3)** passed the resume guard (still running 15 min in) after
+  the input path fix.
+
 - **CORRECTION to the G1 entry below.** The SAC session P1 finished (11 h, ~933k steps).
   push_dr s1 *did* learn: 0.50 nominal success at 150k, 0.95 at 600k–934k. push_dr s0 and
   push_drhist s0/s1 stayed at 0.05 (`results/archive/sac_her_p1/train_logs/`). So SAC+HER

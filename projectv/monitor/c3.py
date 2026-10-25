@@ -50,7 +50,7 @@ from projectv.monitor.metrics import (
     select_alpha,
 )
 from projectv.monitor.splits import CALIB, TEST, calib_mask
-from projectv.utils.config import file_hash, load_exp
+from projectv.utils.config import file_hash, load_exp, text_hash
 from projectv.utils.io import write_json, write_run_meta
 from projectv.xai.policy_fn import SB3Policy
 
@@ -298,7 +298,7 @@ def main(argv: list[str] | None = None) -> None:
     if not a.no_hash_check:
         assert_frozen(a.cells, hash_path)
     cells = load_cells(a.cells, check_hash=False)
-    heldout_hash = file_hash(a.cells)
+    heldout_hash = text_hash(a.cells)
     exp_cfg = load_exp(f"configs/exp/{a.exp}.yaml")
 
     ckpts = {s: rollout.resolve_checkpoint(a.exp, s, root) for s in a.seeds}

@@ -34,7 +34,7 @@ import numpy as np
 from projectv.eval.cells import Cell, assert_frozen, load_cells
 from projectv.eval.rollout import load_model, resolve_checkpoint, run_episodes
 from projectv.eval.steplog import save_steplog, steplog_path
-from projectv.utils.config import config_hash, file_hash, load_exp
+from projectv.utils.config import config_hash, file_hash, load_exp, text_hash
 from projectv.utils.io import git_sha, write_json, write_run_meta
 from projectv.utils.seeding import eval_episode_seed
 
@@ -225,11 +225,11 @@ def load_sweep_cells(args: argparse.Namespace, root: Path) -> tuple[list[Cell], 
             "outputs are not valid C3/C4/robustness results",
             flush=True,
         )
-        return load_cells(args.dry_cells, check_hash=False), "dry:" + file_hash(args.dry_cells)
+        return load_cells(args.dry_cells, check_hash=False), "dry:" + text_hash(args.dry_cells)
     hash_file = Path(args.hash_file) if args.hash_file else root / "heldout_hash.txt"
     assert hash_file.exists(), f"{hash_file} missing: freeze the grid first (calibrate_heldout.py)"
     assert_frozen(args.cells, hash_file)
-    return load_cells(args.cells, check_hash=False), file_hash(args.cells)
+    return load_cells(args.cells, check_hash=False), text_hash(args.cells)
 
 
 def main(argv: list[str] | None = None) -> None:
