@@ -44,6 +44,8 @@ def main() -> None:
         f"MAX_HOURS = {args.max_hours!r}\n"
         f"ALGO = {args.algo!r}\n"
         f"EXTRA = {args.extra!r}\n"
+        f"RESUME_REQUIRED = {bool(args.resume_from)!r}
+"
     )
     cell = next(c for c in nb["cells"] if "".join(c["source"]).startswith("# PARAMETERS"))
     cell["source"] = params.splitlines(keepends=True)
