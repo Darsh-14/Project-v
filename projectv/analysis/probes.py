@@ -53,7 +53,10 @@ from projectv.xai.groups import make_groups, slot_of
 TARGETS = ("log_friction", "log_mass", "gain")
 FEATURES = ("penult", "obs_single", "obs_stacked", "penult_random")
 ALPHAS = (1e-2, 1e-1, 1.0, 10.0, 100.0, 1000.0)
-EXPS = {"push": ("push_nodr", "push_dr", "push_drhist")}
+EXPS = {
+    "push": ("push_nodr", "push_dr", "push_drhist"),
+    "reach": ("reach_nodr", "reach_dr", "reach_drhist"),  # Gate G2 track
+}
 TRAIN_DR = "configs/dr/train.yaml"
 PROBE_SEED_OFFSET = 1_000_000  # episode seeds disjoint from eval seeds (CLAUDE.md §7)
 

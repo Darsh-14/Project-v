@@ -50,7 +50,14 @@ def write_cells(cells: list[Cell], path: str | Path, **header) -> None:
     Path(path).write_text(yaml.safe_dump(doc, sort_keys=False), encoding="utf-8", newline="\n")
 
 
-def assert_frozen(path: str | Path = HELDOUT_PATH, hash_path: str | Path = HASH_PATH) -> None:
+def default_hash_path(path: str | Path) -> Path:
+    """configs/dr/heldout.yaml -> results/heldout_hash.txt; heldout_reach.yaml ->
+    results/heldout_reach_hash.txt (one recorded freeze hash per grid file)."""
+    return Path("results") / f"{Path(path).stem}_hash.txt"
+
+
+def assert_frozen(path: str | Path = HELDOUT_PATH, hash_path: str | Path | None = None) -> None:
+    hash_path = hash_path if hash_path is not None else default_hash_path(path)
     recorded = Path(hash_path).read_text().strip()
     actual = text_hash(path)
     assert recorded == actual, f"{path} changed after freeze ({actual} != {recorded})"

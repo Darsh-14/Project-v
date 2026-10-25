@@ -39,7 +39,10 @@ from projectv.xai.groups import base_name, make_groups, slot_of
 
 METHODS = ("ig", "gwie_c")
 TEMPORAL_BUCKETS = ("t", "t-1", "t-2", "t-3", "act")
-EXPS = {"push": ("push_nodr", "push_dr", "push_drhist")}
+EXPS = {
+    "push": ("push_nodr", "push_dr", "push_drhist"),
+    "reach": ("reach_nodr", "reach_dr", "reach_drhist"),  # Gate G2 track
+}
 
 
 # --- pure helpers ---------------------------------------------------------------------------

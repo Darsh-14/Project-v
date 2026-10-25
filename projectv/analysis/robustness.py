@@ -209,7 +209,10 @@ def main(argv: list[str] | None = None) -> None:
     df = load_eval(root, tuple(args.exps))
     if df.empty:
         raise SystemExit(f"no eval CSVs under {root / 'eval'}")
-    rob, poi = robustness_tables(df, tuple(args.exps), POI_PAIRS, args.n_boot, args.seed)
+    # POI pairs follow the condition names: DR vs NoDR, DR+Hist vs DR, for any task prefix
+    task = args.exps[0].split("_")[0]
+    pairs = ((f"{task}_dr", f"{task}_nodr"), (f"{task}_drhist", f"{task}_dr"))
+    rob, poi = robustness_tables(df, tuple(args.exps), pairs, args.n_boot, args.seed)
     out.mkdir(parents=True, exist_ok=True)
     rob.to_csv(out / "robustness.csv", index=False)
     poi.to_csv(out / "poi.csv", index=False)
