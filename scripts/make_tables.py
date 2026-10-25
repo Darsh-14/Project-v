@@ -84,9 +84,18 @@ def ci_frame(df: pd.DataFrame, drop: Iterable[str] = ()) -> pd.DataFrame:
             out[c] = [str(int(v)) for v in df[c]]
         elif pd.api.types.is_numeric_dtype(df[c]) and not pd.api.types.is_bool_dtype(df[c]):
             out[c] = [fmt_num(float(v)) for v in df[c]]
+        elif c.endswith("_per_seed"):  # "0.2938;0.225;0.2959" -> "0.294 / 0.225 / 0.296"
+            out[c] = [fmt_seed_list(v) for v in df[c]]
         else:
             out[c] = ["" if pd.isna(v) else str(v) for v in df[c]]
     return pd.DataFrame(out, index=df.index)
+
+
+def fmt_seed_list(v: object) -> str:
+    """A `;`-separated per-seed list, each value with 3 decimals."""
+    if v is None or (isinstance(v, float) and math.isnan(v)):
+        return "n/a"
+    return " / ".join(fmt_num(x.strip()) for x in str(v).split(";") if x.strip())
 
 
 def to_markdown(df: pd.DataFrame) -> str:
@@ -201,6 +210,267 @@ def table_c3(root: Path, exp: str, per_factor: bool) -> str:
     return to_markdown(ci_frame(df))
 
 
+def table_c3_metrics(root: Path, exp: str) -> str:
+    """C3 metrics table; adds `n_seeds` (count of non-empty `auroc_s{n}` columns) when the file
+    has per-seed AUROCs but no `n_seeds` column."""
+    p = root / "c3" / f"c3_{exp}_metrics.csv"
+    df = _read(p)
+    if df is None:
+        return tbd_block([p], root)
+    seed_cols = _seed_cols(df, "auroc")
+    if seed_cols and "n_seeds" not in df.columns:
+        df = df.copy()
+        df["n_seeds"] = df[seed_cols].notna().sum(axis=1).astype(int)
+    tcol = _first_col(df, T_COLS)
+    if tcol:
+        df = df.sort_values([tcol], kind="stable")
+    return to_markdown(ci_frame(df))
+
+
+def _seed_cols(df: pd.DataFrame, metric: str | None = None) -> list[str]:
+    """Per-seed columns: `seed{n}` / `s{n}` (metric None) or `{metric}_s{n}`."""
+    pat = rf"{re.escape(metric)}_s\d+" if metric else r"s(eed)?_?\d+"
+    return [c for c in df.columns if re.fullmatch(pat, c)]
+
+
+def _seeds_txt(row: pd.Series, seed_cols: list[str]) -> str:
+    vals = [fmt_num(row[c]) for c in seed_cols if c in row.index and not pd.isna(row[c])]
+    return " / ".join(vals) if vals else "n/a"
+
+
+def _ci_seeds_cell(row: pd.Series, col: str, seed_cols: list[str]) -> str:
+    s = fmt_ci(row[col], row.get(f"{col}_lo"), row.get(f"{col}_hi"))
+    if seed_cols:
+        s += f"; seeds {_seeds_txt(row, seed_cols)}"
+    return s
+
+
+# ---------------------------------------------------------------------------- Reach track
+
+REACH_CONDS = ("reach_nodr", "reach_dr", "reach_drhist")
+REACH_LABELS = {"reach_nodr": "NoDR", "reach_dr": "DR", "reach_drhist": "DR+Hist"}
+
+
+def _ordered(values: Iterable[str], order: Iterable[str]) -> list[str]:
+    vals = list(dict.fromkeys(values))
+    known = [o for o in order if o in vals]
+    return known + [v for v in vals if v not in known]
+
+
+def table_robustness_reach(root: Path) -> str:
+    """Success per (condition, split) with CI and per-seed values, then probability of
+    improvement (P(x > y), rliable) per split."""
+    rp = root / "robustness_reach" / "robustness.csv"
+    pp = root / "robustness_reach" / "poi.csv"
+    rob, poi = _read(rp), _read(pp)
+    if rob is None:
+        return tbd_block([rp], root)
+    seed_cols = _seed_cols(rob)
+    out = rob.copy()
+    if seed_cols:
+        out["per_seed"] = [_seeds_txt(r, seed_cols) for _, r in rob.iterrows()]
+        out = out.drop(columns=seed_cols)
+    parts = [to_markdown(ci_frame(out, drop=("ci_backend",)))]
+    parts.append("Probability of improvement P(x > y) across seeds and cells (95% CI):")
+    parts.append(tbd_block([pp], root) if poi is None else to_markdown(ci_frame(poi)))
+    return "\n\n".join(parts)
+
+
+def _long_pivot(
+    df: pd.DataFrame, row_keys: list[str], col_key: str, col_order: Iterable[str], label=None
+) -> pd.DataFrame:
+    """Pivot a long `mean, mean_lo, mean_hi, seed{n}, n_seeds` frame: one row per `row_keys`,
+    one column per `col_key` value holding `mean [lo, hi]; seeds a / b / c`. Column headers
+    carry n (from `n_seeds`)."""
+    seed_cols = _seed_cols(df)
+    cols = _ordered(df[col_key].astype(str), col_order)
+    rows: dict[tuple, dict[str, str]] = {}
+    ns: dict[str, set[int]] = {c: set() for c in cols}
+    for _, r in df.iterrows():
+        key = tuple("" if pd.isna(r[k]) else str(r[k]) for k in row_keys)
+        c = str(r[col_key])
+        rows.setdefault(key, {})[c] = _ci_seeds_cell(r, "mean", seed_cols)
+        if "n_seeds" in r.index and not pd.isna(r["n_seeds"]):
+            ns[c].add(int(r["n_seeds"]))
+    label = label or (lambda c: c)
+    head = {c: f"{label(c)} (n={'/'.join(map(str, sorted(ns[c]))) or '?'})" for c in cols}
+    data = [
+        dict(zip(row_keys, k, strict=True)) | {head[c]: v.get(c, "n/a") for c in cols}
+        for k, v in rows.items()
+    ]
+    return pd.DataFrame(data, columns=[*row_keys, *head.values()])
+
+
+def table_c4_reach_reliance(root: Path, level: str = "base") -> str:
+    p = root / "c4_reach" / "reliance.csv"
+    df = _read(p)
+    if df is None:
+        return tbd_block([p], root)
+    ecol = _first_col(df, EXP_COLS)
+    if "level" in df.columns:
+        df = df[df["level"].astype(str) == level]
+    if not len(df) or ecol is None or "mean" not in df.columns:
+        return tbd_block([p], root)
+    if "quantity" in df.columns:  # non-share rows (entropy, ...) are labelled by quantity
+        df = df.assign(
+            group=[
+                str(g) if q == "share" else str(q)
+                for g, q in zip(df["group"].fillna(""), df["quantity"].astype(str), strict=True)
+            ]
+        )
+    piv = _long_pivot(df, ["method", "group"], ecol, REACH_CONDS, REACH_LABELS.get)
+    return to_markdown(piv)
+
+
+def table_c4_reach_temporal(root: Path) -> str:
+    p = root / "c4_reach" / "temporal.csv"
+    df = _read(p)
+    if df is None or "mean" not in df.columns or "group" not in df.columns:
+        return tbd_block([p], root)
+    if "quantity" in df.columns:
+        df = df[df["quantity"].astype(str) == "share"]
+    ecol = _first_col(df, EXP_COLS)
+    scol = _first_col(df, ("scope", *SPLIT_COLS))
+    keys = [c for c in (ecol, "method", scol) if c]
+    piv = _long_pivot(df, keys, "group", ("t", "t-1", "t-2", "t-3", "act"))
+    return to_markdown(piv)
+
+
+def table_c4_reach_probes(root: Path) -> str:
+    """One row per (condition, target, feature set): pooled R² [CI] (scope `all`), per-seed R²
+    (scopes `seed{n}`), n_seeds and the claim-rule columns."""
+    p = root / "c4_reach" / "probes.csv"
+    df = _read(p)
+    if df is None or "r2" not in df.columns:
+        return tbd_block([p], root)
+    ecol = _first_col(df, EXP_COLS) or "exp"
+    keys = [ecol, "target", "features"]
+    rows = []
+    for k, d in df.groupby(keys, sort=False):
+        scope = d["scope"].astype(str) if "scope" in d.columns else pd.Series("all", d.index)
+        pooled = d[scope == "all"]
+        r = pooled.iloc[0] if len(pooled) else d.iloc[0]
+        seeds = d[scope.str.fullmatch(r"seed\d+")].sort_values("scope")
+        row = dict(zip(keys, k, strict=True))
+        row["r2 (pooled)"] = fmt_ci(r["r2"], r.get("r2_lo"), r.get("r2_hi"))
+        row["r2 per seed"] = " / ".join(fmt_num(v) for v in seeds["r2"]) or "n/a"
+        n = r.get("n_seeds")
+        row["n_seeds"] = str(int(n)) if n is not None and not pd.isna(n) else str(len(seeds))
+        for c in ("claim_sysid", "penult_beats_stacked"):
+            if c in d.columns:
+                row[c] = "n/a" if pd.isna(r[c]) else str(r[c])
+        rows.append(row)
+    return to_markdown(pd.DataFrame(rows)) + "\n\n" + probes_claim_block(root)
+
+
+def _bool(v: object) -> bool | None:
+    if v is None or (isinstance(v, float) and math.isnan(v)):
+        return None
+    return str(v).strip().lower() in {"true", "1", "1.0", "yes"}
+
+
+def probes_claim_block(root: Path) -> str:
+    """Claim-rule outcome per (condition, target), from `claim_sysid` in probes.csv."""
+    p = root / "c4_reach" / "probes.csv"
+    df = _read(p)
+    if df is None or "claim_sysid" not in df.columns:
+        return f"- Claim rule outcome (`claim_sysid`): {TBD} (missing: `{_rel(p, root)}`)."
+    ecol = _first_col(df, EXP_COLS) or "exp"
+    outcomes = []
+    for (e, t), d in df.groupby([ecol, "target"], sort=False):
+        vals = [b for b in map(_bool, d["claim_sysid"]) if b is not None]
+        outcomes.append((f"{e}/{t}", any(vals) if vals else None))
+    txt = ", ".join(f"{k}: **{'n/a' if v is None else v}**" for k, v in outcomes)
+    lines = [f"- Claim rule outcome (`claim_sysid`, {_rel(p, root)}): {txt}."]
+    claimed = [k for k, v in outcomes if v]
+    lines.append(
+        "- Implicit system identification is claimed for: " + ", ".join(claimed) + "."
+        if claimed
+        else "- No implicit system identification is claimed for any (condition, target)."
+    )
+    meta = root / "c4_reach" / "run_meta_probes.json"
+    if meta.exists():
+        sha = json.loads(meta.read_text(encoding="utf-8")).get("git_sha", "")
+        if sha:
+            lines.append(f"- Probe run code version (`run_meta_probes.json` git SHA): `{sha[:7]}`.")
+    return "\n".join(lines)
+
+
+def _c3_best(df: pd.DataFrame, T: int, metric: str = "auroc"):
+    mcol, tcol = _first_col(df, MONITOR_COLS), _first_col(df, T_COLS)
+    if mcol is None or tcol is None or metric not in df.columns:
+        return None, None
+    d = df[pd.to_numeric(df[tcol], errors="coerce") == T]
+    asm = d[d[mcol].map(_norm) == "asm"]
+    base = d[d[mcol].map(_norm).isin({_norm(b) for b in C3_BASELINES})]
+    base = base[pd.to_numeric(base[metric], errors="coerce").notna()]
+    best = base.loc[pd.to_numeric(base[metric]).idxmax()] if len(base) else None
+    return (asm.iloc[0] if len(asm) else None), best
+
+
+def _verdict(a: pd.Series, b: pd.Series, col: str = "auroc") -> str:
+    try:
+        alo, ahi, blo, bhi = (
+            float(x) for x in (a[f"{col}_lo"], a[f"{col}_hi"], b[f"{col}_lo"], b[f"{col}_hi"])
+        )
+    except (KeyError, TypeError, ValueError):
+        return "no CI available"
+    if alo > bhi:
+        return "ASM above the best baseline (CIs disjoint)"
+    if ahi < blo:
+        return "ASM below the best baseline (CIs disjoint)"
+    return "CIs overlap"
+
+
+def reach_summary_block(root: Path, T: int = 10) -> str:
+    """Generated one-line-per-result summary of the Reach track (every number from files)."""
+    lines = []
+    rob = _read(root / "robustness_reach" / "robustness.csv")
+    if rob is None:
+        lines.append(f"- Held-out-dynamics (sim-to-sim) success on FetchReach: {TBD}.")
+    else:
+        parts, ns = [], set()
+        for c in REACH_CONDS:
+            v = _robustness_value(rob, {_norm(c)}, c, "")
+            parts.append(f"{REACH_LABELS[c]} **{_pct(v)}**")
+            if v and "n_seeds" in v:
+                ns.add(v["n_seeds"])
+        n_txt = "n=" + "/".join(map(str, sorted(ns))) + " seeds" if ns else "n=TBD seeds"
+        lines.append(
+            "- Held-out-dynamics (sim-to-sim) success on FetchReach, mean over "
+            f"{n_txt} [95% bootstrap CI]: " + ", ".join(parts) + "."
+        )
+    poi = _read(root / "robustness_reach" / "poi.csv")
+    if poi is not None and {"x", "y", "split", "poi"} <= set(poi.columns):
+        d = poi[poi["split"].astype(str) == "heldout"]
+        if len(d):
+            txt = ", ".join(
+                f"P({REACH_LABELS.get(r['x'], r['x'])} > {REACH_LABELS.get(r['y'], r['y'])}) "
+                f"{fmt_ci(r['poi'], r.get('poi_lo'), r.get('poi_hi'))}"
+                for _, r in d.iterrows()
+            )
+            lines.append(f"- Probability of improvement on the held-out cells: {txt}.")
+    for c in REACH_CONDS:
+        df = _read(root / "c3" / f"c3_{c}_metrics.csv")
+        label = f"- C3 {c}, AUROC from the first {T} of 50 steps (test split):"
+        if df is None:
+            lines.append(f"{label} {TBD}.")
+            continue
+        a, b = _c3_best(df, T)
+        if a is None or b is None:
+            lines.append(f"{label} {TBD}.")
+            continue
+        mcol = _first_col(df, MONITOR_COLS)
+        lines.append(
+            f"{label} ASM {fmt_ci(a['auroc'], a.get('auroc_lo'), a.get('auroc_hi'))} vs best "
+            f"baseline ({b[mcol]}) {fmt_ci(b['auroc'], b.get('auroc_lo'), b.get('auroc_hi'))}: "
+            f"{_verdict(a, b)}."
+        )
+    first = probes_claim_block(root).splitlines()[0]
+    lines.append(first.replace("- Claim rule outcome", "- C4 probes, claim rule outcome", 1))
+    return "\n".join(lines)
+
+
 def headline_numbers(root: Path) -> dict[str, dict | None]:
     """mvp.md §14 numbers: X/Y = held-out success NoDR/DR (push), Z = ASM AUROC from the first
     10 steps on push_dr, W = best of the 5 baselines at the same prefix. Null when missing."""
@@ -302,6 +572,15 @@ def build_tables(root: Path) -> dict[str, str]:
     for exp in C3_EXPS:
         t[f"c3_{exp}"] = table_c3(root, exp, per_factor=False)
         t[f"c3_{exp}_per_factor"] = table_c3(root, exp, per_factor=True)
+    for exp in REACH_CONDS:
+        t[f"c3_{exp}"] = table_c3_metrics(root, exp)
+        t[f"c3_{exp}_per_factor"] = table_c3(root, exp, per_factor=True)
+    t["robustness_reach"] = table_robustness_reach(root)
+    t["c4_reach_reliance"] = table_c4_reach_reliance(root, "base")
+    t["c4_reach_reliance_slots"] = table_c4_reach_reliance(root, "slot")
+    t["c4_reach_temporal"] = table_c4_reach_temporal(root)
+    t["c4_reach_probes"] = table_c4_reach_probes(root)
+    t["c1_shortcut_her"] = _generic(root, "c1/c1_shortcut_her_summary.csv", RUNTIME_COLS)
     t["c4_reliance"] = _generic(root, "c4/reliance.csv")
     t["c4_temporal"] = _generic(root, "c4/temporal.csv")
     t["c4_probes"] = _generic(root, "c4/probes.csv")
@@ -354,6 +633,7 @@ def make_all(root: Path, out: Path, docs: Iterable[Path], log: Callable[[str], N
     (out / "numbers.json").write_text(json.dumps(nums, indent=2) + "\n", encoding="utf-8")
     blocks = dict(tables)
     blocks["headline"] = headline_block(nums)
+    blocks["reach_summary"] = reach_summary_block(root)
     blocks["num_X"], blocks["num_Y"] = _pct(nums["X"]), _pct(nums["Y"])
     blocks["num_Z"], blocks["num_W"] = _auc(nums["Z"]), _auc(nums["W"])
     for doc in docs:

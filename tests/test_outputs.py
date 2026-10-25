@@ -201,3 +201,231 @@ def test_method_colours_fixed(mf):
     assert len(set(mf.METHOD_COLORS.values())) == len(mf.METHODS)
     assert mf.color_for("gwie_c", mf.METHOD_COLORS) == mf.METHOD_COLORS["gwie_c"]
     assert mf.color_for("DR+Hist", mf.CONDITION_COLORS) == mf.CONDITION_COLORS["push_drhist"]
+
+
+# ---------------------------------------------------------------------------- Reach track (G2)
+
+REACH = ("reach_nodr", "reach_dr", "reach_drhist")
+
+
+def _ci_row(v: float, half: float = 0.01, seeds: bool = True) -> dict:
+    d = dict(mean=v, mean_lo=v - half, mean_hi=v + half, n_seeds=3)
+    if seeds:
+        d.update(seed0=v, seed1=v, seed2=v)
+    return d
+
+
+def synthetic_reach(root: Path) -> None:
+    """Small files with the schemas of the real Reach-track outputs."""
+    (root / "c3").mkdir(parents=True, exist_ok=True)
+    for i, exp in enumerate(REACH):
+        rows = []
+        for T in (10, 25):
+            for sig, auc in (("asm", 0.6 + 0.05 * i), ("obs_ood", 0.62), ("act_ood", 0.8)):
+                rows.append(
+                    dict(exp=exp, signal=sig, T=T, alpha=0.2, n_test=100, n_fail_test=30)
+                    | dict(auroc=auc, auroc_lo=auc - 0.02, auroc_hi=auc + 0.02)
+                    | dict(auroc_s0=auc - 0.01, auroc_s1=auc, auroc_s2=auc + 0.01)
+                )
+        pd.DataFrame(rows).to_csv(root / "c3" / f"c3_{exp}_metrics.csv", index=False)
+        pf = [
+            dict(exp=exp, signal="asm", T=10, factor=f, n_test=50, n_fail_test=nf, auroc=a)
+            | dict(auroc_lo=a, auroc_hi=a)
+            for f, nf, a in (("gain", 5, 0.7), ("latency", 0, float("nan")))
+        ]
+        pd.DataFrame(pf).to_csv(root / "c3" / f"c3_{exp}_per_factor.csv", index=False)
+    rng = np.random.default_rng(1)
+    eps = [
+        dict(exp="reach_dr", signal=sig, seed=0, split="test" if i % 2 else "calib", ep_seed=i)
+        | dict(failed=i % 4 < 2, S10=rng.normal(i % 4 < 2), S25=rng.normal(i % 4 < 2))
+        for sig in ("asm", "act_ood")
+        for i in range(40)
+    ]
+    pd.DataFrame(eps).to_csv(root / "c3" / "c3_reach_dr_episode_scores.csv", index=False)
+
+    (root / "robustness_reach").mkdir()
+    rob = [
+        dict(exp=e, split=s, n_cells=1, n_seeds=3, ci_backend="rliable")
+        | dict(success=v, success_lo=v - 0.01, success_hi=v + 0.01)
+        | dict(seed0=v - 0.02, seed1=v, seed2=v + 0.02)
+        for e, v in zip(REACH, (0.5, 0.6612, 0.74), strict=True)
+        for s in ("nominal", "heldout", "factor:gain")
+    ]
+    pd.DataFrame(rob).to_csv(root / "robustness_reach" / "robustness.csv", index=False)
+    poi = [
+        dict(x="reach_dr", y="reach_nodr", split="heldout", poi=0.887, poi_lo=0.87, poi_hi=0.89),
+        dict(x="reach_drhist", y="reach_dr", split="heldout", poi=0.748, poi_lo=0.7, poi_hi=0.8),
+    ]
+    pd.DataFrame(poi).to_csv(root / "robustness_reach" / "poi.csv", index=False)
+
+    (root / "c4_reach").mkdir()
+    rel = [
+        dict(exp=e, method=m, level="base", quantity=q, group=g or None) | _ci_row(v)
+        for e in REACH
+        for m in ("ig", "gwie_c")
+        for q, g, v in (("share", "ee_pos", 0.45), ("share", "goal", 0.5), ("entropy", "", 0.7))
+    ]
+    pd.DataFrame(rel).to_csv(root / "c4_reach" / "reliance.csv", index=False)
+    tmp = [
+        dict(exp="reach_drhist", method=m, level="temporal", quantity="share", group=g)
+        | _ci_row(v)
+        | dict(scope=sc)
+        for m in ("ig", "gwie_c")
+        for sc in ("nominal", "heldout")
+        for g, v in (("t", 0.5444), ("t-1", 0.2), ("t-2", 0.1), ("t-3", 0.1), ("act", 0.0556))
+    ]
+    pd.DataFrame(tmp).to_csv(root / "c4_reach" / "temporal.csv", index=False)
+    pr = [
+        dict(exp=e, target="gain", features=f, scope=sc, r2_lo=-0.03, r2_hi=0.04)
+        | dict(r2=0.0092 if sc == "all" else 0.01, claim_sysid=False)
+        | dict(n_seeds=3.0 if sc == "all" else None)
+        for e in REACH
+        for f in ("penult", "obs_single", "penult_random")
+        for sc in ("seed0", "seed1", "seed2", "all")
+    ]
+    pd.DataFrame(pr).to_csv(root / "c4_reach" / "probes.csv", index=False)
+
+    (root / "c1").mkdir(exist_ok=True)
+    her = [
+        dict(method=m, n_seeds=3, n_states=600, runtime_ms=1.0)
+        | dict(hint_share=h, hint_share_lo=h - 0.01, hint_share_hi=h + 0.01)
+        | dict(goal_share=0.4, goal_share_lo=0.39, goal_share_hi=0.41)
+        | dict(hint_share_per_seed="0.03448;0.02327;0.02112")
+        | dict(success_drop=0.0, success_drop_lo=0.0, success_drop_hi=0.0)
+        for m, h in (("ig", 0.039), ("gwie_c", 0.029))
+    ]
+    pd.DataFrame(her).to_csv(root / "c1" / "c1_shortcut_her_summary.csv", index=False)
+    v2 = [
+        r
+        | dict(hint_share=0.42, hint_share_lo=0.41, hint_share_hi=0.43)
+        | dict(success_drop=0.987, success_drop_lo=0.967)
+        for r in her
+    ]
+    pd.DataFrame(v2).to_csv(root / "c1" / "c1_shortcut_summary.csv", index=False)
+
+
+REACH_DOC = """# Report
+<!-- BEGIN:reach_summary -->
+TBD
+<!-- END:reach_summary -->
+
+<!-- BEGIN:robustness_reach -->
+TBD
+<!-- END:robustness_reach -->
+
+<!-- BEGIN:c3_reach_dr -->
+<!-- END:c3_reach_dr -->
+
+<!-- BEGIN:c4_reach_probes -->
+<!-- END:c4_reach_probes -->
+
+<!-- BEGIN:c1_shortcut_her -->
+<!-- END:c1_shortcut_her -->
+"""
+
+REACH_TABLES = (
+    *(f"c3_{e}" for e in REACH),
+    *(f"c3_{e}_per_factor" for e in REACH),
+    "robustness_reach",
+    "c4_reach_reliance",
+    "c4_reach_reliance_slots",
+    "c4_reach_temporal",
+    "c4_reach_probes",
+    "c1_shortcut_her",
+)
+
+
+def test_reach_tables_synthetic(mt, tmp_path):
+    root = tmp_path / "results"
+    synthetic_reach(root)
+    doc = tmp_path / "report.md"
+    doc.write_text(REACH_DOC, encoding="utf-8")
+    tables, _ = mt.make_all(root, root / "tables", [doc], log=lambda s: None)
+    for name in REACH_TABLES:
+        assert name in tables and (root / "tables" / f"{name}.md").exists()
+    for name in set(REACH_TABLES) - {"c4_reach_reliance_slots"}:  # no slot rows in synthetic
+        assert not tables[name].startswith("| status"), name
+
+    c3 = tables["c3_reach_dr"]
+    assert "0.650 [0.630, 0.670]" in c3 and "| n_seeds |" in c3 and c3.count("| 3 |") == 6
+    assert "n/a [n/a, n/a]" in tables["c3_reach_dr_per_factor"]  # no failures -> no AUROC
+
+    rob = tables["robustness_reach"]
+    assert "0.661 [0.651, 0.671]" in rob and "0.641 / 0.661 / 0.681" in rob
+    assert "0.887 [0.870, 0.890]" in rob and "ci_backend" not in rob.split("\n\n")[0]
+
+    rel = tables["c4_reach_reliance"]
+    assert "NoDR (n=3)" in rel and "DR+Hist (n=3)" in rel and "| ig | entropy |" in rel
+    assert "0.450 [0.440, 0.460]; seeds 0.450 / 0.450 / 0.450" in rel
+    tmp = tables["c4_reach_temporal"]
+    assert "t-3 (n=3)" in tmp and "0.544 [0.534, 0.554]" in tmp and "| heldout |" in tmp
+
+    pr = tables["c4_reach_probes"]
+    assert "| reach_dr | gain | penult | 0.009 [-0.030, 0.040] | 0.010 / 0.010 / 0.010 | 3 |" in pr
+    assert "Claim rule outcome (`claim_sysid`" in pr and "reach_dr/gain: **False**" in pr
+    assert "No implicit system identification is claimed" in pr
+
+    her = tables["c1_shortcut_her"]
+    assert "0.034 / 0.023 / 0.021" in her and "runtime" not in her
+    assert "0.034 / 0.023 / 0.021" in tables["c1_shortcut"]  # same per-seed formatting
+
+    text = doc.read_text(encoding="utf-8")
+    assert "DR **66.1% [65.1, 67.1]**" in text and "n=3 seeds" in text
+    assert "P(DR > NoDR) 0.887 [0.870, 0.890]" in text
+    assert "ASM 0.650 [0.630, 0.670] vs best baseline (act_ood) 0.800 [0.780, 0.820]" in text
+    assert "ASM below the best baseline (CIs disjoint)" in text
+    assert "TBD" not in text
+    # idempotent: a second run changes nothing
+    mt.make_all(root, root / "tables", [doc], log=lambda s: None)
+    assert doc.read_text(encoding="utf-8") == text
+
+
+def test_reach_tables_missing_tbd(mt, tmp_path):
+    root = tmp_path / "results"
+    root.mkdir()
+    doc = tmp_path / "report.md"
+    doc.write_text(REACH_DOC, encoding="utf-8")
+    tables, _ = mt.make_all(root, root / "tables", [doc], log=lambda s: None)
+    for name in REACH_TABLES:
+        assert "TBD" in tables[name], name
+    summary = mt.reach_summary_block(root)
+    assert summary.count("TBD") >= 5 and "FetchReach: TBD" in summary
+    text = doc.read_text(encoding="utf-8")
+    assert "TBD (missing: `results/robustness_reach/robustness.csv`)" in text
+    assert "TBD (missing: `results/c4_reach/probes.csv`)" in text
+    mt.make_all(root, root / "tables", [doc], log=lambda s: None)
+    assert doc.read_text(encoding="utf-8") == text
+
+    # robustness present, POI missing: the table renders and the POI part says TBD
+    synthetic_reach(tmp_path / "r2")
+    (tmp_path / "r2" / "robustness_reach" / "poi.csv").unlink()
+    rob = mt.table_robustness_reach(tmp_path / "r2")
+    assert "0.661 [0.651, 0.671]" in rob and "TBD (missing: `r2/robustness_reach/poi.csv`)" in rob
+
+
+def test_reach_figs_synthetic(mf, tmp_path):
+    root = tmp_path / "results"
+    synthetic_reach(root)
+    msgs: list[str] = []
+    mf.make_all(root, tmp_path / "figs", skip={"gwie"}, log=msgs.append)
+    assert not any(m.startswith("FAILED") for m in msgs), msgs
+    made = {p.name for p in (tmp_path / "figs").glob("*.png")}
+    assert {
+        "robustness_reach.png",
+        "c3_reach_dr_roc.png",
+        "c4_reach_reliance.png",
+        "c4_reach_temporal.png",
+        "c1_shortcut_shares.png",
+    } <= made
+
+
+def test_reach_roc_skips_without_episode_scores(mf, tmp_path):
+    root = tmp_path / "results"
+    synthetic_reach(root)
+    (root / "c3" / "c3_reach_dr_episode_scores.csv").unlink()
+    msgs: list[str] = []
+    mf.make_all(root, tmp_path / "figs", skip={"gwie"}, log=msgs.append)
+    assert not any(m.startswith("FAILED") for m in msgs), msgs
+    assert any(m.startswith("skip c3_reach_dr_roc.png") for m in msgs)
+    assert (tmp_path / "figs" / "robustness_reach.png").exists()
+    assert mf.CONDITION_COLORS["reach_dr"] == mf.CONDITION_COLORS["push_dr"]

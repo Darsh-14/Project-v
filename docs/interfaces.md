@@ -77,6 +77,7 @@ seed, root="results")`. Load with `train.algo_class(name).load(path, device="cpu
 | C3 | `results/c3/c3_{exp}_metrics.csv`, `results/c3/c3_{exp}_per_factor.csv` |
 | C4 | `results/c4/reliance.csv`, `results/c4/temporal.csv`, `results/c4/probes.csv` |
 | Robustness | `results/robustness/robustness.csv` (built from `results/eval/*.csv`) |
+| Reach track (G2) | `results/c3/c3_reach_{nodr,dr,drhist}_{metrics,per_factor}.csv`, `results/robustness_reach/{robustness,poi}.csv`, `results/c4_reach/{reliance,temporal,probes}.csv` (+ `run_meta_probes.json`), `results/c1/c1_shortcut_her_summary.csv` |
 
 Every CSV has CI columns `{metric}_lo`, `{metric}_hi` where applicable, and every directory has
 a `run_meta.json` (`utils.io.write_run_meta`).

@@ -14,6 +14,13 @@ Figures:
 - c4_reliance.png             group-share stacked bars per condition
 - c4_temporal.png             share on history slots (DR+Hist)
 - robustness.png              nominal / held-out success per condition, per-seed dots
+- c1_shortcut_shares.png      shortcut v2: hint vs goal share per method (method colours)
+Reach track (Gate G2 insurance):
+- robustness_reach.png        success per split (nominal, held-out, per factor) per condition
+- c3_reach_dr_roc.png         ROC per signal for reach_dr (needs the git-ignored
+                              results/c3/c3_reach_dr_episode_scores.csv; skipped if missing)
+- c4_reach_reliance.png       base-level group-share stacked bars per condition
+- c4_reach_temporal.png       DR+Hist shares on t, t-1..t-3 and past actions, per scope
 - gwie_c_erasure_order.png    GWIE-C erasure order for 3 example states (needs checkpoints and
                               step logs; computed with projectv.xai.gwie_c)
 """
@@ -63,6 +70,11 @@ MONITOR_COLORS = dict(zip(MONITORS, PALETTE, strict=False))
 CONDITIONS = ("push_nodr", "push_dr", "push_drhist")
 CONDITION_LABELS = {"push_nodr": "NoDR", "push_dr": "DR", "push_drhist": "DR+Hist"}
 CONDITION_COLORS = dict(zip(CONDITIONS, PALETTE, strict=False))
+# Reach track (Gate G2): the same condition keeps the same colour across tasks.
+REACH_CONDITIONS = ("reach_nodr", "reach_dr", "reach_drhist")
+_REACH_TO_PUSH = dict(zip(REACH_CONDITIONS, CONDITIONS, strict=True))
+CONDITION_LABELS.update({r: CONDITION_LABELS[p] for r, p in _REACH_TO_PUSH.items()})
+CONDITION_COLORS.update({r: CONDITION_COLORS[p] for r, p in _REACH_TO_PUSH.items()})
 SPLIT_COLORS = {"nominal": PALETTE[0], "heldout": PALETTE[1]}
 
 Log = Callable[[str], None]
@@ -259,6 +271,32 @@ def fig_c4_reliance(root: Path, out: Path, log: Log, max_groups: int = 7) -> Non
     vcol = _col(df, ("share", "mean_share"))
     if ccol is None or vcol is None or "group" not in df.columns:
         return _skip(name, f"unexpected columns {list(df.columns)}", log)
+    title = "C4: what each training condition relies on"
+    _reliance_bars(df, ccol, vcol, out / name, log, title, max_groups)
+
+
+def fig_c4_reach_reliance(root: Path, out: Path, log: Log) -> None:
+    """Reach track: base-level group shares (`level == base`, `quantity == share`)."""
+    name = "c4_reach_reliance.png"
+    df = _read(root / "c4_reach" / "reliance.csv")
+    if df is None:
+        return _skip(name, "no results/c4_reach/reliance.csv", log)
+    ccol = _col(df, ("exp", "condition", "policy"))
+    if ccol is None or "mean" not in df.columns or "group" not in df.columns:
+        return _skip(name, f"unexpected columns {list(df.columns)}", log)
+    if "level" in df.columns:
+        df = df[df["level"].astype(str) == "base"]
+    if "quantity" in df.columns:
+        df = df[df["quantity"].astype(str) == "share"]
+    if not len(df):
+        return _skip(name, "no base-level share rows", log)
+    title = "C4 Reach: group attribution shares per training condition (nominal states)"
+    _reliance_bars(df, ccol, "mean", out / name, log, title)
+
+
+def _reliance_bars(
+    df: pd.DataFrame, ccol: str, vcol: str, path: Path, log: Log, title: str, max_groups: int = 7
+) -> None:
     mcol = _col(df, ("method",))
     methods = list(df[mcol].unique()) if mcol else [None]
     # Fixed group order + colours: largest mean share overall first; the tail folds into
@@ -269,13 +307,13 @@ def fig_c4_reliance(root: Path, out: Path, log: Log, max_groups: int = 7) -> Non
     fig, axes = plt.subplots(1, len(methods), figsize=(4.0 * len(methods), 4.2), squeeze=False)
     for ax, m in zip(axes[0], methods, strict=False):
         d = df if m is None else df[df[mcol] == m]
-        conds = _ordered(list(d[ccol].unique()), CONDITIONS)
+        conds = _ordered(list(d[ccol].unique()), CONDITIONS + REACH_CONDITIONS)
         piv = d.groupby([ccol, "group"])[vcol].mean().unstack(fill_value=0.0).reindex(conds)
         piv["other"] = piv.drop(columns=[g for g in top if g in piv.columns]).sum(axis=1)
         bottom = np.zeros(len(conds))
         x = np.arange(len(conds))
         for g in [*top, "other"]:
-            if g not in piv.columns:
+            if g not in piv.columns or (g == "other" and not piv[g].abs().sum()):
                 continue
             v = piv[g].to_numpy(float)
             ax.bar(
@@ -290,6 +328,7 @@ def fig_c4_reliance(root: Path, out: Path, log: Log, max_groups: int = 7) -> Non
             )
             bottom += v
         ax.set_xticks(x, [CONDITION_LABELS.get(c, c) for c in conds])
+        ax.set_ylim(0, 1.02)
         ax.set_ylabel("attribution share (nominal states)", fontsize=9)
         ax.set_title(str(m) if m is not None else "", fontsize=10)
         _style(ax)
@@ -302,9 +341,9 @@ def fig_c4_reliance(root: Path, out: Path, log: Log, max_groups: int = 7) -> Non
         loc="center left",
         bbox_to_anchor=(1.0, 0.5),
     )
-    fig.suptitle("C4: what each training condition relies on", fontsize=11)
+    fig.suptitle(title, fontsize=11)
     fig.tight_layout()
-    _save(fig, out / name, log)
+    _save(fig, path, log)
 
 
 def fig_c4_temporal(root: Path, out: Path, log: Log) -> None:
@@ -378,6 +417,163 @@ def fig_robustness(root: Path, out: Path, log: Log) -> None:
     _style(ax)
     if hcol:
         ax.legend(fontsize=8, frameon=False)
+    fig.tight_layout()
+    _save(fig, out / name, log)
+
+
+# ---------------------------------------------------------------------------- Reach track (G2)
+
+
+def fig_robustness_reach(root: Path, out: Path, log: Log) -> None:
+    """Success per split (nominal, held-out, per held-out factor), one bar per condition in its
+    fixed colour, 95% CI whiskers and per-seed dots."""
+    name = "robustness_reach.png"
+    df = _read(root / "robustness_reach" / "robustness.csv")
+    if df is None:
+        return _skip(name, "no results/robustness_reach/robustness.csv", log)
+    ccol = _col(df, ("exp", "condition", "policy"))
+    vcol = _col(df, ("success", "success_mean", "success_rate"))
+    hcol = _col(df, ("split", "cells", "cell_set", "regime", "eval_set"))
+    if ccol is None or vcol is None or hcol is None:
+        return _skip(name, f"unexpected columns {list(df.columns)}", log)
+    seed_cols = [c for c in df.columns if re.fullmatch(r"(success_)?s(eed)?_?\d+", c)]
+    splits = list(dict.fromkeys(df[hcol].astype(str)))
+    conds = _ordered(list(df[ccol].unique()), REACH_CONDITIONS)
+    x = np.arange(len(splits))
+    w = 0.8 / len(conds)
+    fig, ax = plt.subplots(figsize=(max(5.5, 1.3 * len(splits) + 1.5), 3.8))
+    for i, c in enumerate(conds):
+        d = df[df[ccol] == c].assign(_s=lambda t: t[hcol].astype(str)).set_index("_s")
+        d = d.reindex(splits)
+        xs = x + (i - (len(conds) - 1) / 2) * w
+        label = CONDITION_LABELS.get(c, str(c))
+        ax.bar(xs, d[vcol], width=w * 0.92, color=color_for(c, CONDITION_COLORS), label=label)
+        err = _yerr(d, vcol)
+        if err is not None:
+            ax.errorbar(xs, d[vcol], yerr=err, fmt="none", ecolor=INK, elinewidth=1, capsize=2)
+        for sc in seed_cols:
+            ax.scatter(xs, d[sc], s=12, color="white", edgecolor=INK, linewidth=0.8, zorder=3)
+    ax.set_xticks(x, [s.replace("factor:", "") for s in splits])
+    ax.set_ylim(0, 1.05)
+    ax.set_ylabel("success rate", fontsize=9)
+    note = ", dots: per seed" if seed_cols else ""
+    ax.set_title(
+        f"FetchReach: nominal vs held-out dynamics (sim-to-sim), mean and 95% CI{note}",
+        fontsize=10,
+    )
+    _style(ax)
+    ax.legend(fontsize=8, frameon=False)
+    fig.tight_layout()
+    _save(fig, out / name, log)
+
+
+def fig_c4_reach_temporal(root: Path, out: Path, log: Log) -> None:
+    """DR+Hist (Reach): share on the current step, the 3 history slots and past actions, per
+    method, for each scope (nominal, held-out, per factor)."""
+    name = "c4_reach_temporal.png"
+    df = _read(root / "c4_reach" / "temporal.csv")
+    if df is None:
+        return _skip(name, "no results/c4_reach/temporal.csv", log)
+    scol = _col(df, ("scope", "split", "regime"))
+    if scol is None or "group" not in df.columns or "mean" not in df.columns:
+        return _skip(name, f"unexpected columns {list(df.columns)}", log)
+    if "quantity" in df.columns:
+        df = df[df["quantity"].astype(str) == "share"]
+    mcol = _col(df, ("method",))
+    methods = list(df[mcol].unique()) if mcol else [None]
+    slots = list(dict.fromkeys(df["group"].astype(str)))
+    scopes = list(dict.fromkeys(df[scol].astype(str)))
+    extra = iter(PALETTE[2:])
+    scolors = {s: SPLIT_COLORS.get(s) or next(extra, OTHER) for s in scopes}
+    x = np.arange(len(slots))
+    w = 0.8 / len(scopes)
+    fig, axes = plt.subplots(
+        1, len(methods), figsize=(5.2 * len(methods), 3.8), squeeze=False, sharey=True
+    )
+    for ax, m in zip(axes[0], methods, strict=False):
+        dm = df if m is None else df[df[mcol] == m]
+        for i, s in enumerate(scopes):
+            d = dm[dm[scol].astype(str) == s].assign(_g=lambda t: t["group"].astype(str))
+            d = d.set_index("_g").reindex(slots)
+            xs = x + (i - (len(scopes) - 1) / 2) * w
+            ax.bar(xs, d["mean"], width=w * 0.92, color=scolors[s], label=s.replace("factor:", ""))
+            err = _yerr(d, "mean")
+            if err is not None:
+                ax.errorbar(xs, d["mean"], yerr=err, fmt="none", ecolor=INK, elinewidth=0.8)
+        ax.set_xticks(x, slots)
+        ax.set_title(str(m) if m is not None else "", fontsize=10)
+        _style(ax)
+    axes[0, 0].set_ylabel("attribution share", fontsize=9)
+    axes[0, -1].legend(fontsize=7, frameon=False, title="scope", title_fontsize=7)
+    fig.suptitle("C4 Reach DR+Hist: reliance on history slots and past actions", fontsize=11)
+    fig.tight_layout()
+    _save(fig, out / name, log)
+
+
+def _per_seed(v: object) -> list[float]:
+    if v is None or (isinstance(v, float) and np.isnan(v)):
+        return []
+    return [float(x) for x in str(v).split(";") if x.strip()]
+
+
+def fig_c1_shortcut(root: Path, out: Path, log: Log) -> None:
+    """Shortcut v2 (ground truth B): share on the planted hint vs on the goal per method, in the
+    method's fixed colour (hint solid, goal hatched), 95% CI and per-seed hint dots. The measured
+    success drop with a random hint (true reliance) is printed from the same file."""
+    name = "c1_shortcut_shares.png"
+    df = _read(root / "c1" / "c1_shortcut_summary.csv")
+    if df is None:
+        return _skip(name, "no results/c1/c1_shortcut_summary.csv", log)
+    if not {"method", "hint_share", "goal_share"} <= set(df.columns):
+        return _skip(name, f"unexpected columns {list(df.columns)}", log)
+    df = df.set_index("method").reindex(_ordered(list(df["method"]), METHODS)).reset_index()
+    x = np.arange(len(df))
+    w = 0.38
+    colors = [color_for(m, METHOD_COLORS) for m in df["method"]]
+    fig, ax = plt.subplots(figsize=(7.0, 3.9))
+    for off, col, hatch, alpha in (
+        (-w / 2, "hint_share", None, 1.0),
+        (w / 2, "goal_share", "///", 0.35),
+    ):
+        ax.bar(
+            x + off,
+            df[col],
+            width=w * 0.95,
+            color=colors,
+            alpha=alpha,
+            hatch=hatch,
+            edgecolor=colors if hatch else "white",
+            linewidth=1,
+        )
+        err = _yerr(df, col)
+        if err is not None:
+            ax.errorbar(x + off, df[col], yerr=err, fmt="none", ecolor=INK, elinewidth=1, capsize=2)
+    if "hint_share_per_seed" in df.columns:
+        for xi, v in zip(x, df["hint_share_per_seed"], strict=True):
+            ys = _per_seed(v)
+            ax.scatter([xi - w / 2] * len(ys), ys, s=12, color="white", edgecolor=INK, zorder=3)
+    ax.set_xticks(x, df["method"], rotation=40, ha="right")
+    ax.set_ylim(0, 1.0)
+    ax.set_ylabel("attribution share", fontsize=9)
+    from matplotlib.patches import Patch
+
+    ax.legend(
+        handles=[
+            Patch(facecolor=OTHER, label="hint (planted shortcut)"),
+            Patch(facecolor=OTHER, alpha=0.35, hatch="///", edgecolor=OTHER, label="goal"),
+        ],
+        fontsize=8,
+        frameon=False,
+    )
+    sub = ""
+    if {"success_drop", "success_drop_lo", "success_drop_hi"} <= set(df.columns):
+        r = df.iloc[0]
+        sub = (
+            f"\nmeasured reliance: success drop with a random hint "
+            f"{r['success_drop']:.3f} [{r['success_drop_lo']:.3f}, {r['success_drop_hi']:.3f}]"
+        )
+    ax.set_title(f"C1 shortcut v2: hint vs goal share per method (mean, 95% CI){sub}", fontsize=9)
+    _style(ax)
     fig.tight_layout()
     _save(fig, out / name, log)
 
@@ -517,6 +713,11 @@ FIGS = {
     "c4_reliance": fig_c4_reliance,
     "c4_temporal": fig_c4_temporal,
     "robustness": fig_robustness,
+    "c1_shortcut": fig_c1_shortcut,
+    "c3_roc_reach": lambda r, o, log: fig_c3_roc(r, o, log, "reach_dr"),
+    "c4_reach_reliance": fig_c4_reach_reliance,
+    "c4_reach_temporal": fig_c4_reach_temporal,
+    "robustness_reach": fig_robustness_reach,
     "gwie": fig_gwie_erasure,
 }
 
