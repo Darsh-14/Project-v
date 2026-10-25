@@ -1,0 +1,15 @@
+{
+  "id": "bipin14/pv-eval-smoke",
+  "title": "pv-eval-smoke",
+  "code_file": "kaggle_train.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "kernel_sources": [
+    "bipin14/pv-reach-dr-r0"
+  ],
+  "competition_sources": []
+}

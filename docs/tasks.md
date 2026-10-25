@@ -14,19 +14,19 @@ Mirrors `mvp.md` §10 (Day 1 to 3) and §9 (A1 to A10). Status: `[ ]` todo, `[~]
 - [x] D1.2 Wrappers: dr, latency, noise, history, shortcut + `tests/test_wrappers.py`
 - [x] D1.2 Analytic controller, Reach nominal success 1.00 over 100 eps
 - [x] D1.3 `train.py` + `callbacks.py` (ckpt 50k, replay 200k, `--resume auto`, run_meta.json); algo configs incl. TQC
-- [!] D1.3 Pilot: fps measured (zoo Push config 1.4 steps/s on CPU, infeasible); needs decision + Kaggle GPU measurement (CHECKPOINT 2)
+- [x] D1.3 Pilot: fps measured (zoo Push config 1.4 steps/s on CPU, infeasible); needs decision + Kaggle GPU measurement (CHECKPOINT 2)
 - [x] D1.4 Kaggle notebook + kernels launched: Reach 6 runs (CPU), Push seeds {0,1} 6 runs (T4x2) (CHECKPOINT 3)
 - [x] D1.5 `policy_fn`, `groups`, `attributions`, `gwie_c` + `tests/test_attr_sanity.py`
 - [x] D1.5 C1 on analytic controller, first C1 table in `results/c1/`
-- [ ] Gate G1 decision (CHECKPOINT 4)
+- [x] Gate G1: SAC+HER learned 1/6 Push runs -> rung 1, TQC+HER (CHANGELOG 2026-10-25)
 
 ## Day 2: Evaluate + C1/C4
-- [ ] D2.1 Reach runs done, shortcut experiment, C1 shortcut rows
+- [x] D2.1 Reach runs done (all 15 Reach policies), shortcut v2 experiment, C1 shortcut rows
 - [ ] D2.2 Calibrate + freeze `configs/dr/heldout.yaml`, hash to `results/heldout_hash.txt` (CHECKPOINT)
 - [ ] D2.3 Held-out sweeps + per-step logs (`results/steplogs/`)
 - [ ] D2.4 C1 closed-loop protocol on push_dr, deletion curves
 - [ ] D2.5 C4 reliance, temporal shares, probes (CHECKPOINT: C1 + C4 tables)
-- [ ] Gate G2 decision
+- [~] Gate G2: Reach track fully computed as insurance (grid, sweeps, C3, C4, robustness); Push decision after TQC finishes
 
 ## Day 3: C3, stats, write-up
 - [~] D3.1 (code done, awaiting data) `tests/test_monitor.py`, ASM + 5 baselines, calib/test split, per-factor breakdown (CHECKPOINT)
