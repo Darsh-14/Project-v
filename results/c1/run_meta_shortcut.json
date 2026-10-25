@@ -1,0 +1,31 @@
+{
+  "git_sha": "127e477a3a0ae23ce35edbca3cfb1fe269f555f0",
+  "config_hash": "6ed45ec9f9b8",
+  "argv": [
+    "D:\\Project V\\projectv\\xai\\faithfulness.py",
+    "--task",
+    "shortcut",
+    "--exp",
+    "reach_shortcut_v2",
+    "--seeds",
+    "0",
+    "1",
+    "2"
+  ],
+  "versions": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.9.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 130.09,
+  "task": "shortcut",
+  "exp": "reach_shortcut_v2"
+}
