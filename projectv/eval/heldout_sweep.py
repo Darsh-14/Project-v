@@ -8,7 +8,7 @@ Outputs
 - `{root}/eval/{exp}_s{seed}.csv`: one row per episode (`cell_id, cell_name, factor, episode,
   ep_seed, success`), appended cell by cell.
 - `{root}/steplogs/{exp}_s{seed}/cell{id:02d}.npz` + `meta.json` for the logged cells.
-- `{root}/eval/run_meta.json`.
+- `{root}/eval/run_meta_{exp}_s{seeds}.json` (one per sweep, so parallel sweeps do not collide).
 
 Cell 0 (nominal) always gets `max(--episodes, --nominal-episodes)` episodes: it is the calib pool
 for C3. Resumable: a (seed, cell) is skipped when its CSV rows are complete and, if it must be
@@ -263,6 +263,7 @@ def main(argv: list[str] | None = None) -> None:
         exp,
         ["heldout_sweep", *argv],
         t_start,
+        filename=f"run_meta_{exp['name']}_s{'_'.join(map(str, seeds))}.json",  # one per sweep
         exp=exp["name"],
         seeds=seeds,
         heldout_hash=heldout_hash,

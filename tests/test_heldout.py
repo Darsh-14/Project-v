@@ -89,7 +89,7 @@ def test_sweep_csv_and_steplog_contract(sweep_root):
     names = list(log["dr_names"])
     assert log["dr_values"][0, names.index("obj_mass")] == np.float32(3.0)
     assert (root / "steplogs" / "push_dr_s0" / "meta.json").exists()
-    assert (root / "eval" / "run_meta.json").exists()
+    assert len(list((root / "eval").glob("run_meta_push_dr_s*.json"))) == 1
 
 
 def test_sweep_resume_skips_completed_cells(sweep_root, monkeypatch):
