@@ -249,6 +249,13 @@ def _ci_seeds_cell(row: pd.Series, col: str, seed_cols: list[str]) -> str:
 
 REACH_CONDS = ("reach_nodr", "reach_dr", "reach_drhist")
 REACH_LABELS = {"reach_nodr": "NoDR", "reach_dr": "DR", "reach_drhist": "DR+Hist"}
+PUSH_CONDS = ("push_nodr", "push_dr", "push_drhist")
+PUSH_LABELS = {"push_nodr": "NoDR", "push_dr": "DR", "push_drhist": "DR+Hist"}
+# track -> (conditions, labels, robustness dir, C4 dir, env name)
+TRACKS = {
+    "reach": (REACH_CONDS, REACH_LABELS, "robustness_reach", "c4_reach", "FetchReach"),
+    "push": (PUSH_CONDS, PUSH_LABELS, "robustness", "c4", "FetchPush"),
+}
 
 
 def _ordered(values: Iterable[str], order: Iterable[str]) -> list[str]:
@@ -369,9 +376,9 @@ def _bool(v: object) -> bool | None:
     return str(v).strip().lower() in {"true", "1", "1.0", "yes"}
 
 
-def probes_claim_block(root: Path) -> str:
+def probes_claim_block(root: Path, c4_dir: str = "c4_reach") -> str:
     """Claim-rule outcome per (condition, target), from `claim_sysid` in probes.csv."""
-    p = root / "c4_reach" / "probes.csv"
+    p = root / c4_dir / "probes.csv"
     df = _read(p)
     if df is None or "claim_sysid" not in df.columns:
         return f"- Claim rule outcome (`claim_sysid`): {TBD} (missing: `{_rel(p, root)}`)."
@@ -388,7 +395,7 @@ def probes_claim_block(root: Path) -> str:
         if claimed
         else "- No implicit system identification is claimed for any (condition, target)."
     )
-    meta = root / "c4_reach" / "run_meta_probes.json"
+    meta = root / c4_dir / "run_meta_probes.json"
     if meta.exists():
         sha = json.loads(meta.read_text(encoding="utf-8")).get("git_sha", "")
         if sha:
@@ -422,35 +429,36 @@ def _verdict(a: pd.Series, b: pd.Series, col: str = "auroc") -> str:
     return "CIs overlap"
 
 
-def reach_summary_block(root: Path, T: int = 10) -> str:
-    """Generated one-line-per-result summary of the Reach track (every number from files)."""
+def reach_summary_block(root: Path, T: int = 10, track: str = "reach") -> str:
+    """Generated one-line-per-result summary of a track (every number from files)."""
+    conds, labels, rob_dir, c4_dir, env = TRACKS[track]
     lines = []
-    rob = _read(root / "robustness_reach" / "robustness.csv")
+    rob = _read(root / rob_dir / "robustness.csv")
     if rob is None:
-        lines.append(f"- Held-out-dynamics (sim-to-sim) success on FetchReach: {TBD}.")
+        lines.append(f"- Held-out-dynamics (sim-to-sim) success on {env}: {TBD}.")
     else:
         parts, ns = [], set()
-        for c in REACH_CONDS:
+        for c in conds:
             v = _robustness_value(rob, {_norm(c)}, c, "")
-            parts.append(f"{REACH_LABELS[c]} **{_pct(v)}**")
+            parts.append(f"{labels[c]} **{_pct(v)}**")
             if v and "n_seeds" in v:
                 ns.add(v["n_seeds"])
         n_txt = "n=" + "/".join(map(str, sorted(ns))) + " seeds" if ns else "n=TBD seeds"
         lines.append(
-            "- Held-out-dynamics (sim-to-sim) success on FetchReach, mean over "
+            f"- Held-out-dynamics (sim-to-sim) success on {env}, mean over "
             f"{n_txt} [95% bootstrap CI]: " + ", ".join(parts) + "."
         )
-    poi = _read(root / "robustness_reach" / "poi.csv")
+    poi = _read(root / rob_dir / "poi.csv")
     if poi is not None and {"x", "y", "split", "poi"} <= set(poi.columns):
         d = poi[poi["split"].astype(str) == "heldout"]
         if len(d):
             txt = ", ".join(
-                f"P({REACH_LABELS.get(r['x'], r['x'])} > {REACH_LABELS.get(r['y'], r['y'])}) "
+                f"P({labels.get(r['x'], r['x'])} > {labels.get(r['y'], r['y'])}) "
                 f"{fmt_ci(r['poi'], r.get('poi_lo'), r.get('poi_hi'))}"
                 for _, r in d.iterrows()
             )
             lines.append(f"- Probability of improvement on the held-out cells: {txt}.")
-    for c in REACH_CONDS:
+    for c in conds:
         df = _read(root / "c3" / f"c3_{c}_metrics.csv")
         label = f"- C3 {c}, AUROC from the first {T} of 50 steps (test split):"
         if df is None:
@@ -466,7 +474,7 @@ def reach_summary_block(root: Path, T: int = 10) -> str:
             f"baseline ({b[mcol]}) {fmt_ci(b['auroc'], b.get('auroc_lo'), b.get('auroc_hi'))}: "
             f"{_verdict(a, b)}."
         )
-    first = probes_claim_block(root).splitlines()[0]
+    first = probes_claim_block(root, c4_dir).splitlines()[0]
     lines.append(first.replace("- Claim rule outcome", "- C4 probes, claim rule outcome", 1))
     return "\n".join(lines)
 
@@ -510,6 +518,8 @@ def _val(row: pd.Series, col: str, src: str, desc: str) -> dict:
     for k in ("lo", "hi"):
         if f"{col}_{k}" in row.index and not pd.isna(row[f"{col}_{k}"]):
             d[k] = float(row[f"{col}_{k}"])
+    seeds = {c: row[c] for c in row.index if re.fullmatch(r"seed\d+", str(c))}
+    d["per_seed"] = {int(c[4:]): float(v) for c, v in seeds.items() if not pd.isna(v)}
     return d
 
 
@@ -535,6 +545,10 @@ def _pct(d: dict | None) -> str:
     s = f"{100 * d['value']:.1f}%"
     if d["lo"] is not None and d["hi"] is not None:
         s += f" [{100 * d['lo']:.1f}, {100 * d['hi']:.1f}]"
+    if len(d.get("per_seed", {})) > 1:  # CLAUDE.md §7: always print per-seed values
+        s += (
+            " (" + ", ".join(f"s{k} {100 * v:.1f}%" for k, v in sorted(d["per_seed"].items())) + ")"
+        )
     return s
 
 
@@ -634,6 +648,7 @@ def make_all(root: Path, out: Path, docs: Iterable[Path], log: Callable[[str], N
     blocks = dict(tables)
     blocks["headline"] = headline_block(nums)
     blocks["reach_summary"] = reach_summary_block(root)
+    blocks["push_summary"] = reach_summary_block(root, track="push")
     blocks["num_X"], blocks["num_Y"] = _pct(nums["X"]), _pct(nums["Y"])
     blocks["num_Z"], blocks["num_W"] = _auc(nums["Z"]), _auc(nums["W"])
     for doc in docs:

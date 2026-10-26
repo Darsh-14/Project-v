@@ -370,7 +370,7 @@ def test_reach_tables_synthetic(mt, tmp_path):
     assert "0.034 / 0.023 / 0.021" in tables["c1_shortcut"]  # same per-seed formatting
 
     text = doc.read_text(encoding="utf-8")
-    assert "DR **66.1% [65.1, 67.1]**" in text and "n=3 seeds" in text
+    assert "DR **66.1% [65.1, 67.1] (s0 " in text and "n=3 seeds" in text  # per-seed values follow
     assert "P(DR > NoDR) 0.887 [0.870, 0.890]" in text
     assert "ASM 0.650 [0.630, 0.670] vs best baseline (act_ood) 0.800 [0.780, 0.820]" in text
     assert "ASM below the best baseline (CIs disjoint)" in text
