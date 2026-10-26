@@ -36,7 +36,7 @@ Mirrors `mvp.md` §10 (Day 1 to 3) and §9 (A1 to A10). Status: `[ ]` todo, `[~]
 - [ ] D3.5 HF Hub checkpoint upload (needs the user's HF token)
 
 ## Acceptance criteria
-- [x] A1 pytest passes (115 tests: wrappers, attribution sanity, GWIE, monitor, ...)
+- [x] A1 pytest passes (135 tests: wrappers, attribution sanity, GWIE, monitor, outputs, ...)
 - [!] A2 NOT met: push_dr >= 0.70 for 1 of 2 seeds; fallback ladder (TQC, Gate G2, rung 4) applied and documented in CHANGELOG
 - [x] A3 Grids frozen with hashes (Push 6e9b1e89…, Reach 860a5913…); >= 100 eps per (policy, cell)
 - [x] A4 C1 tables: controller, shortcut, push_dr (s1 only)
