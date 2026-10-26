@@ -2,6 +2,39 @@
 
 Deviations, fallbacks and decisions, newest first.
 
+## 2026-10-26 (Day 3)
+
+- **Push TQC training ended** (`pv-push-tqc-r1`, 7.5 h wall-clock cap, ~759k steps per run, no
+  `_final.zip`; the latest `step_*.zip` is used). Nominal eval success at the last checkpoint
+  (20 episodes, `results/train_logs/push_*`): push_dr s1 0.75, push_drhist s0 0.85,
+  push_nodr s0 0.90, push_dr s0 0.05 (flat for the whole run, as under SAC).
+- **A2 not met; Gate G2 applies.** push_dr reaches >= 0.70 for 1 of 2 trained seeds (seed 2 was
+  never trained, fallback rung 4). Rung 2 (dense-reward SAC) is not attempted: the GPU quota for
+  the week is used up. The Reach track (already computed) carries C3/C4; Push results are
+  reported as **partial**, n = 1 learned seed per condition, with push_dr s0 shown as a failed
+  seed wherever per-seed values are printed. No Push number is extrapolated to n = 3.
+- **Push held-out grid calibrated on push_dr s1, not s0** (mvp.md §10 Day 2 block 2 names s0,
+  which did not learn). Frozen: `configs/dr/heldout.yaml`, hash `6e9b1e89…` in
+  `results/heldout_hash.txt`, log `results/calibration/calibration_log.csv`. Nominal success of
+  the source policy over 50 calibration episodes: 0.80.
+  - Kept and flagged (no value in the 20–80% band, the policy is robust there): obj_friction 2.0,
+    table_friction 1.8, obj_mass 3.0 and 4.0, gain 0.5 and 0.6.
+  - Latency candidate 3 was too hard and bisected to 2, so the grid has two latency-2 cells with
+    identical parameters (different episode seeds). Kept as calibrated; the grid is not edited.
+- Calibration `run_meta` is now written per grid (`calibration_log[_reach]_run_meta.json`); the
+  Reach file was renamed, its contents are unchanged.
+- **Push sweeps run locally** (evaluation only, as for Reach), not on Kaggle.
+- **BUG: every held-out sweep wrote the same `results/eval/run_meta.json`.** The four parallel
+  Push sweeps overwrote each other and the Reach meta. Fixed: one file per sweep
+  (`run_meta_{exp}_s{seeds}.json`). The Reach file was restored from git and renamed; of the Push
+  metas only push_drhist s0's survived. The other three sweeps' provenance (git SHA, checkpoint
+  sha256, grid hash) is still recorded in each `results/steplogs/{exp}_s{seed}/meta.json`.
+- **Learned-policy rule for C1/C3/C4 on Push.** push_dr s0 (nominal success 0.05) is left out of
+  C1, C3 and C4 (`--skip push_dr:0` in reliance/probes, `--seeds 1` for C1/C3). Explaining or
+  monitoring a policy that fails almost every nominal episode measures nothing about the method,
+  and mixing it into a one-seed-per-condition mean would make the DR row about training failure.
+  It is kept in the robustness table, where a failed seed is a real outcome of training with DR.
+
 ## 2026-10-25 (Day 2)
 
 - **BUG: DR parameters were drawn from the env's own random stream (probe leak).**
