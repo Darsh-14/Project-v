@@ -1,0 +1,31 @@
+{
+  "git_sha": "b227fabd24915c9a9692b4ee5375061a9c6711da",
+  "config_hash": "6821998b5ca3",
+  "argv": [
+    "D:\\Project V\\projectv\\analysis\\probes.py",
+    "--task",
+    "push",
+    "--seeds",
+    "0",
+    "1",
+    "--skip",
+    "push_dr:0",
+    "--no-wandb"
+  ],
+  "versions": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.9.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 616.47,
+  "task": "push",
+  "analysis": "probes"
+}

@@ -1,0 +1,28 @@
+{
+  "git_sha": "b227fabd24915c9a9692b4ee5375061a9c6711da",
+  "config_hash": "67dadd7f7202",
+  "argv": [
+    "D:\\Project V\\projectv\\analysis\\robustness.py",
+    "--exps",
+    "push_nodr",
+    "push_dr",
+    "push_drhist",
+    "--no-wandb"
+  ],
+  "versions": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.9.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 301.15,
+  "analysis": "robustness",
+  "note": "note: n=3 seeds per condition -> IQM over runs is degenerate (it trims to ~1 run), so the aggregate is the mean; per-seed values are reported alongside the bootstrap CI."
+}
