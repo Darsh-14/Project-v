@@ -543,7 +543,9 @@ def _pct(d: dict | None) -> str:
     if d is None:
         return TBD
     s = f"{100 * d['value']:.1f}%"
-    if d["lo"] is not None and d["hi"] is not None:
+    if d.get("n_seeds") == 1:  # a bootstrap over one seed has zero width; do not print it as a CI
+        s += " (n=1, no seed CI)"
+    elif d["lo"] is not None and d["hi"] is not None:
         s += f" [{100 * d['lo']:.1f}, {100 * d['hi']:.1f}]"
     if len(d.get("per_seed", {})) > 1:  # CLAUDE.md §7: always print per-seed values
         s += (
