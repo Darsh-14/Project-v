@@ -1,0 +1,13 @@
+{
+  "id": "bipin14/pv-push-tqc-seeds2",
+  "title": "pv-push-tqc-seeds2",
+  "code_file": "kaggle_train.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": []
+}
