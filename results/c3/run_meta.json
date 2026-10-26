@@ -1,17 +1,11 @@
 {
-  "git_sha": "559c1e1d50d81ebb66557bf1d498c2408197dd58",
-  "config_hash": "8c6391722f0f",
+  "git_sha": "af7a4861ca9894383cb85a0ae5f1c61ccc0c5e0a",
+  "config_hash": "2f627418b46b",
   "argv": [
     "--exp",
-    "reach_drhist",
+    "push_drhist",
     "--seeds",
-    "0",
-    "1",
-    "2",
-    "--cells",
-    "configs/dr/heldout_reach.yaml",
-    "--hash-path",
-    "results/heldout_reach_hash.txt"
+    "0"
   ],
   "versions": {
     "python": "3.13.3",
@@ -26,19 +20,15 @@
     "scikit-learn": "1.9.1",
     "rliable": "1.2.0"
   },
-  "wall_clock_s": 382.42,
-  "exp": "reach_drhist",
+  "wall_clock_s": 428.31,
+  "exp": "push_drhist",
   "seeds": [
-    0,
-    1,
-    2
+    0
   ],
-  "heldout_hash": "860a5913888389f9a00854e126a8496e0c6dff620a94d734e4d61f5f59d5c912",
+  "heldout_hash": "6e9b1e89dba6229b19e77c6f71e01070ff881652f1a215fe89f20cea2c20d221",
   "hash_checked": true,
   "checkpoints": {
-    "0": "results\\ckpt\\reach_drhist_s0_final.zip",
-    "1": "results\\ckpt\\reach_drhist_s1_final.zip",
-    "2": "results\\ckpt\\reach_drhist_s2_final.zip"
+    "0": "results\\ckpt\\push_drhist_s0\\step_758743.zip"
   },
   "missing_cells": {},
   "signals": [
@@ -46,12 +36,16 @@
     "obs_ood",
     "act_std",
     "q_drop",
-    "ensemble",
     "act_ood"
   ],
   "groups": [
     "ee_pos",
+    "obj_pos",
+    "obj_rel",
     "grip_state",
+    "obj_rot",
+    "obj_velp",
+    "obj_velr",
     "ee_vel",
     "grip_vel",
     "act",
