@@ -302,6 +302,13 @@ variant is reported in Section 4.8 as a negative control.
 | open_loop | 5 | 1 | 0.040 | goal+obj_pos+obj_rel+obj_rot+ee_pos | 100 |
 <!-- END:c1_push_dr_deletion -->
 
+*Reading (push_dr seed 1, the only learned push_dr seed).* Occlusion and gradient × Δ agree most
+with the closed-loop ranking. IG, KernelSHAP and both GWIE variants tie behind them and recover the
+same top-k groups. Plain gradients and SmoothGrad agree least and miss most of the top-k groups that
+closed-loop erasure identifies. GWIE-C's closed-loop agreement matches IG's, at a higher cost (Section
+4.4). With one seed, method rankings that differ by less than the CI width should not be read as
+differences.
+
 ### 4.4 C2: cost
 
 Runtime per explained state (ms):
@@ -437,6 +444,14 @@ push_drhist and push_nodr (secondary):
 | push_nodr | q_drop | 25 | 0.500 | 1950 | 1227 | 15.179 | 0.054 | 0.842 [0.824, 0.860] | 0.900 [0.886, 0.914] | 0.430 [0.402, 0.457] | 13.000 [11.500, 14.000] | 0.842 |
 | push_nodr | act_ood | 25 | 0.500 | 1950 | 1227 | 130.110 | 0.041 | 0.774 [0.752, 0.796] | 0.831 [0.808, 0.853] | 0.192 [0.170, 0.215] | 13.500 [12.000, 15.000] | 0.774 |
 <!-- END:c3_push_nodr -->
+
+*Reading.* From the first 10 steps, ASM's AUROC lies within the CIs of the best baseline for all
+three Push policies. It is not clearly better or worse. The best baseline differs by condition
+(`q_drop` for DR and DR+Hist, `obs_ood` for NoDR). From the first 25 steps, the critic-based `q_drop`
+baseline is clearly best in all three conditions (CIs disjoint from ASM's). On this evidence ASM is
+a competitive early signal on Push but does not beat a simple value-based monitor once more of the
+episode is seen. Each Push condition is one training seed, so these comparisons cover episode-level
+uncertainty only.
 
 ### 4.6 C4: reliance, temporal reliance and probes
 
@@ -753,6 +768,12 @@ push_drhist and push_nodr (secondary):
 | push_drhist | gain | penult_random | all | -0.124 [-0.202, -0.069] | 200 | 10000 | 1000.000 | False | False | 1.000 |
 <!-- END:c4_probes -->
 
+*Reading.* On nominal states the three Push policies put most attribution on the object–gripper
+relation, the goal and the object position. The DR+Hist policy spreads part of its attribution over
+the history slots and past actions, while the current step keeps the largest single share. That
+temporal profile changes little between nominal and held-out cells. The probe claim rule is not met
+for any (condition, target), so no implicit system identification is claimed for Push.
+
 ### 4.7 Robustness
 
 <!-- BEGIN:robustness -->
@@ -794,6 +815,12 @@ Generated Push summary (one learned seed per condition; push_dr also shows seed 
 - C3 push_drhist, AUROC from the first 10 of 50 steps (test split): ASM 0.706 [0.683, 0.730] vs best baseline (q_drop) 0.697 [0.674, 0.720]: CIs overlap.
 - C4 probes, claim rule outcome (`claim_sysid`, results/c4/probes.csv): push_nodr/log_friction: **False**, push_nodr/log_mass: **False**, push_nodr/gain: **False**, push_dr/log_friction: **False**, push_dr/log_mass: **False**, push_dr/gain: **False**, push_drhist/log_friction: **False**, push_drhist/log_mass: **False**, push_drhist/gain: **False**.
 <!-- END:push_summary -->
+
+*Reading.* DR+Hist has the highest held-out success of the three Push conditions. The learned
+push_dr seed is above NoDR on held-out dynamics, but the failed push_dr seed pulls the DR mean below
+NoDR. With one learned seed per condition, this table cannot separate the effect of DR from
+seed-to-seed variation in Push training. The three-seed Reach track (Section 4.8) is the better
+evidence for the effect of DR.
 
 ### 4.8 Reach track (Gate G2 insurance)
 
