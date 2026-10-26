@@ -269,18 +269,22 @@ def fig_c4_reliance(root: Path, out: Path, log: Log, max_groups: int = 7) -> Non
         return _skip(name, "no results/c4/reliance.csv", log)
     ccol = _col(df, ("condition", "exp", "policy"))
     vcol = _col(df, ("share", "mean_share"))
+    if vcol is None and {"level", "mean"} <= set(df.columns):  # reliance.py layout
+        return fig_c4_reach_reliance(root, out, log, c4_dir="c4", track="Push")
     if ccol is None or vcol is None or "group" not in df.columns:
         return _skip(name, f"unexpected columns {list(df.columns)}", log)
     title = "C4: what each training condition relies on"
     _reliance_bars(df, ccol, vcol, out / name, log, title, max_groups)
 
 
-def fig_c4_reach_reliance(root: Path, out: Path, log: Log) -> None:
-    """Reach track: base-level group shares (`level == base`, `quantity == share`)."""
-    name = "c4_reach_reliance.png"
-    df = _read(root / "c4_reach" / "reliance.csv")
+def fig_c4_reach_reliance(
+    root: Path, out: Path, log: Log, c4_dir: str = "c4_reach", track: str = "Reach"
+) -> None:
+    """Base-level group shares (`level == base`, `quantity == share`) of reliance.py output."""
+    name = f"{c4_dir}_reliance.png"
+    df = _read(root / c4_dir / "reliance.csv")
     if df is None:
-        return _skip(name, "no results/c4_reach/reliance.csv", log)
+        return _skip(name, f"no results/{c4_dir}/reliance.csv", log)
     ccol = _col(df, ("exp", "condition", "policy"))
     if ccol is None or "mean" not in df.columns or "group" not in df.columns:
         return _skip(name, f"unexpected columns {list(df.columns)}", log)
@@ -290,7 +294,7 @@ def fig_c4_reach_reliance(root: Path, out: Path, log: Log) -> None:
         df = df[df["quantity"].astype(str) == "share"]
     if not len(df):
         return _skip(name, "no base-level share rows", log)
-    title = "C4 Reach: group attribution shares per training condition (nominal states)"
+    title = f"C4 {track}: group attribution shares per training condition (nominal states)"
     _reliance_bars(df, ccol, "mean", out / name, log, title)
 
 
@@ -353,6 +357,8 @@ def fig_c4_temporal(root: Path, out: Path, log: Log) -> None:
         return _skip(name, "no results/c4/temporal.csv", log)
     scol = _col(df, ("slot", "time_slot", "lag"))
     vcol = _col(df, ("share", "mean_share"))
+    if vcol is None and {"scope", "mean"} <= set(df.columns):  # reliance.py layout
+        return fig_c4_reach_temporal(root, out, log, c4_dir="c4", track="Push")
     if scol is None or vcol is None:
         return _skip(name, f"unexpected columns {list(df.columns)}", log)
     hcol = _col(df, ("regime", "split", "cells", "cell_set"))
@@ -398,7 +404,7 @@ def fig_robustness(root: Path, out: Path, log: Log) -> None:
     hues = list(df[hcol].unique()) if hcol else [None]
     x = np.arange(len(conds))
     w = 0.8 / len(hues)
-    fig, ax = plt.subplots(figsize=(5.5, 3.8))
+    fig, ax = plt.subplots(figsize=(7.0, 3.8))
     for i, h in enumerate(hues):
         d = (df if h is None else df[df[hcol] == h]).set_index(ccol).reindex(conds)
         xs = x + (i - (len(hues) - 1) / 2) * w
@@ -416,7 +422,7 @@ def fig_robustness(root: Path, out: Path, log: Log) -> None:
     ax.set_title(f"Success on nominal vs held-out dynamics, mean and 95% CI{note}", fontsize=10)
     _style(ax)
     if hcol:
-        ax.legend(fontsize=8, frameon=False)
+        ax.legend(fontsize=8, frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
     fig.tight_layout()
     _save(fig, out / name, log)
 
@@ -467,13 +473,15 @@ def fig_robustness_reach(root: Path, out: Path, log: Log) -> None:
     _save(fig, out / name, log)
 
 
-def fig_c4_reach_temporal(root: Path, out: Path, log: Log) -> None:
-    """DR+Hist (Reach): share on the current step, the 3 history slots and past actions, per
-    method, for each scope (nominal, held-out, per factor)."""
-    name = "c4_reach_temporal.png"
-    df = _read(root / "c4_reach" / "temporal.csv")
+def fig_c4_reach_temporal(
+    root: Path, out: Path, log: Log, c4_dir: str = "c4_reach", track: str = "Reach"
+) -> None:
+    """DR+Hist: share on the current step, the 3 history slots and past actions, per method, for
+    each scope (nominal, held-out, per factor)."""
+    name = f"{c4_dir}_temporal.png"
+    df = _read(root / c4_dir / "temporal.csv")
     if df is None:
-        return _skip(name, "no results/c4_reach/temporal.csv", log)
+        return _skip(name, f"no results/{c4_dir}/temporal.csv", log)
     scol = _col(df, ("scope", "split", "regime"))
     if scol is None or "group" not in df.columns or "mean" not in df.columns:
         return _skip(name, f"unexpected columns {list(df.columns)}", log)
@@ -505,7 +513,7 @@ def fig_c4_reach_temporal(root: Path, out: Path, log: Log) -> None:
         _style(ax)
     axes[0, 0].set_ylabel("attribution share", fontsize=9)
     axes[0, -1].legend(fontsize=7, frameon=False, title="scope", title_fontsize=7)
-    fig.suptitle("C4 Reach DR+Hist: reliance on history slots and past actions", fontsize=11)
+    fig.suptitle(f"C4 {track} DR+Hist: reliance on history slots and past actions", fontsize=11)
     fig.tight_layout()
     _save(fig, out / name, log)
 
