@@ -88,6 +88,8 @@ Fetch environments return a dictionary with `observation` (10-D for Reach, 25-D 
 command, applied through mocap. Episodes last 50 steps, and success is `is_success` at the final
 step. Policies are SAC+HER (SB3, `MultiInputPolicy`) with hyperparameters taken from the
 rl-baselines3-zoo Fetch configurations. TQC+HER is the documented fallback if SAC does not learn.
+SAC+HER learned Push in only 1 of 6 runs, so every reported Push policy is TQC+HER (same buffer and
+HER settings). The Push runs stopped at the Kaggle wall-clock cap after ~759k of the planned 1M steps.
 
 Dynamics factors are resampled at every reset in DR training: object sliding friction, table
 friction, object mass, a control-gain multiplier, observation noise and action latency. Three
@@ -103,8 +105,10 @@ implementation details matter for interpreting the results:
 - **Observation noise** is added to `observation` and to the duplicated `achieved_goal` slice.
 
 The held-out grid holds one-factor-at-a-time cells outside the training ranges plus random
-combined cells. Its values were calibrated once on a pilot DR policy so that success lies roughly
-in 20–80%, then frozen with a recorded hash. Every held-out result is computed on the frozen grid.
+combined cells. Its values were calibrated once on a DR policy so that success lies roughly in
+20–80%, then frozen with a recorded hash. Every held-out result is computed on the frozen grid. The
+Push grid was calibrated on push_dr seed 1, because seed 0 did not learn. Cells where no value
+reached the band are kept and flagged, not dropped.
 
 ### 3.2 Attribution methods
 
@@ -164,9 +168,13 @@ randomly initialised actor.
 
 ### 3.7 Statistics
 
-Training seeds: {0, 1, 2} for Reach; {0, 1} for Push (fallback step 4 of the plan, applied because the
-Kaggle GPU budget could not cover 9 runs × 1M steps; a third Push seed is added only if quota remains,
-and tables state n). Success per (policy, cell) averages at least 100 episodes.
+Training seeds: {0, 1, 2} for Reach. Push: push_dr seeds {0, 1}, push_nodr and push_drhist seed 0
+only (fallback step 4 of the plan, applied because the Kaggle GPU budget could not cover 9 runs × 1M
+steps). push_dr seed 0 did not learn (nominal success ~5%). It appears in the robustness table with
+its per-seed value and is left out of C1, C3 and C4, which analyse learned policies. Push is
+therefore one learned seed per condition, and Push CIs reflect episode-level uncertainty for that
+seed only, not seed-to-seed variation. The C3 `ensemble` baseline needs at least 2 seeds and is not
+computed on Push. Success per (policy, cell) averages at least 100 episodes.
 Across seeds we report the mean with a 95% stratified bootstrap CI (2,000 resamples), always
 alongside per-seed values. With n ≤ 3, IQM is degenerate and is not used.
 
@@ -310,12 +318,18 @@ push_drhist and push_nodr (secondary):
 | TBD (missing: `results/robustness/robustness.csv`) |
 <!-- END:robustness -->
 
+Generated Push summary (one learned seed per condition; push_dr also shows seed 0):
+
+<!-- BEGIN:push_summary -->
+<!-- END:push_summary -->
+
 ### 4.8 Reach track (Gate G2 insurance)
 
 Under Gate G2 (`mvp.md` §10), C3, C4 and the robustness evaluation were also run on FetchReach
 with DR on control gain, observation noise and latency, the factors that affect Reach. Reach uses
 its own frozen held-out grid (`configs/dr/heldout_reach.yaml`), calibrated on reach_dr seed 0.
-The Push results in Sections 4.3 and 4.5–4.7 are pending and are not replaced by this section.
+It complements the partial Push results in Sections 4.3 and 4.5–4.7 (one learned seed per
+condition) with three seeds per condition.
 All shifts are held-out dynamics within one simulator (sim-to-sim).
 
 Generated summary:
@@ -736,13 +750,17 @@ and GWIE-C erasure order for a success, a held-out failure and a shortcut state)
 
 - **Sim-to-sim only.** Held-out dynamics differ in friction, mass, mocap step size, noise and
   latency within one simulator. These results say nothing about transfer to a physical robot.
-- **Two (Push) or three (Reach) seeds.** CIs across seeds are wide; per-seed values are reported and should be read.
+- **Push is partial.** Acceptance criterion A2 (push_dr nominal success ≥ 0.70 for ≥ 2 of 3
+  seeds) was not met: one of two push_dr seeds learned. Push conclusions rest on one learned seed per
+  condition and may not generalise across seeds. Reach has three seeds per condition. Per-seed values
+  are reported throughout and should be read.
+- **Shortened training.** Push policies stopped at ~759k of 1M steps (wall-clock cap).
 - **Narrow setting.** One robot with mocap control, two tasks and one algorithm family. The
   "gain" factor is a mocap step-size multiplier, not an actuator randomization, and the friction
   factor also changes gripper contacts above nominal (Section 3.1).
 - **Ground truth is easy for gradients.** The analytic controller is linear. The planted shortcut
   provides a non-linear ground truth for only one feature.
-- **Calibrated grid.** Held-out values were chosen once so that a pilot DR policy succeeds 20–80%
+- **Calibrated grid.** Held-out values were chosen once so that one DR policy succeeds 20–80%
   of the time. The grid is therefore tied to that policy and is not a neutral sample of shifts.
 - **GWIE lineage.** GWIE-C shares the original's guided-erasure mechanism but changes the target,
   the erasure operator, the stopping rule and the output (see `docs/gwie_original.md`). It should
