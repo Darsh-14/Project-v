@@ -24,6 +24,19 @@ Deviations, fallbacks and decisions, newest first.
 - Calibration `run_meta` is now written per grid (`calibration_log[_reach]_run_meta.json`); the
   Reach file was renamed, its contents are unchanged.
 - **Push sweeps run locally** (evaluation only, as for Reach), not on Kaggle.
+- **Push C3 has 4 baselines, not 5.** `ensemble` needs >= 2 seeds per condition and is skipped
+  (warning in `projectv/monitor/c3.py`). Reach C3 has all 5.
+- **Output fixes.**
+  - `make_tables`: the headline and track summaries print per-seed values when n > 1. For n = 1
+    they print "n=1, no seed CI" instead of a zero-width bootstrap interval.
+  - A generated `push_summary` block mirrors `reach_summary`.
+  - `make_figs`: Push C4 figures use the same plotting as Reach (reliance.py layout).
+  - `make_gifs`: the shortcut GIF uses `reach_shortcut_v2`, the variant that learned the hint.
+  - In the held-out failure GIF, the ASM alarm fires at step 0 for the rendered episode (the first
+    test-split failure). This is shown as is; no episode was picked for a later alarm.
+- **Session interruption.** The local session ended mid-way through Push C3 (the C3 runs had also
+  first been launched through `projectv.monitor.c3`, which has no `__main__` and did nothing). C3
+  was rerun through `projectv.monitor.asm`; no partial output was used.
 - **BUG: every held-out sweep wrote the same `results/eval/run_meta.json`.** The four parallel
   Push sweeps overwrote each other and the Reach meta. Fixed: one file per sweep
   (`run_meta_{exp}_s{seeds}.json`). The Reach file was restored from git and renamed; of the Push
