@@ -16,3 +16,5 @@ kaggle/*/output/
 results/c3/cache/
 results/c3/*_episode_scores.csv
 results/archive/**/ckpt/
+results/c4/cache/
+results/c4/probe_rollouts/

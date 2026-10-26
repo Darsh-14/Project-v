@@ -9,8 +9,8 @@
    where the episode's EWMA ASM score exceeds the calib threshold, frames get a red border and
    an "ASM ALARM" label (needs checkpoint, step log of that cell, the frozen heldout.yaml, and
    results/c3/c3_push_dr_episode_scores.csv).
-3. reach_shortcut_failure.gif: reach_shortcut with the hint replaced by a random point
-   (needs the reach_shortcut checkpoint); the first failing episode of 20 seeded ones.
+3. reach_shortcut_failure.gif: reach_shortcut_v2 (the variant that learned the shortcut) with the hint replaced by a random point
+   (needs the reach_shortcut_v2 checkpoint); the first failing episode of 20 seeded ones.
 
 Every GIF is skipped with a message if an input is missing. Episodes are re-simulated from their
 logged reset seed with the deterministic policy; the outcome printed on the last frame is the
@@ -281,16 +281,17 @@ def gif_shortcut_failure(root: Path, out: Path, log: Log, seed: int = 0, n_try: 
     from projectv.utils.seeding import eval_episode_seed
 
     name = "reach_shortcut_failure.gif"
-    ckpt = _ckpt(root, "reach_shortcut", seed)
+    exp_name = "reach_shortcut_v2"  # v1 (HER) did not learn the hint, see CHANGELOG
+    ckpt = _ckpt(root, exp_name, seed)
     if ckpt is None:
-        return log(f"skip {name}: no reach_shortcut checkpoint for seed {seed}")
-    exp = load_exp("configs/exp/reach_shortcut.yaml")
+        return log(f"skip {name}: no {exp_name} checkpoint for seed {seed}")
+    exp = load_exp(f"configs/exp/{exp_name}.yaml")
     act = sb3_actor(load_policy(ckpt, exp))
     for ep in range(n_try):
         sd = eval_episode_seed(seed, 0, ep)
         frames, success = render_rollout(act, exp, NOMINAL.dr_spec(), sd, shortcut_mode="random")
         if not success:
-            header = f"reach_shortcut s{seed} | hint = random point | ep {ep}"
+            header = f"{exp_name} s{seed} | hint = random point | ep {ep}"
             write_gif(out / name, _captioned(frames, header, success))
             return log(f"wrote {out / name} (first failing episode: {ep + 1} of {n_try} tried)")
     log(f"skip {name}: all {n_try} random-hint episodes succeeded (no shortcut failure to show)")
