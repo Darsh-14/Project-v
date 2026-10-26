@@ -1,0 +1,53 @@
+{
+  "git_sha": "af7a4861ca9894383cb85a0ae5f1c61ccc0c5e0a",
+  "config_hash": "827a287bb493",
+  "argv": [
+    "--exp",
+    "push_nodr",
+    "--seeds",
+    "0"
+  ],
+  "versions": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "mujoco": "3.17.0",
+    "gymnasium": "1.4.0",
+    "gymnasium-robotics": "1.4.2",
+    "stable-baselines3": "2.9.0",
+    "sb3-contrib": "2.9.0",
+    "scikit-learn": "1.9.1",
+    "rliable": "1.2.0"
+  },
+  "wall_clock_s": 424.33,
+  "exp": "push_nodr",
+  "seeds": [
+    0
+  ],
+  "heldout_hash": "6e9b1e89dba6229b19e77c6f71e01070ff881652f1a215fe89f20cea2c20d221",
+  "hash_checked": true,
+  "checkpoints": {
+    "0": "results\\ckpt\\push_nodr_s0\\step_758620.zip"
+  },
+  "missing_cells": {},
+  "signals": [
+    "asm",
+    "obs_ood",
+    "act_std",
+    "q_drop",
+    "act_ood"
+  ],
+  "groups": [
+    "ee_pos",
+    "obj_pos",
+    "obj_rel",
+    "grip_state",
+    "obj_rot",
+    "obj_velp",
+    "obj_velr",
+    "ee_vel",
+    "grip_vel",
+    "goal"
+  ]
+}
