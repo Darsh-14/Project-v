@@ -6,8 +6,8 @@
 ## Summary
 
 <!-- BEGIN:headline -->
-- Held-out-dynamics (sim-to-sim) success on FetchPush, mean over n=1/2 seeds [95% bootstrap CI]: NoDR **34.9% (n=1, no seed CI)**, DR **23.1% [17.9, 28.3] (s0 6.2%, s1 40.0%)**.
-- Failure prediction from the first 10 of 50 steps (push_dr, test split): ASM AUROC **0.713 [0.689, 0.737]** vs best baseline (q_drop) **0.744 [0.722, 0.765]**.
+- Held-out-dynamics (sim-to-sim) success on FetchPush, mean over n=2/3 seeds [95% bootstrap CI]: NoDR **35.2% [34.1, 36.4] (s0 34.9%, s1 35.6%)**, DR **28.8% [24.8, 32.7] (s0 6.2%, s1 40.0%, s2 40.3%)**.
+- Failure prediction from the first 10 of 50 steps (push_dr, test split): ASM AUROC **0.728 [0.702, 0.752]** vs best baseline (q_drop) **0.745 [0.730, 0.760]**.
 <!-- END:headline -->
 
 ## 1. Introduction
@@ -233,15 +233,15 @@ variant is reported in Section 4.8 as a negative control.
 <!-- BEGIN:c1_push_dr -->
 | method | n_seeds | nominal_success | k | tau_closed | tau_closed_per_seed | precision_at_k | precision_at_k_per_seed | pauc | pauc_per_seed |
 |---|---|---|---|---|---|---|---|---|---|
-| grad | 1 | 0.850 | 3 | 0.289 [0.180, 0.405] | 0.289 | 0.333 [0.333, 0.333] | 0.333 | 0.626 [0.579, 0.667] | 0.626 |
-| grad_x_delta | 1 | 0.850 | 3 | 0.733 [0.556, 0.796] | 0.733 | 1.000 [1.000, 1.000] | 1.000 | 0.944 [0.913, 0.971] | 0.944 |
-| ig | 1 | 0.850 | 3 | 0.644 [0.511, 0.733] | 0.644 | 1.000 [1.000, 1.000] | 1.000 | 0.951 [0.907, 0.988] | 0.951 |
-| smoothgrad | 1 | 0.850 | 3 | 0.333 [0.200, 0.422] | 0.333 | 0.333 [0.333, 0.333] | 0.333 | 0.626 [0.579, 0.667] | 0.626 |
-| occlusion | 1 | 0.850 | 3 | 0.778 [0.644, 0.911] | 0.778 | 1.000 [1.000, 1.000] | 1.000 | 0.953 [0.913, 0.987] | 0.953 |
-| kernelshap_grouped | 1 | 0.850 | 3 | 0.644 [0.511, 0.778] | 0.644 | 1.000 [1.000, 1.000] | 1.000 | 0.951 [0.907, 0.988] | 0.951 |
-| gwie_c | 1 | 0.850 | 3 | 0.644 [0.511, 0.764] | 0.644 | 1.000 [0.667, 1.000] | 1.000 | 0.953 [0.918, 0.982] | 0.953 |
-| gwie_orig_port | 1 | 0.850 | 3 | 0.644 [0.539, 0.733] | 0.644 | 1.000 [1.000, 1.000] | 1.000 | 0.951 [0.907, 0.988] | 0.951 |
-| open_loop | 1 | 0.850 | 3 | 0.644 [0.494, 0.778] | 0.644 | 1.000 [0.667, 1.000] | 1.000 | 0.934 [0.902, 0.963] | 0.934 |
+| grad | 2 | 0.855 | 3 | 0.302 [0.212, 0.391] | 0.289 / 0.315 | 0.333 [0.000, 0.333] | 0.333 / 0.333 | 0.702 [0.605, 0.796] | 0.626 / 0.779 |
+| grad_x_delta | 2 | 0.855 | 3 | 0.681 [0.467, 0.734] | 0.733 / 0.629 | 0.833 [0.333, 1.000] | 1.000 / 0.667 | 0.932 [0.896, 0.961] | 0.944 / 0.921 |
+| ig | 2 | 0.855 | 3 | 0.682 [0.533, 0.704] | 0.644 / 0.719 | 1.000 [0.667, 1.000] | 1.000 / 1.000 | 0.937 [0.898, 0.972] | 0.951 / 0.923 |
+| smoothgrad | 2 | 0.855 | 3 | 0.346 [0.235, 0.422] | 0.333 / 0.360 | 0.333 [0.000, 0.333] | 0.333 / 0.333 | 0.771 [0.605, 0.930] | 0.626 / 0.916 |
+| occlusion | 2 | 0.855 | 3 | 0.748 [0.584, 0.841] | 0.778 / 0.719 | 1.000 [0.667, 1.000] | 1.000 / 1.000 | 0.938 [0.901, 0.973] | 0.953 / 0.923 |
+| kernelshap_grouped | 2 | 0.855 | 3 | 0.659 [0.540, 0.742] | 0.644 / 0.674 | 0.833 [0.667, 1.000] | 1.000 / 0.667 | 0.936 [0.897, 0.972] | 0.951 / 0.921 |
+| gwie_c | 2 | 0.855 | 3 | 0.682 [0.561, 0.764] | 0.644 / 0.719 | 1.000 [0.667, 1.000] | 1.000 / 1.000 | 0.933 [0.889, 0.969] | 0.953 / 0.914 |
+| gwie_orig_port | 2 | 0.855 | 3 | 0.704 [0.570, 0.733] | 0.644 / 0.764 | 1.000 [0.667, 1.000] | 1.000 / 1.000 | 0.937 [0.899, 0.972] | 0.951 / 0.923 |
+| open_loop | 2 | 0.855 | 3 | 0.592 [0.417, 0.713] | 0.644 / 0.539 | 0.833 [0.333, 1.000] | 1.000 / 0.667 | 0.918 [0.886, 0.949] | 0.934 / 0.902 |
 <!-- END:c1_push_dr -->
 
 <!-- BEGIN:c1_push_dr_deletion -->
@@ -301,14 +301,70 @@ variant is reported in Section 4.8 as a negative control.
 | open_loop | 3 | 1 | 0.050 | goal+obj_pos+obj_rel | 100 |
 | open_loop | 4 | 1 | 0.050 | goal+obj_pos+obj_rel+obj_rot | 100 |
 | open_loop | 5 | 1 | 0.040 | goal+obj_pos+obj_rel+obj_rot+ee_pos | 100 |
+| grad | 0 | 2 | 0.860 |  | 100 |
+| grad | 1 | 2 | 0.710 | obj_velp | 100 |
+| grad | 2 | 2 | 0.030 | obj_velp+goal | 100 |
+| grad | 3 | 2 | 0.040 | obj_velp+goal+ee_vel | 100 |
+| grad | 4 | 2 | 0.080 | obj_velp+goal+ee_vel+obj_rel | 100 |
+| grad | 5 | 2 | 0.090 | obj_velp+goal+ee_vel+obj_rel+obj_pos | 100 |
+| grad_x_delta | 0 | 2 | 0.860 |  | 100 |
+| grad_x_delta | 1 | 2 | 0.070 | obj_rel | 100 |
+| grad_x_delta | 2 | 2 | 0.080 | obj_rel+obj_rot | 100 |
+| grad_x_delta | 3 | 2 | 0.070 | obj_rel+obj_rot+goal | 100 |
+| grad_x_delta | 4 | 2 | 0.080 | obj_rel+obj_rot+goal+obj_pos | 100 |
+| grad_x_delta | 5 | 2 | 0.040 | obj_rel+obj_rot+goal+obj_pos+ee_pos | 100 |
+| ig | 0 | 2 | 0.860 |  | 100 |
+| ig | 1 | 2 | 0.070 | obj_rel | 100 |
+| ig | 2 | 2 | 0.060 | obj_rel+goal | 100 |
+| ig | 3 | 2 | 0.080 | obj_rel+goal+obj_pos | 100 |
+| ig | 4 | 2 | 0.080 | obj_rel+goal+obj_pos+obj_rot | 100 |
+| ig | 5 | 2 | 0.040 | obj_rel+goal+obj_pos+obj_rot+ee_pos | 100 |
+| smoothgrad | 0 | 2 | 0.860 |  | 100 |
+| smoothgrad | 1 | 2 | 0.120 | goal | 100 |
+| smoothgrad | 2 | 2 | 0.030 | goal+obj_velp | 100 |
+| smoothgrad | 3 | 2 | 0.040 | goal+obj_velp+ee_vel | 100 |
+| smoothgrad | 4 | 2 | 0.080 | goal+obj_velp+ee_vel+obj_rel | 100 |
+| smoothgrad | 5 | 2 | 0.090 | goal+obj_velp+ee_vel+obj_rel+obj_pos | 100 |
+| occlusion | 0 | 2 | 0.860 |  | 100 |
+| occlusion | 1 | 2 | 0.070 | obj_rel | 100 |
+| occlusion | 2 | 2 | 0.060 | obj_rel+goal | 100 |
+| occlusion | 3 | 2 | 0.080 | obj_rel+goal+obj_pos | 100 |
+| occlusion | 4 | 2 | 0.080 | obj_rel+goal+obj_pos+ee_pos | 100 |
+| occlusion | 5 | 2 | 0.040 | obj_rel+goal+obj_pos+ee_pos+obj_rot | 100 |
+| kernelshap_grouped | 0 | 2 | 0.860 |  | 100 |
+| kernelshap_grouped | 1 | 2 | 0.070 | obj_rel | 100 |
+| kernelshap_grouped | 2 | 2 | 0.070 | obj_rel+ee_pos | 100 |
+| kernelshap_grouped | 3 | 2 | 0.080 | obj_rel+ee_pos+obj_pos | 100 |
+| kernelshap_grouped | 4 | 2 | 0.080 | obj_rel+ee_pos+obj_pos+goal | 100 |
+| kernelshap_grouped | 5 | 2 | 0.040 | obj_rel+ee_pos+obj_pos+goal+obj_rot | 100 |
+| gwie_c | 0 | 2 | 0.860 |  | 100 |
+| gwie_c | 1 | 2 | 0.070 | obj_rel | 100 |
+| gwie_c | 2 | 2 | 0.060 | obj_rel+goal | 100 |
+| gwie_c | 3 | 2 | 0.080 | obj_rel+goal+obj_pos | 100 |
+| gwie_c | 4 | 2 | 0.080 | obj_rel+goal+obj_pos+ee_pos | 100 |
+| gwie_c | 5 | 2 | 0.080 | obj_rel+goal+obj_pos+ee_pos+obj_velr | 100 |
+| gwie_orig_port | 0 | 2 | 0.860 |  | 100 |
+| gwie_orig_port | 1 | 2 | 0.070 | obj_rel | 100 |
+| gwie_orig_port | 2 | 2 | 0.060 | obj_rel+goal | 100 |
+| gwie_orig_port | 3 | 2 | 0.080 | obj_rel+goal+obj_pos | 100 |
+| gwie_orig_port | 4 | 2 | 0.080 | obj_rel+goal+obj_pos+ee_pos | 100 |
+| gwie_orig_port | 5 | 2 | 0.040 | obj_rel+goal+obj_pos+ee_pos+obj_rot | 100 |
+| open_loop | 0 | 2 | 0.860 |  | 100 |
+| open_loop | 1 | 2 | 0.120 | goal | 100 |
+| open_loop | 2 | 2 | 0.060 | goal+obj_velr | 100 |
+| open_loop | 3 | 2 | 0.080 | goal+obj_velr+obj_rel | 100 |
+| open_loop | 4 | 2 | 0.080 | goal+obj_velr+obj_rel+obj_pos | 100 |
+| open_loop | 5 | 2 | 0.080 | goal+obj_velr+obj_rel+obj_pos+ee_pos | 100 |
 <!-- END:c1_push_dr_deletion -->
 
-*Reading (push_dr seed 1, the only learned push_dr seed).* Occlusion and gradient × Δ agree most
-with the closed-loop ranking. IG, KernelSHAP and both GWIE variants tie behind them and recover the
-same top-k groups. Plain gradients and SmoothGrad agree least and miss most of the top-k groups that
-closed-loop erasure identifies. GWIE-C's closed-loop agreement matches IG's, at a higher cost (Section
-4.4). With one seed, method rankings that differ by less than the CI width should not be read as
-differences.
+*Reading (push_dr seeds 1 and 2, the two learned push_dr seeds).* Occlusion agrees most with the
+closed-loop ranking. IG, gradient × Δ, KernelSHAP and both GWIE variants follow with overlapping CIs,
+and the ordering among them is not stable across the two seeds. Plain gradients and SmoothGrad
+agree least and miss most of the top-k groups that closed-loop erasure identifies. The open-loop
+importance ranking (mean KL under erasure) agrees with the closed-loop ranking no better than
+occlusion does, which is the C1 question in miniature: per-state importance is a reasonable but
+imperfect guide to what matters over an episode. With two seeds, differences smaller than the CI
+width should not be read as differences.
 
 ### 4.4 C2: cost
 
@@ -317,14 +373,14 @@ Runtime per explained state (ms):
 <!-- BEGIN:c2_runtime -->
 | method | reach_controller (ms) | push_controller (ms) | shortcut (ms) | push_dr (ms) |
 |---|---|---|---|---|
-| grad | 0.644 [0.621, 0.686] | 0.753 [0.691, 0.782] | 1.406 [1.353, 1.464] | 5.436 [5.066, 5.794] |
-| grad_x_delta | 0.709 [0.664, 0.765] | 0.757 [0.724, 0.814] | 1.407 [1.380, 1.480] | 5.329 [5.158, 5.659] |
-| ig | 0.890 [0.832, 0.923] | 0.888 [0.859, 0.971] | 1.768 [1.706, 1.865] | 7.709 [7.322, 8.187] |
-| smoothgrad | 1.061 [1.032, 1.117] | 1.161 [1.118, 1.252] | 1.924 [1.862, 1.989] | 11.175 [10.457, 11.810] |
-| occlusion | 1.589 [1.534, 1.636] | 2.937 [2.881, 2.973] | 4.302 [4.156, 4.428] | 28.055 [26.263, 29.297] |
-| kernelshap_grouped | 4.762 [4.710, 4.826] | 73.711 [73.321, 74.207] | 23.224 [22.568, 23.800] | 821.737 [760.359, 886.845] |
-| gwie_c | 4.505 [4.222, 4.593] | 8.996 [8.763, 9.129] | 18.053 [17.439, 19.037] | 191.596 [182.315, 194.054] |
-| gwie_orig_port | 1.898 [1.824, 1.957] | 2.226 [2.182, 2.297] | 4.832 [4.659, 5.005] | 26.246 [25.036, 27.684] |
+| grad | 0.644 [0.621, 0.686] | 0.753 [0.691, 0.782] | 1.406 [1.353, 1.464] | 6.356 [5.202, 8.835] |
+| grad_x_delta | 0.709 [0.664, 0.765] | 0.757 [0.724, 0.814] | 1.407 [1.380, 1.480] | 5.992 [5.282, 8.468] |
+| ig | 0.890 [0.832, 0.923] | 0.888 [0.859, 0.971] | 1.768 [1.706, 1.865] | 8.875 [7.611, 11.818] |
+| smoothgrad | 1.061 [1.032, 1.117] | 1.161 [1.118, 1.252] | 1.924 [1.862, 1.989] | 12.750 [10.811, 18.163] |
+| occlusion | 1.589 [1.534, 1.636] | 2.937 [2.881, 2.973] | 4.302 [4.156, 4.428] | 31.358 [27.044, 43.889] |
+| kernelshap_grouped | 4.762 [4.710, 4.826] | 73.711 [73.321, 74.207] | 23.224 [22.568, 23.800] | 937.548 [799.037, 1532.278] |
+| gwie_c | 4.505 [4.222, 4.593] | 8.996 [8.763, 9.129] | 18.053 [17.439, 19.037] | 210.176 [188.242, 327.750] |
+| gwie_orig_port | 1.898 [1.824, 1.957] | 2.226 [2.182, 2.297] | 4.832 [4.659, 5.005] | 30.468 [25.816, 42.560] |
 | open_loop | n/a | n/a | n/a | n/a [n/a, n/a] |
 <!-- END:c2_runtime -->
 
@@ -333,18 +389,20 @@ Runtime per explained state (ms):
 push_dr (primary):
 
 <!-- BEGIN:c3_push_dr -->
-| exp | signal | T | alpha | n_test | n_fail_test | threshold | fpr_test | auroc | auprc | tpr_at_5fpr | det_step_median | auroc_s1 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| push_dr | asm | 10 | 0.300 | 1950 | 1118 | 14.289 | 0.049 | 0.713 [0.689, 0.737] | 0.716 [0.686, 0.749] | 0.100 [0.083, 0.118] | 0.000 [0.000, 2.000] | 0.713 |
-| push_dr | obs_ood | 10 | 0.300 | 1950 | 1118 | 153.186 | 0.038 | 0.724 [0.702, 0.747] | 0.738 [0.709, 0.770] | 0.114 [0.095, 0.132] | 0.000 [0.000, 0.000] | 0.724 |
-| push_dr | act_std | 10 | 1.000 | 1950 | 1118 | 0.932 | 0.058 | 0.613 [0.588, 0.638] | 0.680 [0.650, 0.710] | 0.162 [0.141, 0.183] | 7.000 [7.000, 8.000] | 0.613 |
-| push_dr | q_drop | 10 | 1.000 | 1950 | 1118 | 18.625 | 0.035 | 0.744 [0.722, 0.765] | 0.787 [0.761, 0.811] | 0.179 [0.156, 0.202] | 4.000 [4.000, 5.000] | 0.744 |
-| push_dr | act_ood | 10 | 0.200 | 1950 | 1118 | 146.776 | 0.043 | 0.623 [0.601, 0.648] | 0.670 [0.640, 0.704] | 0.063 [0.050, 0.077] | 7.000 [5.000, 7.000] | 0.623 |
-| push_dr | asm | 25 | 0.300 | 1950 | 1118 | 15.207 | 0.056 | 0.732 [0.709, 0.755] | 0.728 [0.700, 0.761] | 0.114 [0.097, 0.133] | 5.000 [2.000, 7.000] | 0.732 |
-| push_dr | obs_ood | 25 | 0.300 | 1950 | 1118 | 166.608 | 0.040 | 0.741 [0.718, 0.763] | 0.741 [0.712, 0.772] | 0.091 [0.075, 0.108] | 0.000 [0.000, 2.500] | 0.741 |
-| push_dr | act_std | 25 | 1.000 | 1950 | 1118 | 1.277 | 0.069 | 0.606 [0.580, 0.630] | 0.688 [0.657, 0.718] | 0.191 [0.167, 0.213] | 12.000 [10.000, 13.000] | 0.606 |
-| push_dr | q_drop | 25 | 1.000 | 1950 | 1118 | 19.824 | 0.038 | 0.847 [0.829, 0.864] | 0.872 [0.851, 0.891] | 0.393 [0.365, 0.422] | 13.000 [12.000, 14.000] | 0.847 |
-| push_dr | act_ood | 25 | 0.200 | 1950 | 1118 | 421.405 | 0.040 | 0.689 [0.666, 0.713] | 0.703 [0.674, 0.737] | 0.083 [0.068, 0.100] | 14.000 [12.500, 15.000] | 0.689 |
+| exp | signal | T | alpha | n_test | n_fail_test | threshold | fpr_test | auroc | auprc | tpr_at_5fpr | det_step_median | auroc_s1 | auroc_s2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| push_dr | asm | 10 | 0.300 | 3900 | 2237 | 13.566 | 0.049 | 0.728 [0.702, 0.752] | 0.737 [0.703, 0.774] | 0.118 [0.097, 0.139] | 0.000 [0.000, 1.000] | 0.713 | 0.742 |
+| push_dr | obs_ood | 10 | 0.500 | 3900 | 2237 | 175.563 | 0.034 | 0.733 [0.715, 0.751] | 0.748 [0.727, 0.770] | 0.105 [0.092, 0.118] | 2.000 [1.000, 3.000] | 0.727 | 0.739 |
+| push_dr | act_std | 10 | 1.000 | 3900 | 2237 | 0.881 | 0.062 | 0.599 [0.575, 0.624] | 0.650 [0.602, 0.695] | 0.114 [0.049, 0.182] | 7.000 [6.000, 7.000] | 0.613 | 0.586 |
+| push_dr | q_drop | 10 | 1.000 | 3900 | 2237 | 18.422 | 0.043 | 0.745 [0.730, 0.760] | 0.784 [0.767, 0.803] | 0.192 [0.175, 0.210] | 5.000 [4.000, 5.000] | 0.744 | 0.747 |
+| push_dr | ensemble | 10 | 0.300 | 3900 | 2237 | 1.540 | 0.046 | 0.642 [0.617, 0.667] | 0.700 [0.668, 0.730] | 0.119 [0.100, 0.139] | 7.000 [6.000, 7.000] | 0.628 | 0.655 |
+| push_dr | act_ood | 10 | 0.200 | 3900 | 2237 | 112.124 | 0.054 | 0.628 [0.609, 0.647] | 0.671 [0.650, 0.695] | 0.091 [0.079, 0.102] | 6.000 [5.000, 7.000] | 0.623 | 0.633 |
+| push_dr | asm | 25 | 0.300 | 3900 | 2237 | 14.705 | 0.051 | 0.748 [0.721, 0.774] | 0.747 [0.714, 0.783] | 0.114 [0.084, 0.144] | 1.000 [0.000, 5.000] | 0.732 | 0.765 |
+| push_dr | obs_ood | 25 | 0.500 | 3900 | 2237 | 191.923 | 0.040 | 0.754 [0.729, 0.778] | 0.757 [0.727, 0.786] | 0.108 [0.093, 0.125] | 6.500 [5.000, 8.000] | 0.740 | 0.768 |
+| push_dr | act_std | 25 | 1.000 | 3900 | 2237 | 1.260 | 0.059 | 0.572 [0.522, 0.617] | 0.669 [0.635, 0.702] | 0.173 [0.141, 0.207] | 13.000 [11.000, 15.512] | 0.606 | 0.534 |
+| push_dr | q_drop | 25 | 1.000 | 3900 | 2237 | 19.920 | 0.044 | 0.852 [0.838, 0.866] | 0.873 [0.858, 0.888] | 0.408 [0.375, 0.441] | 13.000 [13.000, 14.000] | 0.847 | 0.857 |
+| push_dr | ensemble | 25 | 0.300 | 3900 | 2237 | 2.076 | 0.048 | 0.762 [0.745, 0.778] | 0.789 [0.769, 0.810] | 0.205 [0.189, 0.222] | 14.000 [13.000, 15.000] | 0.757 | 0.767 |
+| push_dr | act_ood | 25 | 0.200 | 3900 | 2237 | 345.922 | 0.042 | 0.709 [0.679, 0.740] | 0.717 [0.689, 0.748] | 0.098 [0.086, 0.110] | 12.000 [10.000, 14.000] | 0.689 | 0.730 |
 <!-- END:c3_push_dr -->
 
 Per held-out factor:
@@ -352,476 +410,524 @@ Per held-out factor:
 <!-- BEGIN:c3_push_dr_per_factor -->
 | exp | signal | T | factor | n_test | n_fail_test | auroc |
 |---|---|---|---|---|---|---|
-| push_dr | asm | 10 | combined | 1100 | 768 | 0.640 [0.600, 0.678] |
-| push_dr | obs_ood | 10 | combined | 1100 | 768 | 0.654 [0.616, 0.691] |
-| push_dr | act_std | 10 | combined | 1100 | 768 | 0.638 [0.604, 0.675] |
-| push_dr | q_drop | 10 | combined | 1100 | 768 | 0.707 [0.672, 0.740] |
-| push_dr | act_ood | 10 | combined | 1100 | 768 | 0.623 [0.586, 0.658] |
-| push_dr | asm | 10 | friction | 400 | 131 | 0.611 [0.553, 0.672] |
-| push_dr | obs_ood | 10 | friction | 400 | 131 | 0.620 [0.559, 0.679] |
-| push_dr | act_std | 10 | friction | 400 | 131 | 0.559 [0.499, 0.621] |
-| push_dr | q_drop | 10 | friction | 400 | 131 | 0.761 [0.708, 0.810] |
-| push_dr | act_ood | 10 | friction | 400 | 131 | 0.651 [0.592, 0.710] |
-| push_dr | asm | 10 | gain | 300 | 85 | 0.767 [0.702, 0.823] |
-| push_dr | obs_ood | 10 | gain | 300 | 85 | 0.801 [0.740, 0.855] |
-| push_dr | act_std | 10 | gain | 300 | 85 | 0.628 [0.555, 0.700] |
-| push_dr | q_drop | 10 | gain | 300 | 85 | 0.872 [0.823, 0.917] |
-| push_dr | act_ood | 10 | gain | 300 | 85 | 0.741 [0.675, 0.805] |
-| push_dr | asm | 10 | latency | 200 | 79 | 0.439 [0.362, 0.517] |
-| push_dr | obs_ood | 10 | latency | 200 | 79 | 0.620 [0.544, 0.694] |
-| push_dr | act_std | 10 | latency | 200 | 79 | 0.481 [0.403, 0.559] |
-| push_dr | q_drop | 10 | latency | 200 | 79 | 0.645 [0.569, 0.721] |
-| push_dr | act_ood | 10 | latency | 200 | 79 | 0.471 [0.387, 0.554] |
-| push_dr | asm | 10 | mass | 250 | 50 | 0.617 [0.533, 0.698] |
-| push_dr | obs_ood | 10 | mass | 250 | 50 | 0.622 [0.527, 0.712] |
-| push_dr | act_std | 10 | mass | 250 | 50 | 0.457 [0.370, 0.546] |
-| push_dr | q_drop | 10 | mass | 250 | 50 | 0.761 [0.673, 0.839] |
-| push_dr | act_ood | 10 | mass | 250 | 50 | 0.573 [0.489, 0.658] |
-| push_dr | asm | 10 | noise | 200 | 60 | 0.777 [0.707, 0.838] |
-| push_dr | obs_ood | 10 | noise | 200 | 60 | 0.815 [0.752, 0.872] |
-| push_dr | act_std | 10 | noise | 200 | 60 | 0.474 [0.388, 0.560] |
-| push_dr | q_drop | 10 | noise | 200 | 60 | 0.820 [0.757, 0.879] |
-| push_dr | act_ood | 10 | noise | 200 | 60 | 0.571 [0.484, 0.656] |
-| push_dr | asm | 25 | combined | 1100 | 768 | 0.666 [0.627, 0.702] |
-| push_dr | obs_ood | 25 | combined | 1100 | 768 | 0.654 [0.616, 0.690] |
-| push_dr | act_std | 25 | combined | 1100 | 768 | 0.613 [0.578, 0.647] |
-| push_dr | q_drop | 25 | combined | 1100 | 768 | 0.819 [0.791, 0.845] |
-| push_dr | act_ood | 25 | combined | 1100 | 768 | 0.639 [0.602, 0.676] |
-| push_dr | asm | 25 | friction | 400 | 131 | 0.607 [0.548, 0.665] |
-| push_dr | obs_ood | 25 | friction | 400 | 131 | 0.744 [0.688, 0.798] |
-| push_dr | act_std | 25 | friction | 400 | 131 | 0.604 [0.535, 0.665] |
-| push_dr | q_drop | 25 | friction | 400 | 131 | 0.867 [0.826, 0.903] |
-| push_dr | act_ood | 25 | friction | 400 | 131 | 0.666 [0.612, 0.719] |
-| push_dr | asm | 25 | gain | 300 | 85 | 0.785 [0.724, 0.838] |
-| push_dr | obs_ood | 25 | gain | 300 | 85 | 0.902 [0.856, 0.940] |
-| push_dr | act_std | 25 | gain | 300 | 85 | 0.711 [0.637, 0.778] |
-| push_dr | q_drop | 25 | gain | 300 | 85 | 0.945 [0.911, 0.972] |
-| push_dr | act_ood | 25 | gain | 300 | 85 | 0.718 [0.651, 0.778] |
-| push_dr | asm | 25 | latency | 200 | 79 | 0.605 [0.522, 0.683] |
-| push_dr | obs_ood | 25 | latency | 200 | 79 | 0.646 [0.573, 0.721] |
-| push_dr | act_std | 25 | latency | 200 | 79 | 0.408 [0.326, 0.491] |
-| push_dr | q_drop | 25 | latency | 200 | 79 | 0.763 [0.698, 0.826] |
-| push_dr | act_ood | 25 | latency | 200 | 79 | 0.681 [0.606, 0.752] |
-| push_dr | asm | 25 | mass | 250 | 50 | 0.661 [0.573, 0.744] |
-| push_dr | obs_ood | 25 | mass | 250 | 50 | 0.720 [0.628, 0.808] |
-| push_dr | act_std | 25 | mass | 250 | 50 | 0.555 [0.448, 0.658] |
-| push_dr | q_drop | 25 | mass | 250 | 50 | 0.860 [0.790, 0.922] |
-| push_dr | act_ood | 25 | mass | 250 | 50 | 0.624 [0.542, 0.706] |
-| push_dr | asm | 25 | noise | 200 | 60 | 0.778 [0.709, 0.840] |
-| push_dr | obs_ood | 25 | noise | 200 | 60 | 0.823 [0.763, 0.877] |
-| push_dr | act_std | 25 | noise | 200 | 60 | 0.518 [0.425, 0.605] |
-| push_dr | q_drop | 25 | noise | 200 | 60 | 0.849 [0.793, 0.902] |
-| push_dr | act_ood | 25 | noise | 200 | 60 | 0.645 [0.564, 0.723] |
+| push_dr | asm | 10 | combined | 2200 | 1545 | 0.658 [0.622, 0.696] |
+| push_dr | obs_ood | 10 | combined | 2200 | 1545 | 0.654 [0.628, 0.680] |
+| push_dr | act_std | 10 | combined | 2200 | 1545 | 0.601 [0.542, 0.656] |
+| push_dr | q_drop | 10 | combined | 2200 | 1545 | 0.694 [0.662, 0.723] |
+| push_dr | ensemble | 10 | combined | 2200 | 1545 | 0.608 [0.579, 0.638] |
+| push_dr | act_ood | 10 | combined | 2200 | 1545 | 0.611 [0.580, 0.641] |
+| push_dr | asm | 10 | friction | 800 | 263 | 0.666 [0.585, 0.743] |
+| push_dr | obs_ood | 10 | friction | 800 | 263 | 0.670 [0.603, 0.735] |
+| push_dr | act_std | 10 | friction | 800 | 263 | 0.565 [0.520, 0.608] |
+| push_dr | q_drop | 10 | friction | 800 | 263 | 0.799 [0.740, 0.856] |
+| push_dr | ensemble | 10 | friction | 800 | 263 | 0.747 [0.673, 0.818] |
+| push_dr | act_ood | 10 | friction | 800 | 263 | 0.717 [0.627, 0.801] |
+| push_dr | asm | 10 | gain | 600 | 167 | 0.759 [0.713, 0.800] |
+| push_dr | obs_ood | 10 | gain | 600 | 167 | 0.812 [0.765, 0.852] |
+| push_dr | act_std | 10 | gain | 600 | 167 | 0.600 [0.535, 0.663] |
+| push_dr | q_drop | 10 | gain | 600 | 167 | 0.858 [0.815, 0.895] |
+| push_dr | ensemble | 10 | gain | 600 | 167 | 0.817 [0.773, 0.859] |
+| push_dr | act_ood | 10 | gain | 600 | 167 | 0.750 [0.704, 0.794] |
+| push_dr | asm | 10 | latency | 400 | 164 | 0.454 [0.394, 0.514] |
+| push_dr | obs_ood | 10 | latency | 400 | 164 | 0.600 [0.544, 0.657] |
+| push_dr | act_std | 10 | latency | 400 | 164 | 0.467 [0.406, 0.526] |
+| push_dr | q_drop | 10 | latency | 400 | 164 | 0.636 [0.577, 0.690] |
+| push_dr | ensemble | 10 | latency | 400 | 164 | 0.445 [0.385, 0.501] |
+| push_dr | act_ood | 10 | latency | 400 | 164 | 0.485 [0.420, 0.545] |
+| push_dr | asm | 10 | mass | 500 | 104 | 0.619 [0.561, 0.679] |
+| push_dr | obs_ood | 10 | mass | 500 | 104 | 0.671 [0.584, 0.757] |
+| push_dr | act_std | 10 | mass | 500 | 104 | 0.451 [0.391, 0.508] |
+| push_dr | q_drop | 10 | mass | 500 | 104 | 0.765 [0.710, 0.814] |
+| push_dr | ensemble | 10 | mass | 500 | 104 | 0.750 [0.682, 0.810] |
+| push_dr | act_ood | 10 | mass | 500 | 104 | 0.597 [0.530, 0.662] |
+| push_dr | asm | 10 | noise | 400 | 124 | 0.772 [0.724, 0.823] |
+| push_dr | obs_ood | 10 | noise | 400 | 124 | 0.800 [0.748, 0.850] |
+| push_dr | act_std | 10 | noise | 400 | 124 | 0.473 [0.408, 0.535] |
+| push_dr | q_drop | 10 | noise | 400 | 124 | 0.802 [0.750, 0.851] |
+| push_dr | ensemble | 10 | noise | 400 | 124 | 0.687 [0.627, 0.746] |
+| push_dr | act_ood | 10 | noise | 400 | 124 | 0.617 [0.530, 0.703] |
+| push_dr | asm | 25 | combined | 2200 | 1545 | 0.675 [0.644, 0.706] |
+| push_dr | obs_ood | 25 | combined | 2200 | 1545 | 0.665 [0.633, 0.694] |
+| push_dr | act_std | 25 | combined | 2200 | 1545 | 0.580 [0.524, 0.630] |
+| push_dr | q_drop | 25 | combined | 2200 | 1545 | 0.807 [0.780, 0.831] |
+| push_dr | ensemble | 25 | combined | 2200 | 1545 | 0.723 [0.699, 0.747] |
+| push_dr | act_ood | 25 | combined | 2200 | 1545 | 0.648 [0.620, 0.678] |
+| push_dr | asm | 25 | friction | 800 | 263 | 0.704 [0.580, 0.811] |
+| push_dr | obs_ood | 25 | friction | 800 | 263 | 0.817 [0.718, 0.905] |
+| push_dr | act_std | 25 | friction | 800 | 263 | 0.593 [0.543, 0.640] |
+| push_dr | q_drop | 25 | friction | 800 | 263 | 0.912 [0.850, 0.966] |
+| push_dr | ensemble | 25 | friction | 800 | 263 | 0.793 [0.723, 0.860] |
+| push_dr | act_ood | 25 | friction | 800 | 263 | 0.734 [0.642, 0.817] |
+| push_dr | asm | 25 | gain | 600 | 167 | 0.781 [0.740, 0.818] |
+| push_dr | obs_ood | 25 | gain | 600 | 167 | 0.888 [0.848, 0.922] |
+| push_dr | act_std | 25 | gain | 600 | 167 | 0.671 [0.589, 0.744] |
+| push_dr | q_drop | 25 | gain | 600 | 167 | 0.942 [0.917, 0.962] |
+| push_dr | ensemble | 25 | gain | 600 | 167 | 0.857 [0.824, 0.887] |
+| push_dr | act_ood | 25 | gain | 600 | 167 | 0.747 [0.687, 0.799] |
+| push_dr | asm | 25 | latency | 400 | 164 | 0.615 [0.559, 0.670] |
+| push_dr | obs_ood | 25 | latency | 400 | 164 | 0.615 [0.558, 0.671] |
+| push_dr | act_std | 25 | latency | 400 | 164 | 0.396 [0.334, 0.459] |
+| push_dr | q_drop | 25 | latency | 400 | 164 | 0.773 [0.726, 0.818] |
+| push_dr | ensemble | 25 | latency | 400 | 164 | 0.730 [0.675, 0.780] |
+| push_dr | act_ood | 25 | latency | 400 | 164 | 0.721 [0.644, 0.788] |
+| push_dr | asm | 25 | mass | 500 | 104 | 0.683 [0.617, 0.746] |
+| push_dr | obs_ood | 25 | mass | 500 | 104 | 0.771 [0.690, 0.846] |
+| push_dr | act_std | 25 | mass | 500 | 104 | 0.502 [0.402, 0.600] |
+| push_dr | q_drop | 25 | mass | 500 | 104 | 0.905 [0.824, 0.964] |
+| push_dr | ensemble | 25 | mass | 500 | 104 | 0.840 [0.771, 0.893] |
+| push_dr | act_ood | 25 | mass | 500 | 104 | 0.703 [0.585, 0.802] |
+| push_dr | asm | 25 | noise | 400 | 124 | 0.781 [0.734, 0.830] |
+| push_dr | obs_ood | 25 | noise | 400 | 124 | 0.805 [0.758, 0.852] |
+| push_dr | act_std | 25 | noise | 400 | 124 | 0.488 [0.410, 0.567] |
+| push_dr | q_drop | 25 | noise | 400 | 124 | 0.860 [0.818, 0.898] |
+| push_dr | ensemble | 25 | noise | 400 | 124 | 0.717 [0.635, 0.791] |
+| push_dr | act_ood | 25 | noise | 400 | 124 | 0.674 [0.602, 0.735] |
 <!-- END:c3_push_dr_per_factor -->
 
 push_drhist and push_nodr (secondary):
 
 <!-- BEGIN:c3_push_drhist -->
-| exp | signal | T | alpha | n_test | n_fail_test | threshold | fpr_test | auroc | auprc | tpr_at_5fpr | det_step_median | auroc_s0 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| push_drhist | asm | 10 | 0.500 | 1950 | 983 | 20.653 | 0.042 | 0.706 [0.683, 0.730] | 0.655 [0.623, 0.691] | 0.086 [0.069, 0.104] | 0.000 [0.000, 0.000] | 0.706 |
-| push_drhist | obs_ood | 10 | 0.200 | 1950 | 983 | 297.106 | 0.059 | 0.685 [0.662, 0.710] | 0.636 [0.605, 0.673] | 0.105 [0.085, 0.125] | 6.000 [6.000, 7.000] | 0.685 |
-| push_drhist | act_std | 10 | 1.000 | 1950 | 983 | 0.719 | 0.042 | 0.495 [0.470, 0.521] | 0.503 [0.475, 0.535] | 0.045 [0.032, 0.058] | 6.500 [6.000, 8.000] | 0.495 |
-| push_drhist | q_drop | 10 | 1.000 | 1950 | 983 | 19.454 | 0.062 | 0.697 [0.674, 0.720] | 0.681 [0.649, 0.713] | 0.158 [0.135, 0.180] | 4.000 [3.000, 5.000] | 0.697 |
-| push_drhist | act_ood | 10 | 0.200 | 1950 | 983 | 82.505 | 0.052 | 0.553 [0.528, 0.579] | 0.553 [0.523, 0.587] | 0.083 [0.066, 0.101] | 6.000 [5.500, 7.000] | 0.553 |
-| push_drhist | asm | 25 | 0.500 | 1950 | 983 | 21.042 | 0.041 | 0.717 [0.695, 0.741] | 0.658 [0.626, 0.693] | 0.091 [0.073, 0.108] | 0.000 [0.000, 0.000] | 0.717 |
-| push_drhist | obs_ood | 25 | 0.200 | 1950 | 983 | 383.743 | 0.043 | 0.700 [0.676, 0.723] | 0.646 [0.614, 0.682] | 0.072 [0.056, 0.088] | 14.000 [11.000, 17.500] | 0.700 |
-| push_drhist | act_std | 25 | 1.000 | 1950 | 983 | 0.912 | 0.040 | 0.477 [0.452, 0.503] | 0.556 [0.526, 0.586] | 0.157 [0.136, 0.180] | 16.000 [15.000, 18.000] | 0.477 |
-| push_drhist | q_drop | 25 | 1.000 | 1950 | 983 | 21.030 | 0.051 | 0.840 [0.823, 0.856] | 0.829 [0.805, 0.853] | 0.370 [0.341, 0.401] | 14.000 [14.000, 15.000] | 0.840 |
-| push_drhist | act_ood | 25 | 0.200 | 1950 | 983 | 136.767 | 0.065 | 0.677 [0.653, 0.702] | 0.639 [0.608, 0.674] | 0.144 [0.124, 0.166] | 13.500 [12.000, 14.000] | 0.677 |
+| exp | signal | T | alpha | n_test | n_fail_test | threshold | fpr_test | auroc | auprc | tpr_at_5fpr | det_step_median | auroc_s0 | auroc_s1 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| push_drhist | asm | 10 | 0.500 | 3900 | 1988 | 20.336 | 0.046 | 0.697 [0.675, 0.717] | 0.651 [0.628, 0.676] | 0.102 [0.085, 0.118] | 0.000 [0.000, 0.000] | 0.706 | 0.687 |
+| push_drhist | obs_ood | 10 | 0.200 | 3900 | 1988 | 302.067 | 0.061 | 0.682 [0.663, 0.700] | 0.637 [0.614, 0.662] | 0.092 [0.078, 0.106] | 6.000 [6.000, 7.000] | 0.685 | 0.679 |
+| push_drhist | act_std | 10 | 1.000 | 3900 | 1988 | 0.765 | 0.037 | 0.515 [0.483, 0.553] | 0.528 [0.489, 0.565] | 0.045 [0.034, 0.057] | 7.000 [6.000, 8.000] | 0.495 | 0.540 |
+| push_drhist | q_drop | 10 | 1.000 | 3900 | 1988 | 18.177 | 0.058 | 0.693 [0.676, 0.711] | 0.687 [0.663, 0.712] | 0.186 [0.161, 0.214] | 4.500 [3.000, 6.000] | 0.697 | 0.690 |
+| push_drhist | ensemble | 10 | 0.200 | 3900 | 1988 | 1.163 | 0.063 | 0.545 [0.525, 0.565] | 0.562 [0.540, 0.586] | 0.110 [0.096, 0.124] | 7.000 [7.000, 8.000] | 0.551 | 0.539 |
+| push_drhist | act_ood | 10 | 0.200 | 3900 | 1988 | 81.912 | 0.059 | 0.543 [0.519, 0.565] | 0.554 [0.532, 0.577] | 0.097 [0.077, 0.118] | 7.000 [6.000, 8.000] | 0.553 | 0.531 |
+| push_drhist | asm | 25 | 0.500 | 3900 | 1988 | 20.848 | 0.049 | 0.701 [0.674, 0.728] | 0.648 [0.623, 0.675] | 0.095 [0.081, 0.109] | 0.000 [0.000, 0.000] | 0.717 | 0.685 |
+| push_drhist | obs_ood | 25 | 0.200 | 3900 | 1988 | 376.450 | 0.051 | 0.699 [0.682, 0.716] | 0.648 [0.625, 0.673] | 0.095 [0.076, 0.112] | 14.000 [12.000, 15.000] | 0.700 | 0.699 |
+| push_drhist | act_std | 25 | 1.000 | 3900 | 1988 | 0.922 | 0.050 | 0.512 [0.467, 0.560] | 0.577 [0.543, 0.611] | 0.177 [0.146, 0.211] | 18.000 [16.000, 19.000] | 0.477 | 0.548 |
+| push_drhist | q_drop | 25 | 1.000 | 3900 | 1988 | 20.685 | 0.054 | 0.845 [0.831, 0.859] | 0.835 [0.815, 0.854] | 0.411 [0.387, 0.437] | 14.000 [14.000, 15.000] | 0.840 | 0.851 |
+| push_drhist | ensemble | 25 | 0.200 | 3900 | 1988 | 1.518 | 0.061 | 0.733 [0.715, 0.750] | 0.724 [0.695, 0.753] | 0.246 [0.225, 0.268] | 15.000 [14.000, 15.000] | 0.727 | 0.739 |
+| push_drhist | act_ood | 25 | 0.200 | 3900 | 1988 | 143.891 | 0.074 | 0.675 [0.658, 0.692] | 0.642 [0.620, 0.667] | 0.143 [0.125, 0.161] | 13.000 [12.488, 14.000] | 0.677 | 0.674 |
 <!-- END:c3_push_drhist -->
 
 <!-- BEGIN:c3_push_nodr -->
-| exp | signal | T | alpha | n_test | n_fail_test | threshold | fpr_test | auroc | auprc | tpr_at_5fpr | det_step_median | auroc_s0 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| push_nodr | asm | 10 | 0.200 | 1950 | 1227 | 47.097 | 0.058 | 0.714 [0.690, 0.740] | 0.760 [0.731, 0.790] | 0.097 [0.080, 0.113] | 0.000 [0.000, 0.000] | 0.714 |
-| push_nodr | obs_ood | 10 | 1.000 | 1950 | 1227 | 210.351 | 0.055 | 0.748 [0.724, 0.772] | 0.797 [0.770, 0.825] | 0.174 [0.153, 0.196] | 4.000 [3.000, 5.000] | 0.748 |
-| push_nodr | act_std | 10 | 1.000 | 1950 | 1227 | 0.746 | 0.046 | 0.580 [0.552, 0.605] | 0.675 [0.646, 0.707] | 0.051 [0.039, 0.064] | 6.000 [5.000, 8.000] | 0.580 |
-| push_nodr | q_drop | 10 | 0.500 | 1950 | 1227 | 14.061 | 0.054 | 0.724 [0.702, 0.747] | 0.812 [0.789, 0.834] | 0.227 [0.204, 0.252] | 3.000 [3.000, 4.000] | 0.724 |
-| push_nodr | act_ood | 10 | 0.500 | 1950 | 1227 | 54.491 | 0.065 | 0.694 [0.669, 0.720] | 0.781 [0.756, 0.807] | 0.192 [0.170, 0.213] | 7.000 [6.000, 7.000] | 0.694 |
-| push_nodr | asm | 25 | 0.200 | 1950 | 1227 | 48.923 | 0.054 | 0.727 [0.703, 0.752] | 0.761 [0.733, 0.792] | 0.098 [0.082, 0.115] | 0.000 [0.000, 0.000] | 0.727 |
-| push_nodr | obs_ood | 25 | 1.000 | 1950 | 1227 | 241.402 | 0.069 | 0.777 [0.754, 0.800] | 0.808 [0.781, 0.836] | 0.183 [0.161, 0.204] | 9.000 [7.500, 10.000] | 0.777 |
-| push_nodr | act_std | 25 | 1.000 | 1950 | 1227 | 0.856 | 0.040 | 0.540 [0.513, 0.566] | 0.692 [0.664, 0.718] | 0.140 [0.122, 0.160] | 18.000 [17.000, 19.000] | 0.540 |
-| push_nodr | q_drop | 25 | 0.500 | 1950 | 1227 | 15.179 | 0.054 | 0.842 [0.824, 0.860] | 0.900 [0.886, 0.914] | 0.430 [0.402, 0.457] | 13.000 [11.500, 14.000] | 0.842 |
-| push_nodr | act_ood | 25 | 0.500 | 1950 | 1227 | 130.110 | 0.041 | 0.774 [0.752, 0.796] | 0.831 [0.808, 0.853] | 0.192 [0.170, 0.215] | 13.500 [12.000, 15.000] | 0.774 |
+| exp | signal | T | alpha | n_test | n_fail_test | threshold | fpr_test | auroc | auprc | tpr_at_5fpr | det_step_median | auroc_s0 | auroc_s1 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| push_nodr | asm | 10 | 0.500 | 3900 | 2405 | 54.480 | 0.058 | 0.745 [0.700, 0.792] | 0.784 [0.745, 0.820] | 0.137 [0.097, 0.181] | 2.000 [1.000, 3.000] | 0.712 | 0.782 |
+| push_nodr | obs_ood | 10 | 1.000 | 3900 | 2405 | 202.202 | 0.056 | 0.764 [0.738, 0.798] | 0.806 [0.783, 0.832] | 0.209 [0.190, 0.230] | 4.000 [3.000, 4.000] | 0.748 | 0.788 |
+| push_nodr | act_std | 10 | 1.000 | 3900 | 2405 | 0.796 | 0.055 | 0.610 [0.566, 0.659] | 0.704 [0.661, 0.740] | 0.131 [0.030, 0.242] | 4.000 [4.000, 8.000] | 0.580 | 0.649 |
+| push_nodr | q_drop | 10 | 1.000 | 3900 | 2405 | 18.101 | 0.060 | 0.769 [0.735, 0.801] | 0.821 [0.799, 0.843] | 0.240 [0.196, 0.288] | 3.000 [3.000, 4.000] | 0.745 | 0.790 |
+| push_nodr | ensemble | 10 | 0.200 | 3900 | 2405 | 1.573 | 0.061 | 0.709 [0.693, 0.726] | 0.773 [0.749, 0.796] | 0.188 [0.160, 0.215] | 0.000 [0.000, 1.000] | 0.709 | 0.710 |
+| push_nodr | act_ood | 10 | 1.000 | 3900 | 2405 | 253.469 | 0.047 | 0.645 [0.630, 0.704] | 0.715 [0.694, 0.792] | 0.108 [0.044, 0.177] | 5.000 [5.000, 8.000] | 0.694 | 0.683 |
+| push_nodr | asm | 25 | 0.500 | 3900 | 2405 | 64.265 | 0.050 | 0.763 [0.716, 0.810] | 0.787 [0.749, 0.822] | 0.112 [0.061, 0.168] | 6.000 [5.000, 7.000] | 0.728 | 0.800 |
+| push_nodr | obs_ood | 25 | 1.000 | 3900 | 2405 | 237.017 | 0.060 | 0.798 [0.766, 0.837] | 0.820 [0.794, 0.849] | 0.206 [0.186, 0.225] | 9.000 [8.000, 10.000] | 0.777 | 0.828 |
+| push_nodr | act_std | 25 | 1.000 | 3900 | 2405 | 0.982 | 0.061 | 0.616 [0.526, 0.712] | 0.738 [0.679, 0.792] | 0.244 [0.098, 0.402] | 14.000 [12.000, 18.000] | 0.540 | 0.701 |
+| push_nodr | q_drop | 25 | 1.000 | 3900 | 2405 | 20.033 | 0.051 | 0.861 [0.837, 0.883] | 0.895 [0.876, 0.913] | 0.410 [0.366, 0.456] | 13.000 [11.000, 14.000] | 0.845 | 0.875 |
+| push_nodr | ensemble | 25 | 0.200 | 3900 | 2405 | 1.915 | 0.065 | 0.805 [0.790, 0.820] | 0.858 [0.843, 0.873] | 0.364 [0.320, 0.410] | 15.000 [14.000, 15.000] | 0.803 | 0.808 |
+| push_nodr | act_ood | 25 | 1.000 | 3900 | 2405 | 529.586 | 0.050 | 0.724 [0.710, 0.790] | 0.767 [0.748, 0.835] | 0.129 [0.071, 0.192] | 14.000 [11.000, 15.000] | 0.769 | 0.778 |
 <!-- END:c3_push_nodr -->
 
 *Reading.* From the first 10 steps, ASM's AUROC lies within the CIs of the best baseline for all
-three Push policies. It is not clearly better or worse. The best baseline differs by condition
-(`q_drop` for DR and DR+Hist, `obs_ood` for NoDR). From the first 25 steps, the critic-based `q_drop`
-baseline is clearly best in all three conditions (CIs disjoint from ASM's). On this evidence ASM is
-a competitive early signal on Push but does not beat a simple value-based monitor once more of the
-episode is seen. Each Push condition is one training seed, so these comparisons cover episode-level
-uncertainty only.
+three Push conditions. It is not clearly better or worse, and it is the highest point estimate for
+DR+Hist. The `ensemble` baseline (disagreement between the two learned seeds of a condition) is
+clearly below ASM at 10 steps for DR and DR+Hist and overlaps it for NoDR. From the first 25 steps,
+the critic-based `q_drop` baseline is clearly best in all three conditions (CIs disjoint from
+ASM's). On this evidence ASM is a competitive early signal on Push but does not beat a simple
+value-based monitor once more of the episode is seen.
 
 ### 4.6 C4: reliance, temporal reliance and probes
 
 <!-- BEGIN:c4_reliance -->
-| exp | method | level | quantity | group | mean | n_seeds | seed0 | n_groups | seed1 |
-|---|---|---|---|---|---|---|---|---|---|
-| push_nodr | gwie_c | base | share | ee_pos | 0.124 [0.124, 0.124] | 1 | 0.124 | n/a | n/a |
-| push_nodr | gwie_c | base | share | obj_pos | 0.181 [0.181, 0.181] | 1 | 0.181 | n/a | n/a |
-| push_nodr | gwie_c | base | share | obj_rel | 0.212 [0.212, 0.212] | 1 | 0.212 | n/a | n/a |
-| push_nodr | gwie_c | base | share | grip_state | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_nodr | gwie_c | base | share | obj_rot | 0.058 [0.058, 0.058] | 1 | 0.058 | n/a | n/a |
-| push_nodr | gwie_c | base | share | obj_velp | 0.074 [0.074, 0.074] | 1 | 0.074 | n/a | n/a |
-| push_nodr | gwie_c | base | share | obj_velr | 0.032 [0.032, 0.032] | 1 | 0.032 | n/a | n/a |
-| push_nodr | gwie_c | base | share | ee_vel | 0.076 [0.076, 0.076] | 1 | 0.076 | n/a | n/a |
-| push_nodr | gwie_c | base | share | grip_vel | 0.002 [0.002, 0.002] | 1 | 0.002 | n/a | n/a |
-| push_nodr | gwie_c | base | share | goal | 0.240 [0.240, 0.240] | 1 | 0.240 | n/a | n/a |
-| push_nodr | gwie_c | base | entropy |  | 1.559 [1.559, 1.559] | 1 | 1.559 | 10.000 | n/a |
-| push_nodr | gwie_c | base | entropy_norm |  | 0.677 [0.677, 0.677] | 1 | 0.677 | 10.000 | n/a |
-| push_nodr | ig | base | share | ee_pos | 0.147 [0.147, 0.147] | 1 | 0.147 | n/a | n/a |
-| push_nodr | ig | base | share | obj_pos | 0.188 [0.188, 0.188] | 1 | 0.188 | n/a | n/a |
-| push_nodr | ig | base | share | obj_rel | 0.230 [0.230, 0.230] | 1 | 0.230 | n/a | n/a |
-| push_nodr | ig | base | share | grip_state | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_nodr | ig | base | share | obj_rot | 0.054 [0.054, 0.054] | 1 | 0.054 | n/a | n/a |
-| push_nodr | ig | base | share | obj_velp | 0.060 [0.060, 0.060] | 1 | 0.060 | n/a | n/a |
-| push_nodr | ig | base | share | obj_velr | 0.006 [0.006, 0.006] | 1 | 0.006 | n/a | n/a |
-| push_nodr | ig | base | share | ee_vel | 0.062 [0.062, 0.062] | 1 | 0.062 | n/a | n/a |
-| push_nodr | ig | base | share | grip_vel | 0.001 [0.001, 0.001] | 1 | 0.001 | n/a | n/a |
-| push_nodr | ig | base | share | goal | 0.252 [0.252, 0.252] | 1 | 0.252 | n/a | n/a |
-| push_nodr | ig | base | entropy |  | 1.606 [1.606, 1.606] | 1 | 1.606 | 10.000 | n/a |
-| push_nodr | ig | base | entropy_norm |  | 0.698 [0.698, 0.698] | 1 | 0.698 | 10.000 | n/a |
-| push_dr | gwie_c | base | share | ee_pos | 0.129 [0.129, 0.129] | 1 | n/a | n/a | 0.129 |
-| push_dr | gwie_c | base | share | obj_pos | 0.153 [0.153, 0.153] | 1 | n/a | n/a | 0.153 |
-| push_dr | gwie_c | base | share | obj_rel | 0.220 [0.220, 0.220] | 1 | n/a | n/a | 0.220 |
-| push_dr | gwie_c | base | share | grip_state | 0.000 [0.000, 0.000] | 1 | n/a | n/a | 0.000 |
-| push_dr | gwie_c | base | share | obj_rot | 0.097 [0.097, 0.097] | 1 | n/a | n/a | 0.097 |
-| push_dr | gwie_c | base | share | obj_velp | 0.065 [0.065, 0.065] | 1 | n/a | n/a | 0.065 |
-| push_dr | gwie_c | base | share | obj_velr | 0.072 [0.072, 0.072] | 1 | n/a | n/a | 0.072 |
-| push_dr | gwie_c | base | share | ee_vel | 0.068 [0.068, 0.068] | 1 | n/a | n/a | 0.068 |
-| push_dr | gwie_c | base | share | grip_vel | 0.004 [0.004, 0.004] | 1 | n/a | n/a | 0.004 |
-| push_dr | gwie_c | base | share | goal | 0.192 [0.192, 0.192] | 1 | n/a | n/a | 0.192 |
-| push_dr | gwie_c | base | entropy |  | 1.627 [1.627, 1.627] | 1 | n/a | 10.000 | 1.627 |
-| push_dr | gwie_c | base | entropy_norm |  | 0.707 [0.707, 0.707] | 1 | n/a | 10.000 | 0.707 |
-| push_dr | ig | base | share | ee_pos | 0.114 [0.114, 0.114] | 1 | n/a | n/a | 0.114 |
-| push_dr | ig | base | share | obj_pos | 0.199 [0.199, 0.199] | 1 | n/a | n/a | 0.199 |
-| push_dr | ig | base | share | obj_rel | 0.261 [0.261, 0.261] | 1 | n/a | n/a | 0.261 |
-| push_dr | ig | base | share | grip_state | 0.000 [0.000, 0.000] | 1 | n/a | n/a | 0.000 |
-| push_dr | ig | base | share | obj_rot | 0.101 [0.101, 0.101] | 1 | n/a | n/a | 0.101 |
-| push_dr | ig | base | share | obj_velp | 0.038 [0.038, 0.038] | 1 | n/a | n/a | 0.038 |
-| push_dr | ig | base | share | obj_velr | 0.022 [0.022, 0.022] | 1 | n/a | n/a | 0.022 |
-| push_dr | ig | base | share | ee_vel | 0.036 [0.036, 0.036] | 1 | n/a | n/a | 0.036 |
-| push_dr | ig | base | share | grip_vel | 0.001 [0.001, 0.001] | 1 | n/a | n/a | 0.001 |
-| push_dr | ig | base | share | goal | 0.227 [0.227, 0.227] | 1 | n/a | n/a | 0.227 |
-| push_dr | ig | base | entropy |  | 1.568 [1.568, 1.568] | 1 | n/a | 10.000 | 1.568 |
-| push_dr | ig | base | entropy_norm |  | 0.681 [0.681, 0.681] | 1 | n/a | 10.000 | 0.681 |
-| push_drhist | gwie_c | base | share | ee_pos | 0.075 [0.075, 0.075] | 1 | 0.075 | n/a | n/a |
-| push_drhist | gwie_c | base | share | obj_pos | 0.089 [0.089, 0.089] | 1 | 0.089 | n/a | n/a |
-| push_drhist | gwie_c | base | share | obj_rel | 0.160 [0.160, 0.160] | 1 | 0.160 | n/a | n/a |
-| push_drhist | gwie_c | base | share | grip_state | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | gwie_c | base | share | obj_rot | 0.139 [0.139, 0.139] | 1 | 0.139 | n/a | n/a |
-| push_drhist | gwie_c | base | share | obj_velp | 0.093 [0.093, 0.093] | 1 | 0.093 | n/a | n/a |
-| push_drhist | gwie_c | base | share | obj_velr | 0.138 [0.138, 0.138] | 1 | 0.138 | n/a | n/a |
-| push_drhist | gwie_c | base | share | ee_vel | 0.077 [0.077, 0.077] | 1 | 0.077 | n/a | n/a |
-| push_drhist | gwie_c | base | share | grip_vel | 0.005 [0.005, 0.005] | 1 | 0.005 | n/a | n/a |
-| push_drhist | gwie_c | base | share | act | 0.117 [0.117, 0.117] | 1 | 0.117 | n/a | n/a |
-| push_drhist | gwie_c | base | share | goal | 0.108 [0.108, 0.108] | 1 | 0.108 | n/a | n/a |
-| push_drhist | gwie_c | base | entropy |  | 1.839 [1.839, 1.839] | 1 | 1.839 | 11.000 | n/a |
-| push_drhist | gwie_c | base | entropy_norm |  | 0.767 [0.767, 0.767] | 1 | 0.767 | 11.000 | n/a |
-| push_drhist | gwie_c | slot | share | ee_pos | 0.035 [0.035, 0.035] | 1 | 0.035 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_pos | 0.051 [0.051, 0.051] | 1 | 0.051 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_rel | 0.068 [0.068, 0.068] | 1 | 0.068 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | grip_state | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_rot | 0.040 [0.040, 0.040] | 1 | 0.040 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_velp | 0.053 [0.053, 0.053] | 1 | 0.053 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_velr | 0.043 [0.043, 0.043] | 1 | 0.043 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | ee_vel | 0.047 [0.047, 0.047] | 1 | 0.047 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | grip_vel | 0.001 [0.001, 0.001] | 1 | 0.001 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | ee_pos@t-1 | 0.020 [0.020, 0.020] | 1 | 0.020 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_pos@t-1 | 0.021 [0.021, 0.021] | 1 | 0.021 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_rel@t-1 | 0.042 [0.042, 0.042] | 1 | 0.042 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | grip_state@t-1 | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_rot@t-1 | 0.037 [0.037, 0.037] | 1 | 0.037 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_velp@t-1 | 0.021 [0.021, 0.021] | 1 | 0.021 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_velr@t-1 | 0.035 [0.035, 0.035] | 1 | 0.035 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | ee_vel@t-1 | 0.013 [0.013, 0.013] | 1 | 0.013 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | grip_vel@t-1 | 0.001 [0.001, 0.001] | 1 | 0.001 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | ee_pos@t-2 | 0.011 [0.011, 0.011] | 1 | 0.011 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_pos@t-2 | 0.010 [0.010, 0.010] | 1 | 0.010 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_rel@t-2 | 0.030 [0.030, 0.030] | 1 | 0.030 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | grip_state@t-2 | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_rot@t-2 | 0.036 [0.036, 0.036] | 1 | 0.036 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_velp@t-2 | 0.011 [0.011, 0.011] | 1 | 0.011 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_velr@t-2 | 0.029 [0.029, 0.029] | 1 | 0.029 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | ee_vel@t-2 | 0.009 [0.009, 0.009] | 1 | 0.009 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | grip_vel@t-2 | 0.001 [0.001, 0.001] | 1 | 0.001 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | ee_pos@t-3 | 0.010 [0.010, 0.010] | 1 | 0.010 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_pos@t-3 | 0.007 [0.007, 0.007] | 1 | 0.007 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_rel@t-3 | 0.021 [0.021, 0.021] | 1 | 0.021 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | grip_state@t-3 | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_rot@t-3 | 0.027 [0.027, 0.027] | 1 | 0.027 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_velp@t-3 | 0.007 [0.007, 0.007] | 1 | 0.007 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | obj_velr@t-3 | 0.031 [0.031, 0.031] | 1 | 0.031 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | ee_vel@t-3 | 0.008 [0.008, 0.008] | 1 | 0.008 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | grip_vel@t-3 | 0.001 [0.001, 0.001] | 1 | 0.001 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | act@t-1 | 0.045 [0.045, 0.045] | 1 | 0.045 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | act@t-2 | 0.041 [0.041, 0.041] | 1 | 0.041 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | act@t-3 | 0.031 [0.031, 0.031] | 1 | 0.031 | n/a | n/a |
-| push_drhist | gwie_c | slot | share | goal | 0.108 [0.108, 0.108] | 1 | 0.108 | n/a | n/a |
-| push_drhist | gwie_c | slot | entropy |  | 2.628 [2.628, 2.628] | 1 | 2.628 | 40.000 | n/a |
-| push_drhist | gwie_c | slot | entropy_norm |  | 0.712 [0.712, 0.712] | 1 | 0.712 | 40.000 | n/a |
-| push_drhist | ig | base | share | ee_pos | 0.130 [0.130, 0.130] | 1 | 0.130 | n/a | n/a |
-| push_drhist | ig | base | share | obj_pos | 0.171 [0.171, 0.171] | 1 | 0.171 | n/a | n/a |
-| push_drhist | ig | base | share | obj_rel | 0.209 [0.209, 0.209] | 1 | 0.209 | n/a | n/a |
-| push_drhist | ig | base | share | grip_state | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | ig | base | share | obj_rot | 0.066 [0.066, 0.066] | 1 | 0.066 | n/a | n/a |
-| push_drhist | ig | base | share | obj_velp | 0.053 [0.053, 0.053] | 1 | 0.053 | n/a | n/a |
-| push_drhist | ig | base | share | obj_velr | 0.025 [0.025, 0.025] | 1 | 0.025 | n/a | n/a |
-| push_drhist | ig | base | share | ee_vel | 0.049 [0.049, 0.049] | 1 | 0.049 | n/a | n/a |
-| push_drhist | ig | base | share | grip_vel | 0.001 [0.001, 0.001] | 1 | 0.001 | n/a | n/a |
-| push_drhist | ig | base | share | act | 0.064 [0.064, 0.064] | 1 | 0.064 | n/a | n/a |
-| push_drhist | ig | base | share | goal | 0.232 [0.232, 0.232] | 1 | 0.232 | n/a | n/a |
-| push_drhist | ig | base | entropy |  | 1.760 [1.760, 1.760] | 1 | 1.760 | 11.000 | n/a |
-| push_drhist | ig | base | entropy_norm |  | 0.734 [0.734, 0.734] | 1 | 0.734 | 11.000 | n/a |
-| push_drhist | ig | slot | share | ee_pos | 0.076 [0.076, 0.076] | 1 | 0.076 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_pos | 0.125 [0.125, 0.125] | 1 | 0.125 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_rel | 0.112 [0.112, 0.112] | 1 | 0.112 | n/a | n/a |
-| push_drhist | ig | slot | share | grip_state | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_rot | 0.021 [0.021, 0.021] | 1 | 0.021 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_velp | 0.037 [0.037, 0.037] | 1 | 0.037 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_velr | 0.011 [0.011, 0.011] | 1 | 0.011 | n/a | n/a |
-| push_drhist | ig | slot | share | ee_vel | 0.034 [0.034, 0.034] | 1 | 0.034 | n/a | n/a |
-| push_drhist | ig | slot | share | grip_vel | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | ig | slot | share | ee_pos@t-1 | 0.029 [0.029, 0.029] | 1 | 0.029 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_pos@t-1 | 0.027 [0.027, 0.027] | 1 | 0.027 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_rel@t-1 | 0.053 [0.053, 0.053] | 1 | 0.053 | n/a | n/a |
-| push_drhist | ig | slot | share | grip_state@t-1 | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_rot@t-1 | 0.017 [0.017, 0.017] | 1 | 0.017 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_velp@t-1 | 0.009 [0.009, 0.009] | 1 | 0.009 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_velr@t-1 | 0.007 [0.007, 0.007] | 1 | 0.007 | n/a | n/a |
-| push_drhist | ig | slot | share | ee_vel@t-1 | 0.008 [0.008, 0.008] | 1 | 0.008 | n/a | n/a |
-| push_drhist | ig | slot | share | grip_vel@t-1 | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | ig | slot | share | ee_pos@t-2 | 0.016 [0.016, 0.016] | 1 | 0.016 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_pos@t-2 | 0.012 [0.012, 0.012] | 1 | 0.012 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_rel@t-2 | 0.027 [0.027, 0.027] | 1 | 0.027 | n/a | n/a |
-| push_drhist | ig | slot | share | grip_state@t-2 | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_rot@t-2 | 0.015 [0.015, 0.015] | 1 | 0.015 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_velp@t-2 | 0.004 [0.004, 0.004] | 1 | 0.004 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_velr@t-2 | 0.004 [0.004, 0.004] | 1 | 0.004 | n/a | n/a |
-| push_drhist | ig | slot | share | ee_vel@t-2 | 0.004 [0.004, 0.004] | 1 | 0.004 | n/a | n/a |
-| push_drhist | ig | slot | share | grip_vel@t-2 | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | ig | slot | share | ee_pos@t-3 | 0.009 [0.009, 0.009] | 1 | 0.009 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_pos@t-3 | 0.006 [0.006, 0.006] | 1 | 0.006 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_rel@t-3 | 0.018 [0.018, 0.018] | 1 | 0.018 | n/a | n/a |
-| push_drhist | ig | slot | share | grip_state@t-3 | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_rot@t-3 | 0.013 [0.013, 0.013] | 1 | 0.013 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_velp@t-3 | 0.002 [0.002, 0.002] | 1 | 0.002 | n/a | n/a |
-| push_drhist | ig | slot | share | obj_velr@t-3 | 0.003 [0.003, 0.003] | 1 | 0.003 | n/a | n/a |
-| push_drhist | ig | slot | share | ee_vel@t-3 | 0.003 [0.003, 0.003] | 1 | 0.003 | n/a | n/a |
-| push_drhist | ig | slot | share | grip_vel@t-3 | 0.000 [0.000, 0.000] | 1 | 0.000 | n/a | n/a |
-| push_drhist | ig | slot | share | act@t-1 | 0.029 [0.029, 0.029] | 1 | 0.029 | n/a | n/a |
-| push_drhist | ig | slot | share | act@t-2 | 0.020 [0.020, 0.020] | 1 | 0.020 | n/a | n/a |
-| push_drhist | ig | slot | share | act@t-3 | 0.014 [0.014, 0.014] | 1 | 0.014 | n/a | n/a |
-| push_drhist | ig | slot | share | goal | 0.232 [0.232, 0.232] | 1 | 0.232 | n/a | n/a |
-| push_drhist | ig | slot | entropy |  | 2.529 [2.529, 2.529] | 1 | 2.529 | 40.000 | n/a |
-| push_drhist | ig | slot | entropy_norm |  | 0.686 [0.686, 0.686] | 1 | 0.686 | 40.000 | n/a |
+| exp | method | level | quantity | group | mean | n_seeds | seed0 | seed1 | n_groups | seed2 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| push_nodr | gwie_c | base | share | ee_pos | 0.121 [0.119, 0.124] | 2 | 0.124 | 0.119 | n/a | n/a |
+| push_nodr | gwie_c | base | share | obj_pos | 0.177 [0.172, 0.181] | 2 | 0.181 | 0.172 | n/a | n/a |
+| push_nodr | gwie_c | base | share | obj_rel | 0.191 [0.170, 0.212] | 2 | 0.212 | 0.170 | n/a | n/a |
+| push_nodr | gwie_c | base | share | grip_state | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_nodr | gwie_c | base | share | obj_rot | 0.065 [0.058, 0.072] | 2 | 0.058 | 0.072 | n/a | n/a |
+| push_nodr | gwie_c | base | share | obj_velp | 0.081 [0.074, 0.087] | 2 | 0.074 | 0.087 | n/a | n/a |
+| push_nodr | gwie_c | base | share | obj_velr | 0.041 [0.032, 0.049] | 2 | 0.032 | 0.049 | n/a | n/a |
+| push_nodr | gwie_c | base | share | ee_vel | 0.081 [0.076, 0.085] | 2 | 0.076 | 0.085 | n/a | n/a |
+| push_nodr | gwie_c | base | share | grip_vel | 0.003 [0.002, 0.003] | 2 | 0.002 | 0.003 | n/a | n/a |
+| push_nodr | gwie_c | base | share | goal | 0.241 [0.240, 0.242] | 2 | 0.240 | 0.242 | n/a | n/a |
+| push_nodr | gwie_c | base | entropy |  | 1.528 [1.498, 1.559] | 2 | 1.559 | 1.498 | 10.000 | n/a |
+| push_nodr | gwie_c | base | entropy_norm |  | 0.664 [0.650, 0.677] | 2 | 0.677 | 0.650 | 10.000 | n/a |
+| push_nodr | ig | base | share | ee_pos | 0.133 [0.118, 0.147] | 2 | 0.147 | 0.118 | n/a | n/a |
+| push_nodr | ig | base | share | obj_pos | 0.192 [0.188, 0.197] | 2 | 0.188 | 0.197 | n/a | n/a |
+| push_nodr | ig | base | share | obj_rel | 0.227 [0.225, 0.230] | 2 | 0.230 | 0.225 | n/a | n/a |
+| push_nodr | ig | base | share | grip_state | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_nodr | ig | base | share | obj_rot | 0.071 [0.054, 0.088] | 2 | 0.054 | 0.088 | n/a | n/a |
+| push_nodr | ig | base | share | obj_velp | 0.052 [0.044, 0.060] | 2 | 0.060 | 0.044 | n/a | n/a |
+| push_nodr | ig | base | share | obj_velr | 0.007 [0.006, 0.007] | 2 | 0.006 | 0.007 | n/a | n/a |
+| push_nodr | ig | base | share | ee_vel | 0.054 [0.046, 0.062] | 2 | 0.062 | 0.046 | n/a | n/a |
+| push_nodr | ig | base | share | grip_vel | 0.001 [0.001, 0.001] | 2 | 0.001 | 0.001 | n/a | n/a |
+| push_nodr | ig | base | share | goal | 0.262 [0.252, 0.272] | 2 | 0.252 | 0.272 | n/a | n/a |
+| push_nodr | ig | base | entropy |  | 1.582 [1.557, 1.606] | 2 | 1.606 | 1.557 | 10.000 | n/a |
+| push_nodr | ig | base | entropy_norm |  | 0.687 [0.676, 0.698] | 2 | 0.698 | 0.676 | 10.000 | n/a |
+| push_dr | gwie_c | base | share | ee_pos | 0.130 [0.129, 0.130] | 2 | n/a | 0.129 | n/a | 0.130 |
+| push_dr | gwie_c | base | share | obj_pos | 0.152 [0.150, 0.153] | 2 | n/a | 0.153 | n/a | 0.150 |
+| push_dr | gwie_c | base | share | obj_rel | 0.217 [0.214, 0.220] | 2 | n/a | 0.220 | n/a | 0.214 |
+| push_dr | gwie_c | base | share | grip_state | 0.000 [0.000, 0.000] | 2 | n/a | 0.000 | n/a | 0.000 |
+| push_dr | gwie_c | base | share | obj_rot | 0.100 [0.097, 0.103] | 2 | n/a | 0.097 | n/a | 0.103 |
+| push_dr | gwie_c | base | share | obj_velp | 0.068 [0.065, 0.072] | 2 | n/a | 0.065 | n/a | 0.072 |
+| push_dr | gwie_c | base | share | obj_velr | 0.071 [0.070, 0.072] | 2 | n/a | 0.072 | n/a | 0.070 |
+| push_dr | gwie_c | base | share | ee_vel | 0.068 [0.068, 0.068] | 2 | n/a | 0.068 | n/a | 0.068 |
+| push_dr | gwie_c | base | share | grip_vel | 0.005 [0.004, 0.005] | 2 | n/a | 0.004 | n/a | 0.005 |
+| push_dr | gwie_c | base | share | goal | 0.190 [0.187, 0.192] | 2 | n/a | 0.192 | n/a | 0.187 |
+| push_dr | gwie_c | base | entropy |  | 1.630 [1.627, 1.633] | 2 | n/a | 1.627 | 10.000 | 1.633 |
+| push_dr | gwie_c | base | entropy_norm |  | 0.708 [0.707, 0.709] | 2 | n/a | 0.707 | 10.000 | 0.709 |
+| push_dr | ig | base | share | ee_pos | 0.120 [0.114, 0.126] | 2 | n/a | 0.114 | n/a | 0.126 |
+| push_dr | ig | base | share | obj_pos | 0.193 [0.187, 0.199] | 2 | n/a | 0.199 | n/a | 0.187 |
+| push_dr | ig | base | share | obj_rel | 0.257 [0.252, 0.261] | 2 | n/a | 0.261 | n/a | 0.252 |
+| push_dr | ig | base | share | grip_state | 0.000 [0.000, 0.000] | 2 | n/a | 0.000 | n/a | 0.000 |
+| push_dr | ig | base | share | obj_rot | 0.111 [0.101, 0.121] | 2 | n/a | 0.101 | n/a | 0.121 |
+| push_dr | ig | base | share | obj_velp | 0.036 [0.033, 0.038] | 2 | n/a | 0.038 | n/a | 0.033 |
+| push_dr | ig | base | share | obj_velr | 0.023 [0.022, 0.024] | 2 | n/a | 0.022 | n/a | 0.024 |
+| push_dr | ig | base | share | ee_vel | 0.033 [0.031, 0.036] | 2 | n/a | 0.036 | n/a | 0.031 |
+| push_dr | ig | base | share | grip_vel | 0.001 [0.001, 0.001] | 2 | n/a | 0.001 | n/a | 0.001 |
+| push_dr | ig | base | share | goal | 0.226 [0.225, 0.227] | 2 | n/a | 0.227 | n/a | 0.225 |
+| push_dr | ig | base | entropy |  | 1.570 [1.568, 1.571] | 2 | n/a | 1.568 | 10.000 | 1.571 |
+| push_dr | ig | base | entropy_norm |  | 0.682 [0.681, 0.682] | 2 | n/a | 0.681 | 10.000 | 0.682 |
+| push_drhist | gwie_c | base | share | ee_pos | 0.074 [0.074, 0.075] | 2 | 0.075 | 0.074 | n/a | n/a |
+| push_drhist | gwie_c | base | share | obj_pos | 0.085 [0.082, 0.089] | 2 | 0.089 | 0.082 | n/a | n/a |
+| push_drhist | gwie_c | base | share | obj_rel | 0.153 [0.145, 0.160] | 2 | 0.160 | 0.145 | n/a | n/a |
+| push_drhist | gwie_c | base | share | grip_state | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | gwie_c | base | share | obj_rot | 0.153 [0.139, 0.166] | 2 | 0.139 | 0.166 | n/a | n/a |
+| push_drhist | gwie_c | base | share | obj_velp | 0.085 [0.078, 0.093] | 2 | 0.093 | 0.078 | n/a | n/a |
+| push_drhist | gwie_c | base | share | obj_velr | 0.136 [0.133, 0.138] | 2 | 0.138 | 0.133 | n/a | n/a |
+| push_drhist | gwie_c | base | share | ee_vel | 0.068 [0.060, 0.077] | 2 | 0.077 | 0.060 | n/a | n/a |
+| push_drhist | gwie_c | base | share | grip_vel | 0.006 [0.005, 0.008] | 2 | 0.005 | 0.008 | n/a | n/a |
+| push_drhist | gwie_c | base | share | act | 0.119 [0.117, 0.122] | 2 | 0.117 | 0.122 | n/a | n/a |
+| push_drhist | gwie_c | base | share | goal | 0.119 [0.108, 0.131] | 2 | 0.108 | 0.131 | n/a | n/a |
+| push_drhist | gwie_c | base | entropy |  | 1.828 [1.818, 1.839] | 2 | 1.839 | 1.818 | 11.000 | n/a |
+| push_drhist | gwie_c | base | entropy_norm |  | 0.763 [0.758, 0.767] | 2 | 0.767 | 0.758 | 11.000 | n/a |
+| push_drhist | gwie_c | slot | share | ee_pos | 0.036 [0.035, 0.038] | 2 | 0.035 | 0.038 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_pos | 0.052 [0.051, 0.052] | 2 | 0.051 | 0.052 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_rel | 0.066 [0.065, 0.068] | 2 | 0.068 | 0.065 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | grip_state | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_rot | 0.044 [0.040, 0.049] | 2 | 0.040 | 0.049 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_velp | 0.045 [0.038, 0.053] | 2 | 0.053 | 0.038 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_velr | 0.041 [0.039, 0.043] | 2 | 0.043 | 0.039 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | ee_vel | 0.040 [0.032, 0.047] | 2 | 0.047 | 0.032 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | grip_vel | 0.002 [0.001, 0.002] | 2 | 0.001 | 0.002 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | ee_pos@t-1 | 0.019 [0.019, 0.020] | 2 | 0.020 | 0.019 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_pos@t-1 | 0.018 [0.015, 0.021] | 2 | 0.021 | 0.015 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_rel@t-1 | 0.039 [0.036, 0.042] | 2 | 0.042 | 0.036 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | grip_state@t-1 | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_rot@t-1 | 0.041 [0.037, 0.045] | 2 | 0.037 | 0.045 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_velp@t-1 | 0.021 [0.021, 0.021] | 2 | 0.021 | 0.021 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_velr@t-1 | 0.034 [0.033, 0.035] | 2 | 0.035 | 0.033 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | ee_vel@t-1 | 0.012 [0.012, 0.013] | 2 | 0.013 | 0.012 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | grip_vel@t-1 | 0.003 [0.001, 0.004] | 2 | 0.001 | 0.004 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | ee_pos@t-2 | 0.011 [0.011, 0.011] | 2 | 0.011 | 0.011 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_pos@t-2 | 0.009 [0.009, 0.010] | 2 | 0.010 | 0.009 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_rel@t-2 | 0.027 [0.025, 0.030] | 2 | 0.030 | 0.025 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | grip_state@t-2 | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_rot@t-2 | 0.037 [0.036, 0.038] | 2 | 0.036 | 0.038 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_velp@t-2 | 0.011 [0.011, 0.011] | 2 | 0.011 | 0.011 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_velr@t-2 | 0.030 [0.029, 0.032] | 2 | 0.029 | 0.032 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | ee_vel@t-2 | 0.008 [0.007, 0.009] | 2 | 0.009 | 0.007 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | grip_vel@t-2 | 0.001 [0.001, 0.001] | 2 | 0.001 | 0.001 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | ee_pos@t-3 | 0.008 [0.006, 0.010] | 2 | 0.010 | 0.006 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_pos@t-3 | 0.007 [0.006, 0.007] | 2 | 0.007 | 0.006 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_rel@t-3 | 0.020 [0.020, 0.021] | 2 | 0.021 | 0.020 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | grip_state@t-3 | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_rot@t-3 | 0.030 [0.027, 0.034] | 2 | 0.027 | 0.034 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_velp@t-3 | 0.008 [0.007, 0.008] | 2 | 0.007 | 0.008 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | obj_velr@t-3 | 0.030 [0.029, 0.031] | 2 | 0.031 | 0.029 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | ee_vel@t-3 | 0.008 [0.008, 0.009] | 2 | 0.008 | 0.009 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | grip_vel@t-3 | 0.001 [0.001, 0.001] | 2 | 0.001 | 0.001 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | act@t-1 | 0.046 [0.045, 0.047] | 2 | 0.045 | 0.047 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | act@t-2 | 0.039 [0.037, 0.041] | 2 | 0.041 | 0.037 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | act@t-3 | 0.035 [0.031, 0.038] | 2 | 0.031 | 0.038 | n/a | n/a |
+| push_drhist | gwie_c | slot | share | goal | 0.119 [0.108, 0.131] | 2 | 0.108 | 0.131 | n/a | n/a |
+| push_drhist | gwie_c | slot | entropy |  | 2.613 [2.598, 2.628] | 2 | 2.628 | 2.598 | 40.000 | n/a |
+| push_drhist | gwie_c | slot | entropy_norm |  | 0.708 [0.704, 0.712] | 2 | 0.712 | 0.704 | 40.000 | n/a |
+| push_drhist | ig | base | share | ee_pos | 0.126 [0.121, 0.130] | 2 | 0.130 | 0.121 | n/a | n/a |
+| push_drhist | ig | base | share | obj_pos | 0.171 [0.171, 0.172] | 2 | 0.171 | 0.172 | n/a | n/a |
+| push_drhist | ig | base | share | obj_rel | 0.202 [0.194, 0.209] | 2 | 0.209 | 0.194 | n/a | n/a |
+| push_drhist | ig | base | share | grip_state | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | ig | base | share | obj_rot | 0.079 [0.066, 0.092] | 2 | 0.066 | 0.092 | n/a | n/a |
+| push_drhist | ig | base | share | obj_velp | 0.051 [0.050, 0.053] | 2 | 0.053 | 0.050 | n/a | n/a |
+| push_drhist | ig | base | share | obj_velr | 0.022 [0.020, 0.025] | 2 | 0.025 | 0.020 | n/a | n/a |
+| push_drhist | ig | base | share | ee_vel | 0.046 [0.043, 0.049] | 2 | 0.049 | 0.043 | n/a | n/a |
+| push_drhist | ig | base | share | grip_vel | 0.001 [0.001, 0.001] | 2 | 0.001 | 0.001 | n/a | n/a |
+| push_drhist | ig | base | share | act | 0.066 [0.064, 0.068] | 2 | 0.064 | 0.068 | n/a | n/a |
+| push_drhist | ig | base | share | goal | 0.236 [0.232, 0.239] | 2 | 0.232 | 0.239 | n/a | n/a |
+| push_drhist | ig | base | entropy |  | 1.751 [1.743, 1.760] | 2 | 1.760 | 1.743 | 11.000 | n/a |
+| push_drhist | ig | base | entropy_norm |  | 0.730 [0.727, 0.734] | 2 | 0.734 | 0.727 | 11.000 | n/a |
+| push_drhist | ig | slot | share | ee_pos | 0.072 [0.067, 0.076] | 2 | 0.076 | 0.067 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_pos | 0.124 [0.122, 0.125] | 2 | 0.125 | 0.122 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_rel | 0.106 [0.101, 0.112] | 2 | 0.112 | 0.101 | n/a | n/a |
+| push_drhist | ig | slot | share | grip_state | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_rot | 0.027 [0.021, 0.033] | 2 | 0.021 | 0.033 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_velp | 0.035 [0.033, 0.037] | 2 | 0.037 | 0.033 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_velr | 0.010 [0.008, 0.011] | 2 | 0.011 | 0.008 | n/a | n/a |
+| push_drhist | ig | slot | share | ee_vel | 0.032 [0.030, 0.034] | 2 | 0.034 | 0.030 | n/a | n/a |
+| push_drhist | ig | slot | share | grip_vel | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | ig | slot | share | ee_pos@t-1 | 0.030 [0.029, 0.030] | 2 | 0.029 | 0.030 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_pos@t-1 | 0.028 [0.027, 0.028] | 2 | 0.027 | 0.028 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_rel@t-1 | 0.049 [0.046, 0.053] | 2 | 0.053 | 0.046 | n/a | n/a |
+| push_drhist | ig | slot | share | grip_state@t-1 | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_rot@t-1 | 0.020 [0.017, 0.022] | 2 | 0.017 | 0.022 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_velp@t-1 | 0.010 [0.009, 0.010] | 2 | 0.009 | 0.010 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_velr@t-1 | 0.006 [0.005, 0.007] | 2 | 0.007 | 0.005 | n/a | n/a |
+| push_drhist | ig | slot | share | ee_vel@t-1 | 0.007 [0.007, 0.008] | 2 | 0.008 | 0.007 | n/a | n/a |
+| push_drhist | ig | slot | share | grip_vel@t-1 | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | ig | slot | share | ee_pos@t-2 | 0.016 [0.015, 0.016] | 2 | 0.016 | 0.015 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_pos@t-2 | 0.013 [0.012, 0.014] | 2 | 0.012 | 0.014 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_rel@t-2 | 0.027 [0.027, 0.027] | 2 | 0.027 | 0.027 | n/a | n/a |
+| push_drhist | ig | slot | share | grip_state@t-2 | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_rot@t-2 | 0.017 [0.015, 0.019] | 2 | 0.015 | 0.019 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_velp@t-2 | 0.004 [0.004, 0.004] | 2 | 0.004 | 0.004 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_velr@t-2 | 0.004 [0.004, 0.004] | 2 | 0.004 | 0.004 | n/a | n/a |
+| push_drhist | ig | slot | share | ee_vel@t-2 | 0.004 [0.003, 0.004] | 2 | 0.004 | 0.003 | n/a | n/a |
+| push_drhist | ig | slot | share | grip_vel@t-2 | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | ig | slot | share | ee_pos@t-3 | 0.009 [0.009, 0.009] | 2 | 0.009 | 0.009 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_pos@t-3 | 0.007 [0.006, 0.007] | 2 | 0.006 | 0.007 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_rel@t-3 | 0.019 [0.018, 0.020] | 2 | 0.018 | 0.020 | n/a | n/a |
+| push_drhist | ig | slot | share | grip_state@t-3 | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_rot@t-3 | 0.015 [0.013, 0.017] | 2 | 0.013 | 0.017 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_velp@t-3 | 0.002 [0.002, 0.002] | 2 | 0.002 | 0.002 | n/a | n/a |
+| push_drhist | ig | slot | share | obj_velr@t-3 | 0.003 [0.003, 0.003] | 2 | 0.003 | 0.003 | n/a | n/a |
+| push_drhist | ig | slot | share | ee_vel@t-3 | 0.003 [0.003, 0.003] | 2 | 0.003 | 0.003 | n/a | n/a |
+| push_drhist | ig | slot | share | grip_vel@t-3 | 0.000 [0.000, 0.000] | 2 | 0.000 | 0.000 | n/a | n/a |
+| push_drhist | ig | slot | share | act@t-1 | 0.030 [0.029, 0.032] | 2 | 0.029 | 0.032 | n/a | n/a |
+| push_drhist | ig | slot | share | act@t-2 | 0.021 [0.020, 0.021] | 2 | 0.020 | 0.021 | n/a | n/a |
+| push_drhist | ig | slot | share | act@t-3 | 0.015 [0.014, 0.016] | 2 | 0.014 | 0.016 | n/a | n/a |
+| push_drhist | ig | slot | share | goal | 0.236 [0.232, 0.239] | 2 | 0.232 | 0.239 | n/a | n/a |
+| push_drhist | ig | slot | entropy |  | 2.529 [2.529, 2.529] | 2 | 2.529 | 2.529 | 40.000 | n/a |
+| push_drhist | ig | slot | entropy_norm |  | 0.686 [0.686, 0.686] | 2 | 0.686 | 0.686 | 40.000 | n/a |
 <!-- END:c4_reliance -->
 
 <!-- BEGIN:c4_temporal -->
-| exp | method | level | quantity | group | mean | n_seeds | seed0 | scope |
-|---|---|---|---|---|---|---|---|---|
-| push_drhist | gwie_c | temporal | share | t | 0.446 [0.446, 0.446] | 1 | 0.446 | nominal |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.190 [0.190, 0.190] | 1 | 0.190 | nominal |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.135 [0.135, 0.135] | 1 | 0.135 | nominal |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.112 [0.112, 0.112] | 1 | 0.112 | nominal |
-| push_drhist | gwie_c | temporal | share | act | 0.117 [0.117, 0.117] | 1 | 0.117 | nominal |
-| push_drhist | gwie_c | temporal | share | t | 0.444 [0.444, 0.444] | 1 | 0.444 | heldout |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.198 [0.198, 0.198] | 1 | 0.198 | heldout |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.136 [0.136, 0.136] | 1 | 0.136 | heldout |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.111 [0.111, 0.111] | 1 | 0.111 | heldout |
-| push_drhist | gwie_c | temporal | share | act | 0.111 [0.111, 0.111] | 1 | 0.111 | heldout |
-| push_drhist | gwie_c | temporal | share | t | 0.441 [0.441, 0.441] | 1 | 0.441 | factor:combined |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.197 [0.197, 0.197] | 1 | 0.197 | factor:combined |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.136 [0.136, 0.136] | 1 | 0.136 | factor:combined |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.113 [0.113, 0.113] | 1 | 0.113 | factor:combined |
-| push_drhist | gwie_c | temporal | share | act | 0.112 [0.112, 0.112] | 1 | 0.112 | factor:combined |
-| push_drhist | gwie_c | temporal | share | t | 0.440 [0.440, 0.440] | 1 | 0.440 | factor:friction |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.204 [0.204, 0.204] | 1 | 0.204 | factor:friction |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.139 [0.139, 0.139] | 1 | 0.139 | factor:friction |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.108 [0.108, 0.108] | 1 | 0.108 | factor:friction |
-| push_drhist | gwie_c | temporal | share | act | 0.109 [0.109, 0.109] | 1 | 0.109 | factor:friction |
-| push_drhist | gwie_c | temporal | share | t | 0.437 [0.437, 0.437] | 1 | 0.437 | factor:gain |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.201 [0.201, 0.201] | 1 | 0.201 | factor:gain |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.140 [0.140, 0.140] | 1 | 0.140 | factor:gain |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.110 [0.110, 0.110] | 1 | 0.110 | factor:gain |
-| push_drhist | gwie_c | temporal | share | act | 0.112 [0.112, 0.112] | 1 | 0.112 | factor:gain |
-| push_drhist | gwie_c | temporal | share | t | 0.463 [0.463, 0.463] | 1 | 0.463 | factor:latency |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.188 [0.188, 0.188] | 1 | 0.188 | factor:latency |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.128 [0.128, 0.128] | 1 | 0.128 | factor:latency |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.110 [0.110, 0.110] | 1 | 0.110 | factor:latency |
-| push_drhist | gwie_c | temporal | share | act | 0.111 [0.111, 0.111] | 1 | 0.111 | factor:latency |
-| push_drhist | gwie_c | temporal | share | t | 0.454 [0.454, 0.454] | 1 | 0.454 | factor:mass |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.196 [0.196, 0.196] | 1 | 0.196 | factor:mass |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.130 [0.130, 0.130] | 1 | 0.130 | factor:mass |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.112 [0.112, 0.112] | 1 | 0.112 | factor:mass |
-| push_drhist | gwie_c | temporal | share | act | 0.108 [0.108, 0.108] | 1 | 0.108 | factor:mass |
-| push_drhist | gwie_c | temporal | share | t | 0.462 [0.462, 0.462] | 1 | 0.462 | factor:noise |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.192 [0.192, 0.192] | 1 | 0.192 | factor:noise |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.128 [0.128, 0.128] | 1 | 0.128 | factor:noise |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.113 [0.113, 0.113] | 1 | 0.113 | factor:noise |
-| push_drhist | gwie_c | temporal | share | act | 0.104 [0.104, 0.104] | 1 | 0.104 | factor:noise |
-| push_drhist | ig | temporal | share | t | 0.649 [0.649, 0.649] | 1 | 0.649 | nominal |
-| push_drhist | ig | temporal | share | t-1 | 0.150 [0.150, 0.150] | 1 | 0.150 | nominal |
-| push_drhist | ig | temporal | share | t-2 | 0.083 [0.083, 0.083] | 1 | 0.083 | nominal |
-| push_drhist | ig | temporal | share | t-3 | 0.054 [0.054, 0.054] | 1 | 0.054 | nominal |
-| push_drhist | ig | temporal | share | act | 0.064 [0.064, 0.064] | 1 | 0.064 | nominal |
-| push_drhist | ig | temporal | share | t | 0.597 [0.597, 0.597] | 1 | 0.597 | heldout |
-| push_drhist | ig | temporal | share | t-1 | 0.153 [0.153, 0.153] | 1 | 0.153 | heldout |
-| push_drhist | ig | temporal | share | t-2 | 0.092 [0.092, 0.092] | 1 | 0.092 | heldout |
-| push_drhist | ig | temporal | share | t-3 | 0.067 [0.067, 0.067] | 1 | 0.067 | heldout |
-| push_drhist | ig | temporal | share | act | 0.091 [0.091, 0.091] | 1 | 0.091 | heldout |
-| push_drhist | ig | temporal | share | t | 0.578 [0.578, 0.578] | 1 | 0.578 | factor:combined |
-| push_drhist | ig | temporal | share | t-1 | 0.156 [0.156, 0.156] | 1 | 0.156 | factor:combined |
-| push_drhist | ig | temporal | share | t-2 | 0.094 [0.094, 0.094] | 1 | 0.094 | factor:combined |
-| push_drhist | ig | temporal | share | t-3 | 0.070 [0.070, 0.070] | 1 | 0.070 | factor:combined |
-| push_drhist | ig | temporal | share | act | 0.102 [0.102, 0.102] | 1 | 0.102 | factor:combined |
-| push_drhist | ig | temporal | share | t | 0.611 [0.611, 0.611] | 1 | 0.611 | factor:friction |
-| push_drhist | ig | temporal | share | t-1 | 0.153 [0.153, 0.153] | 1 | 0.153 | factor:friction |
-| push_drhist | ig | temporal | share | t-2 | 0.092 [0.092, 0.092] | 1 | 0.092 | factor:friction |
-| push_drhist | ig | temporal | share | t-3 | 0.067 [0.067, 0.067] | 1 | 0.067 | factor:friction |
-| push_drhist | ig | temporal | share | act | 0.077 [0.077, 0.077] | 1 | 0.077 | factor:friction |
-| push_drhist | ig | temporal | share | t | 0.610 [0.610, 0.610] | 1 | 0.610 | factor:gain |
-| push_drhist | ig | temporal | share | t-1 | 0.150 [0.150, 0.150] | 1 | 0.150 | factor:gain |
-| push_drhist | ig | temporal | share | t-2 | 0.092 [0.092, 0.092] | 1 | 0.092 | factor:gain |
-| push_drhist | ig | temporal | share | t-3 | 0.067 [0.067, 0.067] | 1 | 0.067 | factor:gain |
-| push_drhist | ig | temporal | share | act | 0.080 [0.080, 0.080] | 1 | 0.080 | factor:gain |
-| push_drhist | ig | temporal | share | t | 0.631 [0.631, 0.631] | 1 | 0.631 | factor:latency |
-| push_drhist | ig | temporal | share | t-1 | 0.146 [0.146, 0.146] | 1 | 0.146 | factor:latency |
-| push_drhist | ig | temporal | share | t-2 | 0.080 [0.080, 0.080] | 1 | 0.080 | factor:latency |
-| push_drhist | ig | temporal | share | t-3 | 0.054 [0.054, 0.054] | 1 | 0.054 | factor:latency |
-| push_drhist | ig | temporal | share | act | 0.088 [0.088, 0.088] | 1 | 0.088 | factor:latency |
-| push_drhist | ig | temporal | share | t | 0.645 [0.645, 0.645] | 1 | 0.645 | factor:mass |
-| push_drhist | ig | temporal | share | t-1 | 0.145 [0.145, 0.145] | 1 | 0.145 | factor:mass |
-| push_drhist | ig | temporal | share | t-2 | 0.084 [0.084, 0.084] | 1 | 0.084 | factor:mass |
-| push_drhist | ig | temporal | share | t-3 | 0.060 [0.060, 0.060] | 1 | 0.060 | factor:mass |
-| push_drhist | ig | temporal | share | act | 0.065 [0.065, 0.065] | 1 | 0.065 | factor:mass |
-| push_drhist | ig | temporal | share | t | 0.613 [0.613, 0.613] | 1 | 0.613 | factor:noise |
-| push_drhist | ig | temporal | share | t-1 | 0.147 [0.147, 0.147] | 1 | 0.147 | factor:noise |
-| push_drhist | ig | temporal | share | t-2 | 0.089 [0.089, 0.089] | 1 | 0.089 | factor:noise |
-| push_drhist | ig | temporal | share | t-3 | 0.065 [0.065, 0.065] | 1 | 0.065 | factor:noise |
-| push_drhist | ig | temporal | share | act | 0.086 [0.086, 0.086] | 1 | 0.086 | factor:noise |
+| exp | method | level | quantity | group | mean | n_seeds | seed0 | seed1 | scope |
+|---|---|---|---|---|---|---|---|---|---|
+| push_drhist | gwie_c | temporal | share | t | 0.446 [0.446, 0.446] | 2 | 0.446 | 0.446 | nominal |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.187 [0.184, 0.190] | 2 | 0.190 | 0.184 | nominal |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.135 [0.134, 0.135] | 2 | 0.135 | 0.134 | nominal |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.113 [0.112, 0.114] | 2 | 0.112 | 0.114 | nominal |
+| push_drhist | gwie_c | temporal | share | act | 0.119 [0.117, 0.122] | 2 | 0.117 | 0.122 | nominal |
+| push_drhist | gwie_c | temporal | share | t | 0.440 [0.437, 0.444] | 2 | 0.444 | 0.437 | heldout |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.194 [0.191, 0.198] | 2 | 0.198 | 0.191 | heldout |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.136 [0.136, 0.137] | 2 | 0.136 | 0.137 | heldout |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.112 [0.111, 0.112] | 2 | 0.111 | 0.112 | heldout |
+| push_drhist | gwie_c | temporal | share | act | 0.118 [0.111, 0.124] | 2 | 0.111 | 0.124 | heldout |
+| push_drhist | gwie_c | temporal | share | t | 0.434 [0.426, 0.441] | 2 | 0.441 | 0.426 | factor:combined |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.195 [0.192, 0.197] | 2 | 0.197 | 0.192 | factor:combined |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.138 [0.136, 0.139] | 2 | 0.136 | 0.139 | factor:combined |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.114 [0.113, 0.115] | 2 | 0.113 | 0.115 | factor:combined |
+| push_drhist | gwie_c | temporal | share | act | 0.120 [0.112, 0.128] | 2 | 0.112 | 0.128 | factor:combined |
+| push_drhist | gwie_c | temporal | share | t | 0.443 [0.440, 0.447] | 2 | 0.440 | 0.447 | factor:friction |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.199 [0.195, 0.204] | 2 | 0.204 | 0.195 | factor:friction |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.133 [0.128, 0.139] | 2 | 0.139 | 0.128 | factor:friction |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.110 [0.108, 0.111] | 2 | 0.108 | 0.111 | factor:friction |
+| push_drhist | gwie_c | temporal | share | act | 0.114 [0.109, 0.120] | 2 | 0.109 | 0.120 | factor:friction |
+| push_drhist | gwie_c | temporal | share | t | 0.440 [0.437, 0.444] | 2 | 0.437 | 0.444 | factor:gain |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.196 [0.191, 0.201] | 2 | 0.201 | 0.191 | factor:gain |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.137 [0.134, 0.140] | 2 | 0.140 | 0.134 | factor:gain |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.109 [0.107, 0.110] | 2 | 0.110 | 0.107 | factor:gain |
+| push_drhist | gwie_c | temporal | share | act | 0.117 [0.112, 0.123] | 2 | 0.112 | 0.123 | factor:gain |
+| push_drhist | gwie_c | temporal | share | t | 0.467 [0.463, 0.471] | 2 | 0.463 | 0.471 | factor:latency |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.184 [0.179, 0.188] | 2 | 0.188 | 0.179 | factor:latency |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.125 [0.122, 0.128] | 2 | 0.128 | 0.122 | factor:latency |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.104 [0.099, 0.110] | 2 | 0.110 | 0.099 | factor:latency |
+| push_drhist | gwie_c | temporal | share | act | 0.120 [0.111, 0.129] | 2 | 0.111 | 0.129 | factor:latency |
+| push_drhist | gwie_c | temporal | share | t | 0.455 [0.454, 0.455] | 2 | 0.454 | 0.455 | factor:mass |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.190 [0.183, 0.196] | 2 | 0.196 | 0.183 | factor:mass |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.139 [0.130, 0.147] | 2 | 0.130 | 0.147 | factor:mass |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.109 [0.106, 0.112] | 2 | 0.112 | 0.106 | factor:mass |
+| push_drhist | gwie_c | temporal | share | act | 0.108 [0.108, 0.109] | 2 | 0.108 | 0.109 | factor:mass |
+| push_drhist | gwie_c | temporal | share | t | 0.450 [0.437, 0.462] | 2 | 0.462 | 0.437 | factor:noise |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.189 [0.186, 0.192] | 2 | 0.192 | 0.186 | factor:noise |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.133 [0.128, 0.137] | 2 | 0.128 | 0.137 | factor:noise |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.115 [0.113, 0.116] | 2 | 0.113 | 0.116 | factor:noise |
+| push_drhist | gwie_c | temporal | share | act | 0.114 [0.104, 0.124] | 2 | 0.104 | 0.124 | factor:noise |
+| push_drhist | ig | temporal | share | t | 0.642 [0.634, 0.649] | 2 | 0.649 | 0.634 | nominal |
+| push_drhist | ig | temporal | share | t-1 | 0.149 [0.148, 0.150] | 2 | 0.150 | 0.148 | nominal |
+| push_drhist | ig | temporal | share | t-2 | 0.085 [0.083, 0.087] | 2 | 0.083 | 0.087 | nominal |
+| push_drhist | ig | temporal | share | t-3 | 0.058 [0.054, 0.062] | 2 | 0.054 | 0.062 | nominal |
+| push_drhist | ig | temporal | share | act | 0.066 [0.064, 0.068] | 2 | 0.064 | 0.068 | nominal |
+| push_drhist | ig | temporal | share | t | 0.582 [0.567, 0.597] | 2 | 0.597 | 0.567 | heldout |
+| push_drhist | ig | temporal | share | t-1 | 0.157 [0.153, 0.161] | 2 | 0.153 | 0.161 | heldout |
+| push_drhist | ig | temporal | share | t-2 | 0.094 [0.092, 0.096] | 2 | 0.092 | 0.096 | heldout |
+| push_drhist | ig | temporal | share | t-3 | 0.069 [0.067, 0.072] | 2 | 0.067 | 0.072 | heldout |
+| push_drhist | ig | temporal | share | act | 0.098 [0.091, 0.104] | 2 | 0.091 | 0.104 | heldout |
+| push_drhist | ig | temporal | share | t | 0.563 [0.549, 0.578] | 2 | 0.578 | 0.549 | factor:combined |
+| push_drhist | ig | temporal | share | t-1 | 0.160 [0.156, 0.164] | 2 | 0.156 | 0.164 | factor:combined |
+| push_drhist | ig | temporal | share | t-2 | 0.096 [0.094, 0.099] | 2 | 0.094 | 0.099 | factor:combined |
+| push_drhist | ig | temporal | share | t-3 | 0.072 [0.070, 0.074] | 2 | 0.070 | 0.074 | factor:combined |
+| push_drhist | ig | temporal | share | act | 0.108 [0.102, 0.114] | 2 | 0.102 | 0.114 | factor:combined |
+| push_drhist | ig | temporal | share | t | 0.599 [0.587, 0.611] | 2 | 0.611 | 0.587 | factor:friction |
+| push_drhist | ig | temporal | share | t-1 | 0.155 [0.153, 0.158] | 2 | 0.153 | 0.158 | factor:friction |
+| push_drhist | ig | temporal | share | t-2 | 0.093 [0.092, 0.094] | 2 | 0.092 | 0.094 | factor:friction |
+| push_drhist | ig | temporal | share | t-3 | 0.068 [0.067, 0.070] | 2 | 0.067 | 0.070 | factor:friction |
+| push_drhist | ig | temporal | share | act | 0.084 [0.077, 0.092] | 2 | 0.077 | 0.092 | factor:friction |
+| push_drhist | ig | temporal | share | t | 0.594 [0.578, 0.610] | 2 | 0.610 | 0.578 | factor:gain |
+| push_drhist | ig | temporal | share | t-1 | 0.155 [0.150, 0.159] | 2 | 0.150 | 0.159 | factor:gain |
+| push_drhist | ig | temporal | share | t-2 | 0.095 [0.092, 0.097] | 2 | 0.092 | 0.097 | factor:gain |
+| push_drhist | ig | temporal | share | t-3 | 0.071 [0.067, 0.074] | 2 | 0.067 | 0.074 | factor:gain |
+| push_drhist | ig | temporal | share | act | 0.086 [0.080, 0.091] | 2 | 0.080 | 0.091 | factor:gain |
+| push_drhist | ig | temporal | share | t | 0.606 [0.582, 0.631] | 2 | 0.631 | 0.582 | factor:latency |
+| push_drhist | ig | temporal | share | t-1 | 0.149 [0.146, 0.152] | 2 | 0.146 | 0.152 | factor:latency |
+| push_drhist | ig | temporal | share | t-2 | 0.083 [0.080, 0.086] | 2 | 0.080 | 0.086 | factor:latency |
+| push_drhist | ig | temporal | share | t-3 | 0.057 [0.054, 0.060] | 2 | 0.054 | 0.060 | factor:latency |
+| push_drhist | ig | temporal | share | act | 0.104 [0.088, 0.120] | 2 | 0.088 | 0.120 | factor:latency |
+| push_drhist | ig | temporal | share | t | 0.627 [0.610, 0.645] | 2 | 0.645 | 0.610 | factor:mass |
+| push_drhist | ig | temporal | share | t-1 | 0.148 [0.145, 0.152] | 2 | 0.145 | 0.152 | factor:mass |
+| push_drhist | ig | temporal | share | t-2 | 0.088 [0.084, 0.092] | 2 | 0.084 | 0.092 | factor:mass |
+| push_drhist | ig | temporal | share | t-3 | 0.064 [0.060, 0.068] | 2 | 0.060 | 0.068 | factor:mass |
+| push_drhist | ig | temporal | share | act | 0.072 [0.065, 0.078] | 2 | 0.065 | 0.078 | factor:mass |
+| push_drhist | ig | temporal | share | t | 0.597 [0.582, 0.613] | 2 | 0.613 | 0.582 | factor:noise |
+| push_drhist | ig | temporal | share | t-1 | 0.152 [0.147, 0.156] | 2 | 0.147 | 0.156 | factor:noise |
+| push_drhist | ig | temporal | share | t-2 | 0.091 [0.089, 0.092] | 2 | 0.089 | 0.092 | factor:noise |
+| push_drhist | ig | temporal | share | t-3 | 0.068 [0.065, 0.072] | 2 | 0.065 | 0.072 | factor:noise |
+| push_drhist | ig | temporal | share | act | 0.092 [0.086, 0.098] | 2 | 0.086 | 0.098 | factor:noise |
 <!-- END:c4_temporal -->
 
 <!-- BEGIN:c4_probes -->
 | exp | target | features | scope | r2 | n_episodes | n_states | alpha_median | claim_sysid | penult_beats_stacked | n_seeds |
 |---|---|---|---|---|---|---|---|---|---|---|
 | push_nodr | log_friction | penult | seed0 | -10.991 [-35.755, -0.064] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_nodr | log_friction | penult | all | -10.991 [-35.755, -0.064] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_nodr | log_friction | penult | seed1 | -0.218 [-0.369, -0.118] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_nodr | log_friction | penult | all | -5.605 [-22.360, -0.140] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_nodr | log_friction | obs_single | seed0 | -0.063 [-0.126, -0.018] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_nodr | log_friction | obs_single | all | -0.063 [-0.126, -0.018] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_nodr | log_friction | obs_single | seed1 | -0.043 [-0.100, -0.001] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_nodr | log_friction | obs_single | all | -0.053 [-0.101, -0.020] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_nodr | log_friction | penult_random | seed0 | -0.631 [-1.319, -0.235] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_nodr | log_friction | penult_random | all | -0.631 [-1.319, -0.235] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_nodr | log_friction | penult_random | seed1 | -0.257 [-0.492, -0.115] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_nodr | log_friction | penult_random | all | -0.444 [-0.911, -0.174] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_nodr | log_mass | penult | seed0 | -82.862 [-266.336, -0.098] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_nodr | log_mass | penult | all | -82.862 [-266.336, -0.098] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_nodr | log_mass | penult | seed1 | -0.218 [-0.346, -0.124] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_nodr | log_mass | penult | all | -41.540 [-164.818, -0.152] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_nodr | log_mass | obs_single | seed0 | -0.044 [-0.105, 0.008] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_nodr | log_mass | obs_single | all | -0.044 [-0.105, 0.008] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_nodr | log_mass | obs_single | seed1 | -0.027 [-0.091, 0.027] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_nodr | log_mass | obs_single | all | -0.035 [-0.085, 0.000] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_nodr | log_mass | penult_random | seed0 | -0.155 [-0.271, -0.066] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_nodr | log_mass | penult_random | all | -0.155 [-0.271, -0.066] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_nodr | log_mass | penult_random | seed1 | -0.898 [-2.172, -0.141] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_nodr | log_mass | penult_random | all | -0.527 [-1.379, -0.115] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_nodr | gain | penult | seed0 | -31.296 [-99.561, -0.145] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_nodr | gain | penult | all | -31.296 [-99.561, -0.145] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_nodr | gain | penult | seed1 | -0.134 [-0.241, -0.062] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_nodr | gain | penult | all | -15.715 [-64.555, -0.100] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_nodr | gain | obs_single | seed0 | 0.005 [-0.037, 0.034] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_nodr | gain | obs_single | all | 0.005 [-0.037, 0.034] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_nodr | gain | obs_single | seed1 | -0.030 [-0.079, 0.006] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_nodr | gain | obs_single | all | -0.013 [-0.057, 0.018] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_nodr | gain | penult_random | seed0 | -0.175 [-0.304, -0.077] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_nodr | gain | penult_random | all | -0.175 [-0.304, -0.077] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_nodr | gain | penult_random | seed1 | -0.386 [-0.813, -0.135] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_nodr | gain | penult_random | all | -0.281 [-0.559, -0.126] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_dr | log_friction | penult | seed1 | -0.237 [-0.424, -0.113] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_dr | log_friction | penult | all | -0.237 [-0.419, -0.115] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_dr | log_friction | penult | seed2 | -0.129 [-0.231, -0.069] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_dr | log_friction | penult | all | -0.183 [-0.326, -0.104] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_dr | log_friction | obs_single | seed1 | -0.022 [-0.082, 0.023] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_dr | log_friction | obs_single | all | -0.022 [-0.081, 0.023] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_dr | log_friction | obs_single | seed2 | 0.001 [-0.075, 0.061] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_dr | log_friction | obs_single | all | -0.010 [-0.059, 0.029] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_dr | log_friction | penult_random | seed1 | -0.297 [-0.562, -0.101] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_dr | log_friction | penult_random | all | -0.297 [-0.569, -0.108] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_dr | log_friction | penult_random | seed2 | 0.050 [-0.062, 0.135] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_dr | log_friction | penult_random | all | -0.124 [-0.413, 0.084] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_dr | log_mass | penult | seed1 | -0.162 [-0.258, -0.092] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_dr | log_mass | penult | all | -0.162 [-0.259, -0.090] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_dr | log_mass | penult | seed2 | -0.128 [-0.204, -0.074] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_dr | log_mass | penult | all | -0.145 [-0.216, -0.097] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_dr | log_mass | obs_single | seed1 | -0.018 [-0.089, 0.039] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_dr | log_mass | obs_single | all | -0.018 [-0.091, 0.042] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_dr | log_mass | obs_single | seed2 | -0.006 [-0.077, 0.049] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_dr | log_mass | obs_single | all | -0.012 [-0.065, 0.027] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_dr | log_mass | penult_random | seed1 | -0.332 [-0.720, -0.078] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_dr | log_mass | penult_random | all | -0.332 [-0.726, -0.086] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_dr | log_mass | penult_random | seed2 | -0.148 [-0.288, -0.038] | 200 | 10000 | 100.000 | False |  | n/a |
+| push_dr | log_mass | penult_random | all | -0.240 [-0.519, -0.091] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_dr | gain | penult | seed1 | -0.579 [-1.146, -0.193] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_dr | gain | penult | all | -0.579 [-1.103, -0.185] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_dr | gain | penult | seed2 | -0.244 [-0.340, -0.180] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_dr | gain | penult | all | -0.412 [-0.815, -0.209] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_dr | gain | obs_single | seed1 | -0.025 [-0.077, 0.008] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_dr | gain | obs_single | all | -0.025 [-0.074, 0.010] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_dr | gain | obs_single | seed2 | -0.087 [-0.143, -0.050] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_dr | gain | obs_single | all | -0.056 [-0.114, -0.013] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_dr | gain | penult_random | seed1 | -0.216 [-0.322, -0.134] | 200 | 10000 | 1000.000 | False |  | n/a |
-| push_dr | gain | penult_random | all | -0.216 [-0.321, -0.132] | 200 | 10000 | 1000.000 | False |  | 1.000 |
+| push_dr | gain | penult_random | seed2 | -0.353 [-0.528, -0.221] | 200 | 10000 | 1000.000 | False |  | n/a |
+| push_dr | gain | penult_random | all | -0.284 [-0.432, -0.181] | 400 | 20000 | 1000.000 | False |  | 2.000 |
 | push_drhist | log_friction | penult | seed0 | -0.127 [-0.202, -0.082] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | log_friction | penult | all | -0.127 [-0.202, -0.082] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | log_friction | penult | seed1 | -0.116 [-0.169, -0.080] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | log_friction | penult | all | -0.121 [-0.170, -0.094] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | log_friction | obs_single | seed0 | -0.057 [-0.104, -0.024] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | log_friction | obs_single | all | -0.057 [-0.104, -0.024] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | log_friction | obs_single | seed1 | -0.068 [-0.129, -0.024] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | log_friction | obs_single | all | -0.062 [-0.104, -0.035] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | log_friction | obs_stacked | seed0 | -0.064 [-0.113, -0.030] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | log_friction | obs_stacked | all | -0.064 [-0.113, -0.030] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | log_friction | obs_stacked | seed1 | -0.078 [-0.144, -0.030] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | log_friction | obs_stacked | all | -0.071 [-0.116, -0.042] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | log_friction | penult_random | seed0 | -0.113 [-0.196, -0.046] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | log_friction | penult_random | all | -0.113 [-0.196, -0.046] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | log_friction | penult_random | seed1 | -0.114 [-0.199, -0.051] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | log_friction | penult_random | all | -0.113 [-0.176, -0.070] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | log_mass | penult | seed0 | -0.220 [-0.617, -0.033] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | log_mass | penult | all | -0.220 [-0.617, -0.033] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | log_mass | penult | seed1 | -0.109 [-0.200, -0.046] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | log_mass | penult | all | -0.165 [-0.410, -0.061] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | log_mass | obs_single | seed0 | -0.003 [-0.063, 0.037] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | log_mass | obs_single | all | -0.003 [-0.063, 0.037] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | log_mass | obs_single | seed1 | 0.012 [-0.053, 0.067] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | log_mass | obs_single | all | 0.004 [-0.042, 0.041] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | log_mass | obs_stacked | seed0 | -0.001 [-0.067, 0.044] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | log_mass | obs_stacked | all | -0.001 [-0.067, 0.044] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | log_mass | obs_stacked | seed1 | 0.011 [-0.058, 0.068] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | log_mass | obs_stacked | all | 0.005 [-0.045, 0.043] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | log_mass | penult_random | seed0 | -0.039 [-0.128, 0.027] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | log_mass | penult_random | all | -0.039 [-0.128, 0.027] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | log_mass | penult_random | seed1 | -0.136 [-0.247, -0.050] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | log_mass | penult_random | all | -0.088 [-0.186, -0.010] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | gain | penult | seed0 | -0.217 [-0.469, -0.096] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | gain | penult | all | -0.217 [-0.469, -0.096] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | gain | penult | seed1 | -0.089 [-0.164, -0.038] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | gain | penult | all | -0.153 [-0.328, -0.069] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | gain | obs_single | seed0 | -0.005 [-0.054, 0.030] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | gain | obs_single | all | -0.005 [-0.054, 0.030] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | gain | obs_single | seed1 | 0.002 [-0.055, 0.045] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | gain | obs_single | all | -0.001 [-0.040, 0.026] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | gain | obs_stacked | seed0 | 0.002 [-0.055, 0.041] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | gain | obs_stacked | all | 0.002 [-0.055, 0.041] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | gain | obs_stacked | seed1 | 0.010 [-0.049, 0.053] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | gain | obs_stacked | all | 0.006 [-0.036, 0.035] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 | push_drhist | gain | penult_random | seed0 | -0.124 [-0.202, -0.069] | 200 | 10000 | 1000.000 | False | False | n/a |
-| push_drhist | gain | penult_random | all | -0.124 [-0.202, -0.069] | 200 | 10000 | 1000.000 | False | False | 1.000 |
+| push_drhist | gain | penult_random | seed1 | -0.113 [-0.208, -0.045] | 200 | 10000 | 1000.000 | False | False | n/a |
+| push_drhist | gain | penult_random | all | -0.119 [-0.180, -0.073] | 400 | 20000 | 1000.000 | False | False | 2.000 |
 <!-- END:c4_probes -->
 
-*Reading.* On nominal states the three Push policies put most attribution on the object–gripper
-relation, the goal and the object position. The DR+Hist policy spreads part of its attribution over
-the history slots and past actions, while the current step keeps the largest single share. That
-temporal profile changes little between nominal and held-out cells. The probe claim rule is not met
-for any (condition, target), so no implicit system identification is claimed for Push.
+*Reading.* On nominal states the NoDR and DR policies put most attribution on the goal, the
+object–gripper relation and the object position. The DR+Hist policy spreads part of its attribution
+over the history slots and past actions, while the current step keeps the largest single share.
+Under IG that current-step share is lower on held-out cells than on nominal states, i.e. the policy
+leans a little more on recent history when the dynamics are shifted. GWIE-C shows little change.
+The probe claim rule is not met for any (condition, target), so no implicit system identification
+is claimed for Push.
 
 ### 4.7 Robustness
 
 <!-- BEGIN:robustness -->
-| exp | split | n_cells | n_seeds | episodes_per_cell_min | success | ci_backend | seed0 | seed1 |
-|---|---|---|---|---|---|---|---|---|
-| push_nodr | nominal | 1 | 1 | 200 | 0.910 [0.910, 0.910] | rliable | 0.910 | n/a |
-| push_dr | nominal | 1 | 2 | 200 | 0.453 [0.055, 0.850] | rliable | 0.055 | 0.850 |
-| push_drhist | nominal | 1 | 1 | 200 | 0.890 [0.890, 0.890] | rliable | 0.890 | n/a |
-| push_nodr | heldout | 37 | 1 | 100 | 0.349 [0.349, 0.349] | rliable | 0.349 | n/a |
-| push_dr | heldout | 37 | 2 | 100 | 0.231 [0.179, 0.283] | rliable | 0.062 | 0.400 |
-| push_drhist | heldout | 37 | 1 | 100 | 0.473 [0.473, 0.473] | rliable | 0.473 | n/a |
-| push_nodr | factor:combined | 20 | 1 | 100 | 0.173 [0.173, 0.173] | rliable | 0.173 | n/a |
-| push_dr | factor:combined | 20 | 2 | 100 | 0.151 [0.107, 0.194] | rliable | 0.065 | 0.237 |
-| push_drhist | factor:combined | 20 | 1 | 100 | 0.309 [0.309, 0.309] | rliable | 0.309 | n/a |
-| push_nodr | factor:friction | 6 | 1 | 100 | 0.588 [0.588, 0.588] | rliable | 0.588 | n/a |
-| push_dr | factor:friction | 6 | 2 | 100 | 0.330 [0.157, 0.505] | rliable | 0.062 | 0.598 |
-| push_drhist | factor:friction | 6 | 1 | 100 | 0.598 [0.598, 0.598] | rliable | 0.598 | n/a |
-| push_nodr | factor:gain | 4 | 1 | 100 | 0.585 [0.585, 0.585] | rliable | 0.585 | n/a |
-| push_dr | factor:gain | 4 | 2 | 100 | 0.341 [0.133, 0.576] | rliable | 0.050 | 0.633 |
-| push_drhist | factor:gain | 4 | 1 | 100 | 0.638 [0.638, 0.638] | rliable | 0.638 | n/a |
-| push_nodr | factor:latency | 2 | 1 | 100 | 0.190 [0.190, 0.190] | rliable | 0.190 | n/a |
-| push_dr | factor:latency | 2 | 2 | 100 | 0.182 [0.055, 0.310] | rliable | 0.055 | 0.310 |
-| push_drhist | factor:latency | 2 | 1 | 100 | 0.730 [0.730, 0.730] | rliable | 0.730 | n/a |
-| push_nodr | factor:mass | 3 | 1 | 100 | 0.750 [0.750, 0.750] | rliable | 0.750 | n/a |
-| push_dr | factor:mass | 3 | 2 | 100 | 0.393 [0.095, 0.692] | rliable | 0.063 | 0.723 |
-| push_drhist | factor:mass | 3 | 1 | 100 | 0.777 [0.777, 0.777] | rliable | 0.777 | n/a |
-| push_nodr | factor:noise | 2 | 1 | 100 | 0.475 [0.475, 0.475] | rliable | 0.475 | n/a |
-| push_dr | factor:noise | 2 | 2 | 100 | 0.323 [0.065, 0.580] | rliable | 0.065 | 0.580 |
-| push_drhist | factor:noise | 2 | 1 | 100 | 0.685 [0.685, 0.685] | rliable | 0.685 | n/a |
+| exp | split | n_cells | n_seeds | episodes_per_cell_min | success | ci_backend | seed0 | seed1 | seed2 |
+|---|---|---|---|---|---|---|---|---|---|
+| push_nodr | nominal | 1 | 2 | 200 | 0.953 [0.910, 0.995] | rliable | 0.910 | 0.995 | n/a |
+| push_dr | nominal | 1 | 3 | 200 | 0.580 [0.055, 0.850] | rliable | 0.055 | 0.850 | 0.835 |
+| push_drhist | nominal | 1 | 2 | 200 | 0.887 [0.885, 0.890] | rliable | 0.890 | 0.885 | n/a |
+| push_nodr | heldout | 37 | 2 | 100 | 0.352 [0.341, 0.364] | rliable | 0.349 | 0.356 | n/a |
+| push_dr | heldout | 37 | 3 | 100 | 0.288 [0.248, 0.327] | rliable | 0.062 | 0.400 | 0.403 |
+| push_drhist | heldout | 37 | 2 | 100 | 0.468 [0.461, 0.475] | rliable | 0.473 | 0.464 | n/a |
+| push_nodr | factor:combined | 20 | 2 | 100 | 0.158 [0.146, 0.169] | rliable | 0.173 | 0.142 | n/a |
+| push_dr | factor:combined | 20 | 3 | 100 | 0.179 [0.144, 0.212] | rliable | 0.065 | 0.237 | 0.235 |
+| push_drhist | factor:combined | 20 | 2 | 100 | 0.308 [0.299, 0.317] | rliable | 0.309 | 0.307 | n/a |
+| push_nodr | factor:friction | 6 | 2 | 100 | 0.643 [0.605, 0.682] | rliable | 0.588 | 0.698 | n/a |
+| push_dr | factor:friction | 6 | 3 | 100 | 0.423 [0.286, 0.553] | rliable | 0.062 | 0.598 | 0.608 |
+| push_drhist | factor:friction | 6 | 2 | 100 | 0.597 [0.576, 0.618] | rliable | 0.598 | 0.595 | n/a |
+| push_nodr | factor:gain | 4 | 2 | 100 | 0.624 [0.590, 0.657] | rliable | 0.585 | 0.662 | n/a |
+| push_dr | factor:gain | 4 | 3 | 100 | 0.453 [0.271, 0.620] | rliable | 0.050 | 0.633 | 0.675 |
+| push_drhist | factor:gain | 4 | 2 | 100 | 0.639 [0.617, 0.660] | rliable | 0.638 | 0.640 | n/a |
+| push_nodr | factor:latency | 2 | 2 | 100 | 0.193 [0.175, 0.210] | rliable | 0.190 | 0.195 | n/a |
+| push_dr | factor:latency | 2 | 3 | 100 | 0.222 [0.127, 0.310] | rliable | 0.055 | 0.310 | 0.300 |
+| push_drhist | factor:latency | 2 | 2 | 100 | 0.695 [0.660, 0.730] | rliable | 0.730 | 0.660 | n/a |
+| push_nodr | factor:mass | 3 | 2 | 100 | 0.783 [0.753, 0.813] | rliable | 0.750 | 0.817 | n/a |
+| push_dr | factor:mass | 3 | 3 | 100 | 0.510 [0.284, 0.727] | rliable | 0.063 | 0.723 | 0.743 |
+| push_drhist | factor:mass | 3 | 2 | 100 | 0.768 [0.762, 0.775] | rliable | 0.777 | 0.760 | n/a |
+| push_nodr | factor:noise | 2 | 2 | 100 | 0.400 [0.325, 0.475] | rliable | 0.475 | 0.325 | n/a |
+| push_dr | factor:noise | 2 | 3 | 100 | 0.387 [0.172, 0.553] | rliable | 0.065 | 0.580 | 0.515 |
+| push_drhist | factor:noise | 2 | 2 | 100 | 0.665 [0.645, 0.685] | rliable | 0.685 | 0.645 | n/a |
 <!-- END:robustness -->
 
 Generated Push summary (two learned seeds per condition; the push_dr mean also includes the failed seed 0):
 
 <!-- BEGIN:push_summary -->
-- Held-out-dynamics (sim-to-sim) success on FetchPush, mean over n=1/2 seeds [95% bootstrap CI]: NoDR **34.9% (n=1, no seed CI)**, DR **23.1% [17.9, 28.3] (s0 6.2%, s1 40.0%)**, DR+Hist **47.3% (n=1, no seed CI)**.
-- Probability of improvement on the held-out cells: P(DR > NoDR) 0.547 [0.473, 0.628], P(DR+Hist > DR) 0.838 [0.784, 0.899].
-- C3 push_nodr, AUROC from the first 10 of 50 steps (test split): ASM 0.714 [0.690, 0.740] vs best baseline (obs_ood) 0.748 [0.724, 0.772]: CIs overlap.
-- C3 push_dr, AUROC from the first 10 of 50 steps (test split): ASM 0.713 [0.689, 0.737] vs best baseline (q_drop) 0.744 [0.722, 0.765]: CIs overlap.
-- C3 push_drhist, AUROC from the first 10 of 50 steps (test split): ASM 0.706 [0.683, 0.730] vs best baseline (q_drop) 0.697 [0.674, 0.720]: CIs overlap.
+- Held-out-dynamics (sim-to-sim) success on FetchPush, mean over n=2/3 seeds [95% bootstrap CI]: NoDR **35.2% [34.1, 36.4] (s0 34.9%, s1 35.6%)**, DR **28.8% [24.8, 32.7] (s0 6.2%, s1 40.0%, s2 40.3%)**, DR+Hist **46.8% [46.1, 47.5] (s0 47.3%, s1 46.4%)**.
+- Probability of improvement on the held-out cells: P(DR > NoDR) 0.597 [0.532, 0.658], P(DR+Hist > DR) 0.755 [0.689, 0.815].
+- C3 push_nodr, AUROC from the first 10 of 50 steps (test split): ASM 0.745 [0.700, 0.792] vs best baseline (q_drop) 0.769 [0.735, 0.801]: CIs overlap.
+- C3 push_dr, AUROC from the first 10 of 50 steps (test split): ASM 0.728 [0.702, 0.752] vs best baseline (q_drop) 0.745 [0.730, 0.760]: CIs overlap.
+- C3 push_drhist, AUROC from the first 10 of 50 steps (test split): ASM 0.697 [0.675, 0.717] vs best baseline (q_drop) 0.693 [0.676, 0.711]: CIs overlap.
 - C4 probes, claim rule outcome (`claim_sysid`, results/c4/probes.csv): push_nodr/log_friction: **False**, push_nodr/log_mass: **False**, push_nodr/gain: **False**, push_dr/log_friction: **False**, push_dr/log_mass: **False**, push_dr/gain: **False**, push_drhist/log_friction: **False**, push_drhist/log_mass: **False**, push_drhist/gain: **False**.
 <!-- END:push_summary -->
 
-*Reading.* DR+Hist has the highest held-out success of the three Push conditions. The learned
-push_dr seed is above NoDR on held-out dynamics, but the failed push_dr seed pulls the DR mean below
-NoDR. With one learned seed per condition, this table cannot separate the effect of DR from
-seed-to-seed variation in Push training. The three-seed Reach track (Section 4.8) is the better
-evidence for the effect of DR.
+*Reading.* DR+Hist has the highest held-out success of the three Push conditions, and both of its
+seeds are above every other learned seed. Both learned push_dr seeds are above both NoDR seeds on
+held-out dynamics. The failed push_dr seed 0 pulls the DR mean below NoDR, so the DR row mixes the
+effect of DR with the risk that DR training does not converge (one of three seeds). The three-seed
+Reach track (Section 4.8) gives a cleaner estimate of the effect of DR.
 
 ### 4.8 Reach track (Gate G2 insurance)
 
