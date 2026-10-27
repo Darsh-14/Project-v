@@ -1,5 +1,5 @@
 {
-  "git_sha": "b227fabd24915c9a9692b4ee5375061a9c6711da",
+  "git_sha": "b01edac52646f992f8a9d57d3e3c9d68dc39abd3",
   "config_hash": "67dadd7f7202",
   "argv": [
     "D:\\Project V\\projectv\\analysis\\robustness.py",
@@ -22,7 +22,7 @@
     "scikit-learn": "1.9.1",
     "rliable": "1.2.0"
   },
-  "wall_clock_s": 301.15,
+  "wall_clock_s": 535.49,
   "analysis": "robustness",
   "note": "note: n=3 seeds per condition -> IQM over runs is degenerate (it trims to ~1 run), so the aggregate is the mean; per-seed values are reported alongside the bootstrap CI."
 }

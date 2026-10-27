@@ -1,6 +1,6 @@
 {
-  "git_sha": "b227fabd24915c9a9692b4ee5375061a9c6711da",
-  "config_hash": "cafc24d7e28c",
+  "git_sha": "b01edac52646f992f8a9d57d3e3c9d68dc39abd3",
+  "config_hash": "8378bb77df9f",
   "argv": [
     "D:\\Project V\\projectv\\xai\\faithfulness.py",
     "--task",
@@ -9,6 +9,7 @@
     "push_dr",
     "--seeds",
     "1",
+    "2",
     "--no-wandb"
   ],
   "versions": {
@@ -24,7 +25,7 @@
     "scikit-learn": "1.9.1",
     "rliable": "1.2.0"
   },
-  "wall_clock_s": 707.69,
+  "wall_clock_s": 1196.66,
   "task": "push",
   "exp": "push_dr"
 }

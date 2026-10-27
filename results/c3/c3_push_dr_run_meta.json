@@ -1,11 +1,12 @@
 {
-  "git_sha": "af7a4861ca9894383cb85a0ae5f1c61ccc0c5e0a",
-  "config_hash": "69f011105461",
+  "git_sha": "b01edac52646f992f8a9d57d3e3c9d68dc39abd3",
+  "config_hash": "8195919898ff",
   "argv": [
     "--exp",
     "push_dr",
     "--seeds",
-    "1"
+    "1",
+    "2"
   ],
   "versions": {
     "python": "3.13.3",
@@ -20,15 +21,17 @@
     "scikit-learn": "1.9.1",
     "rliable": "1.2.0"
   },
-  "wall_clock_s": 426.44,
+  "wall_clock_s": 1729.57,
   "exp": "push_dr",
   "seeds": [
-    1
+    1,
+    2
   ],
   "heldout_hash": "6e9b1e89dba6229b19e77c6f71e01070ff881652f1a215fe89f20cea2c20d221",
   "hash_checked": true,
   "checkpoints": {
-    "1": "results\\ckpt\\push_dr_s1\\step_759108.zip"
+    "1": "results\\ckpt\\push_dr_s1\\step_759108.zip",
+    "2": "results\\ckpt\\push_dr_s2_final.zip"
   },
   "missing_cells": {},
   "signals": [
@@ -36,6 +39,7 @@
     "obs_ood",
     "act_std",
     "q_drop",
+    "ensemble",
     "act_ood"
   ],
   "groups": [

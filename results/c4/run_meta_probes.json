@@ -1,6 +1,6 @@
 {
-  "git_sha": "b227fabd24915c9a9692b4ee5375061a9c6711da",
-  "config_hash": "6821998b5ca3",
+  "git_sha": "b01edac52646f992f8a9d57d3e3c9d68dc39abd3",
+  "config_hash": "723f42b1e833",
   "argv": [
     "D:\\Project V\\projectv\\analysis\\probes.py",
     "--task",
@@ -8,6 +8,7 @@
     "--seeds",
     "0",
     "1",
+    "2",
     "--skip",
     "push_dr:0",
     "--no-wandb"
@@ -25,7 +26,7 @@
     "scikit-learn": "1.9.1",
     "rliable": "1.2.0"
   },
-  "wall_clock_s": 616.47,
+  "wall_clock_s": 1656.45,
   "task": "push",
   "analysis": "probes"
 }
