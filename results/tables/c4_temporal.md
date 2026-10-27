@@ -1,82 +1,82 @@
-| exp | method | level | quantity | group | mean | n_seeds | seed0 | scope |
-|---|---|---|---|---|---|---|---|---|
-| push_drhist | gwie_c | temporal | share | t | 0.446 [0.446, 0.446] | 1 | 0.446 | nominal |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.190 [0.190, 0.190] | 1 | 0.190 | nominal |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.135 [0.135, 0.135] | 1 | 0.135 | nominal |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.112 [0.112, 0.112] | 1 | 0.112 | nominal |
-| push_drhist | gwie_c | temporal | share | act | 0.117 [0.117, 0.117] | 1 | 0.117 | nominal |
-| push_drhist | gwie_c | temporal | share | t | 0.444 [0.444, 0.444] | 1 | 0.444 | heldout |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.198 [0.198, 0.198] | 1 | 0.198 | heldout |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.136 [0.136, 0.136] | 1 | 0.136 | heldout |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.111 [0.111, 0.111] | 1 | 0.111 | heldout |
-| push_drhist | gwie_c | temporal | share | act | 0.111 [0.111, 0.111] | 1 | 0.111 | heldout |
-| push_drhist | gwie_c | temporal | share | t | 0.441 [0.441, 0.441] | 1 | 0.441 | factor:combined |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.197 [0.197, 0.197] | 1 | 0.197 | factor:combined |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.136 [0.136, 0.136] | 1 | 0.136 | factor:combined |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.113 [0.113, 0.113] | 1 | 0.113 | factor:combined |
-| push_drhist | gwie_c | temporal | share | act | 0.112 [0.112, 0.112] | 1 | 0.112 | factor:combined |
-| push_drhist | gwie_c | temporal | share | t | 0.440 [0.440, 0.440] | 1 | 0.440 | factor:friction |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.204 [0.204, 0.204] | 1 | 0.204 | factor:friction |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.139 [0.139, 0.139] | 1 | 0.139 | factor:friction |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.108 [0.108, 0.108] | 1 | 0.108 | factor:friction |
-| push_drhist | gwie_c | temporal | share | act | 0.109 [0.109, 0.109] | 1 | 0.109 | factor:friction |
-| push_drhist | gwie_c | temporal | share | t | 0.437 [0.437, 0.437] | 1 | 0.437 | factor:gain |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.201 [0.201, 0.201] | 1 | 0.201 | factor:gain |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.140 [0.140, 0.140] | 1 | 0.140 | factor:gain |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.110 [0.110, 0.110] | 1 | 0.110 | factor:gain |
-| push_drhist | gwie_c | temporal | share | act | 0.112 [0.112, 0.112] | 1 | 0.112 | factor:gain |
-| push_drhist | gwie_c | temporal | share | t | 0.463 [0.463, 0.463] | 1 | 0.463 | factor:latency |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.188 [0.188, 0.188] | 1 | 0.188 | factor:latency |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.128 [0.128, 0.128] | 1 | 0.128 | factor:latency |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.110 [0.110, 0.110] | 1 | 0.110 | factor:latency |
-| push_drhist | gwie_c | temporal | share | act | 0.111 [0.111, 0.111] | 1 | 0.111 | factor:latency |
-| push_drhist | gwie_c | temporal | share | t | 0.454 [0.454, 0.454] | 1 | 0.454 | factor:mass |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.196 [0.196, 0.196] | 1 | 0.196 | factor:mass |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.130 [0.130, 0.130] | 1 | 0.130 | factor:mass |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.112 [0.112, 0.112] | 1 | 0.112 | factor:mass |
-| push_drhist | gwie_c | temporal | share | act | 0.108 [0.108, 0.108] | 1 | 0.108 | factor:mass |
-| push_drhist | gwie_c | temporal | share | t | 0.462 [0.462, 0.462] | 1 | 0.462 | factor:noise |
-| push_drhist | gwie_c | temporal | share | t-1 | 0.192 [0.192, 0.192] | 1 | 0.192 | factor:noise |
-| push_drhist | gwie_c | temporal | share | t-2 | 0.128 [0.128, 0.128] | 1 | 0.128 | factor:noise |
-| push_drhist | gwie_c | temporal | share | t-3 | 0.113 [0.113, 0.113] | 1 | 0.113 | factor:noise |
-| push_drhist | gwie_c | temporal | share | act | 0.104 [0.104, 0.104] | 1 | 0.104 | factor:noise |
-| push_drhist | ig | temporal | share | t | 0.649 [0.649, 0.649] | 1 | 0.649 | nominal |
-| push_drhist | ig | temporal | share | t-1 | 0.150 [0.150, 0.150] | 1 | 0.150 | nominal |
-| push_drhist | ig | temporal | share | t-2 | 0.083 [0.083, 0.083] | 1 | 0.083 | nominal |
-| push_drhist | ig | temporal | share | t-3 | 0.054 [0.054, 0.054] | 1 | 0.054 | nominal |
-| push_drhist | ig | temporal | share | act | 0.064 [0.064, 0.064] | 1 | 0.064 | nominal |
-| push_drhist | ig | temporal | share | t | 0.597 [0.597, 0.597] | 1 | 0.597 | heldout |
-| push_drhist | ig | temporal | share | t-1 | 0.153 [0.153, 0.153] | 1 | 0.153 | heldout |
-| push_drhist | ig | temporal | share | t-2 | 0.092 [0.092, 0.092] | 1 | 0.092 | heldout |
-| push_drhist | ig | temporal | share | t-3 | 0.067 [0.067, 0.067] | 1 | 0.067 | heldout |
-| push_drhist | ig | temporal | share | act | 0.091 [0.091, 0.091] | 1 | 0.091 | heldout |
-| push_drhist | ig | temporal | share | t | 0.578 [0.578, 0.578] | 1 | 0.578 | factor:combined |
-| push_drhist | ig | temporal | share | t-1 | 0.156 [0.156, 0.156] | 1 | 0.156 | factor:combined |
-| push_drhist | ig | temporal | share | t-2 | 0.094 [0.094, 0.094] | 1 | 0.094 | factor:combined |
-| push_drhist | ig | temporal | share | t-3 | 0.070 [0.070, 0.070] | 1 | 0.070 | factor:combined |
-| push_drhist | ig | temporal | share | act | 0.102 [0.102, 0.102] | 1 | 0.102 | factor:combined |
-| push_drhist | ig | temporal | share | t | 0.611 [0.611, 0.611] | 1 | 0.611 | factor:friction |
-| push_drhist | ig | temporal | share | t-1 | 0.153 [0.153, 0.153] | 1 | 0.153 | factor:friction |
-| push_drhist | ig | temporal | share | t-2 | 0.092 [0.092, 0.092] | 1 | 0.092 | factor:friction |
-| push_drhist | ig | temporal | share | t-3 | 0.067 [0.067, 0.067] | 1 | 0.067 | factor:friction |
-| push_drhist | ig | temporal | share | act | 0.077 [0.077, 0.077] | 1 | 0.077 | factor:friction |
-| push_drhist | ig | temporal | share | t | 0.610 [0.610, 0.610] | 1 | 0.610 | factor:gain |
-| push_drhist | ig | temporal | share | t-1 | 0.150 [0.150, 0.150] | 1 | 0.150 | factor:gain |
-| push_drhist | ig | temporal | share | t-2 | 0.092 [0.092, 0.092] | 1 | 0.092 | factor:gain |
-| push_drhist | ig | temporal | share | t-3 | 0.067 [0.067, 0.067] | 1 | 0.067 | factor:gain |
-| push_drhist | ig | temporal | share | act | 0.080 [0.080, 0.080] | 1 | 0.080 | factor:gain |
-| push_drhist | ig | temporal | share | t | 0.631 [0.631, 0.631] | 1 | 0.631 | factor:latency |
-| push_drhist | ig | temporal | share | t-1 | 0.146 [0.146, 0.146] | 1 | 0.146 | factor:latency |
-| push_drhist | ig | temporal | share | t-2 | 0.080 [0.080, 0.080] | 1 | 0.080 | factor:latency |
-| push_drhist | ig | temporal | share | t-3 | 0.054 [0.054, 0.054] | 1 | 0.054 | factor:latency |
-| push_drhist | ig | temporal | share | act | 0.088 [0.088, 0.088] | 1 | 0.088 | factor:latency |
-| push_drhist | ig | temporal | share | t | 0.645 [0.645, 0.645] | 1 | 0.645 | factor:mass |
-| push_drhist | ig | temporal | share | t-1 | 0.145 [0.145, 0.145] | 1 | 0.145 | factor:mass |
-| push_drhist | ig | temporal | share | t-2 | 0.084 [0.084, 0.084] | 1 | 0.084 | factor:mass |
-| push_drhist | ig | temporal | share | t-3 | 0.060 [0.060, 0.060] | 1 | 0.060 | factor:mass |
-| push_drhist | ig | temporal | share | act | 0.065 [0.065, 0.065] | 1 | 0.065 | factor:mass |
-| push_drhist | ig | temporal | share | t | 0.613 [0.613, 0.613] | 1 | 0.613 | factor:noise |
-| push_drhist | ig | temporal | share | t-1 | 0.147 [0.147, 0.147] | 1 | 0.147 | factor:noise |
-| push_drhist | ig | temporal | share | t-2 | 0.089 [0.089, 0.089] | 1 | 0.089 | factor:noise |
-| push_drhist | ig | temporal | share | t-3 | 0.065 [0.065, 0.065] | 1 | 0.065 | factor:noise |
-| push_drhist | ig | temporal | share | act | 0.086 [0.086, 0.086] | 1 | 0.086 | factor:noise |
+| exp | method | level | quantity | group | mean | n_seeds | seed0 | seed1 | scope |
+|---|---|---|---|---|---|---|---|---|---|
+| push_drhist | gwie_c | temporal | share | t | 0.446 [0.446, 0.446] | 2 | 0.446 | 0.446 | nominal |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.187 [0.184, 0.190] | 2 | 0.190 | 0.184 | nominal |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.135 [0.134, 0.135] | 2 | 0.135 | 0.134 | nominal |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.113 [0.112, 0.114] | 2 | 0.112 | 0.114 | nominal |
+| push_drhist | gwie_c | temporal | share | act | 0.119 [0.117, 0.122] | 2 | 0.117 | 0.122 | nominal |
+| push_drhist | gwie_c | temporal | share | t | 0.440 [0.437, 0.444] | 2 | 0.444 | 0.437 | heldout |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.194 [0.191, 0.198] | 2 | 0.198 | 0.191 | heldout |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.136 [0.136, 0.137] | 2 | 0.136 | 0.137 | heldout |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.112 [0.111, 0.112] | 2 | 0.111 | 0.112 | heldout |
+| push_drhist | gwie_c | temporal | share | act | 0.118 [0.111, 0.124] | 2 | 0.111 | 0.124 | heldout |
+| push_drhist | gwie_c | temporal | share | t | 0.434 [0.426, 0.441] | 2 | 0.441 | 0.426 | factor:combined |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.195 [0.192, 0.197] | 2 | 0.197 | 0.192 | factor:combined |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.138 [0.136, 0.139] | 2 | 0.136 | 0.139 | factor:combined |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.114 [0.113, 0.115] | 2 | 0.113 | 0.115 | factor:combined |
+| push_drhist | gwie_c | temporal | share | act | 0.120 [0.112, 0.128] | 2 | 0.112 | 0.128 | factor:combined |
+| push_drhist | gwie_c | temporal | share | t | 0.443 [0.440, 0.447] | 2 | 0.440 | 0.447 | factor:friction |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.199 [0.195, 0.204] | 2 | 0.204 | 0.195 | factor:friction |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.133 [0.128, 0.139] | 2 | 0.139 | 0.128 | factor:friction |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.110 [0.108, 0.111] | 2 | 0.108 | 0.111 | factor:friction |
+| push_drhist | gwie_c | temporal | share | act | 0.114 [0.109, 0.120] | 2 | 0.109 | 0.120 | factor:friction |
+| push_drhist | gwie_c | temporal | share | t | 0.440 [0.437, 0.444] | 2 | 0.437 | 0.444 | factor:gain |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.196 [0.191, 0.201] | 2 | 0.201 | 0.191 | factor:gain |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.137 [0.134, 0.140] | 2 | 0.140 | 0.134 | factor:gain |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.109 [0.107, 0.110] | 2 | 0.110 | 0.107 | factor:gain |
+| push_drhist | gwie_c | temporal | share | act | 0.117 [0.112, 0.123] | 2 | 0.112 | 0.123 | factor:gain |
+| push_drhist | gwie_c | temporal | share | t | 0.467 [0.463, 0.471] | 2 | 0.463 | 0.471 | factor:latency |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.184 [0.179, 0.188] | 2 | 0.188 | 0.179 | factor:latency |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.125 [0.122, 0.128] | 2 | 0.128 | 0.122 | factor:latency |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.104 [0.099, 0.110] | 2 | 0.110 | 0.099 | factor:latency |
+| push_drhist | gwie_c | temporal | share | act | 0.120 [0.111, 0.129] | 2 | 0.111 | 0.129 | factor:latency |
+| push_drhist | gwie_c | temporal | share | t | 0.455 [0.454, 0.455] | 2 | 0.454 | 0.455 | factor:mass |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.190 [0.183, 0.196] | 2 | 0.196 | 0.183 | factor:mass |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.139 [0.130, 0.147] | 2 | 0.130 | 0.147 | factor:mass |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.109 [0.106, 0.112] | 2 | 0.112 | 0.106 | factor:mass |
+| push_drhist | gwie_c | temporal | share | act | 0.108 [0.108, 0.109] | 2 | 0.108 | 0.109 | factor:mass |
+| push_drhist | gwie_c | temporal | share | t | 0.450 [0.437, 0.462] | 2 | 0.462 | 0.437 | factor:noise |
+| push_drhist | gwie_c | temporal | share | t-1 | 0.189 [0.186, 0.192] | 2 | 0.192 | 0.186 | factor:noise |
+| push_drhist | gwie_c | temporal | share | t-2 | 0.133 [0.128, 0.137] | 2 | 0.128 | 0.137 | factor:noise |
+| push_drhist | gwie_c | temporal | share | t-3 | 0.115 [0.113, 0.116] | 2 | 0.113 | 0.116 | factor:noise |
+| push_drhist | gwie_c | temporal | share | act | 0.114 [0.104, 0.124] | 2 | 0.104 | 0.124 | factor:noise |
+| push_drhist | ig | temporal | share | t | 0.642 [0.634, 0.649] | 2 | 0.649 | 0.634 | nominal |
+| push_drhist | ig | temporal | share | t-1 | 0.149 [0.148, 0.150] | 2 | 0.150 | 0.148 | nominal |
+| push_drhist | ig | temporal | share | t-2 | 0.085 [0.083, 0.087] | 2 | 0.083 | 0.087 | nominal |
+| push_drhist | ig | temporal | share | t-3 | 0.058 [0.054, 0.062] | 2 | 0.054 | 0.062 | nominal |
+| push_drhist | ig | temporal | share | act | 0.066 [0.064, 0.068] | 2 | 0.064 | 0.068 | nominal |
+| push_drhist | ig | temporal | share | t | 0.582 [0.567, 0.597] | 2 | 0.597 | 0.567 | heldout |
+| push_drhist | ig | temporal | share | t-1 | 0.157 [0.153, 0.161] | 2 | 0.153 | 0.161 | heldout |
+| push_drhist | ig | temporal | share | t-2 | 0.094 [0.092, 0.096] | 2 | 0.092 | 0.096 | heldout |
+| push_drhist | ig | temporal | share | t-3 | 0.069 [0.067, 0.072] | 2 | 0.067 | 0.072 | heldout |
+| push_drhist | ig | temporal | share | act | 0.098 [0.091, 0.104] | 2 | 0.091 | 0.104 | heldout |
+| push_drhist | ig | temporal | share | t | 0.563 [0.549, 0.578] | 2 | 0.578 | 0.549 | factor:combined |
+| push_drhist | ig | temporal | share | t-1 | 0.160 [0.156, 0.164] | 2 | 0.156 | 0.164 | factor:combined |
+| push_drhist | ig | temporal | share | t-2 | 0.096 [0.094, 0.099] | 2 | 0.094 | 0.099 | factor:combined |
+| push_drhist | ig | temporal | share | t-3 | 0.072 [0.070, 0.074] | 2 | 0.070 | 0.074 | factor:combined |
+| push_drhist | ig | temporal | share | act | 0.108 [0.102, 0.114] | 2 | 0.102 | 0.114 | factor:combined |
+| push_drhist | ig | temporal | share | t | 0.599 [0.587, 0.611] | 2 | 0.611 | 0.587 | factor:friction |
+| push_drhist | ig | temporal | share | t-1 | 0.155 [0.153, 0.158] | 2 | 0.153 | 0.158 | factor:friction |
+| push_drhist | ig | temporal | share | t-2 | 0.093 [0.092, 0.094] | 2 | 0.092 | 0.094 | factor:friction |
+| push_drhist | ig | temporal | share | t-3 | 0.068 [0.067, 0.070] | 2 | 0.067 | 0.070 | factor:friction |
+| push_drhist | ig | temporal | share | act | 0.084 [0.077, 0.092] | 2 | 0.077 | 0.092 | factor:friction |
+| push_drhist | ig | temporal | share | t | 0.594 [0.578, 0.610] | 2 | 0.610 | 0.578 | factor:gain |
+| push_drhist | ig | temporal | share | t-1 | 0.155 [0.150, 0.159] | 2 | 0.150 | 0.159 | factor:gain |
+| push_drhist | ig | temporal | share | t-2 | 0.095 [0.092, 0.097] | 2 | 0.092 | 0.097 | factor:gain |
+| push_drhist | ig | temporal | share | t-3 | 0.071 [0.067, 0.074] | 2 | 0.067 | 0.074 | factor:gain |
+| push_drhist | ig | temporal | share | act | 0.086 [0.080, 0.091] | 2 | 0.080 | 0.091 | factor:gain |
+| push_drhist | ig | temporal | share | t | 0.606 [0.582, 0.631] | 2 | 0.631 | 0.582 | factor:latency |
+| push_drhist | ig | temporal | share | t-1 | 0.149 [0.146, 0.152] | 2 | 0.146 | 0.152 | factor:latency |
+| push_drhist | ig | temporal | share | t-2 | 0.083 [0.080, 0.086] | 2 | 0.080 | 0.086 | factor:latency |
+| push_drhist | ig | temporal | share | t-3 | 0.057 [0.054, 0.060] | 2 | 0.054 | 0.060 | factor:latency |
+| push_drhist | ig | temporal | share | act | 0.104 [0.088, 0.120] | 2 | 0.088 | 0.120 | factor:latency |
+| push_drhist | ig | temporal | share | t | 0.627 [0.610, 0.645] | 2 | 0.645 | 0.610 | factor:mass |
+| push_drhist | ig | temporal | share | t-1 | 0.148 [0.145, 0.152] | 2 | 0.145 | 0.152 | factor:mass |
+| push_drhist | ig | temporal | share | t-2 | 0.088 [0.084, 0.092] | 2 | 0.084 | 0.092 | factor:mass |
+| push_drhist | ig | temporal | share | t-3 | 0.064 [0.060, 0.068] | 2 | 0.060 | 0.068 | factor:mass |
+| push_drhist | ig | temporal | share | act | 0.072 [0.065, 0.078] | 2 | 0.065 | 0.078 | factor:mass |
+| push_drhist | ig | temporal | share | t | 0.597 [0.582, 0.613] | 2 | 0.613 | 0.582 | factor:noise |
+| push_drhist | ig | temporal | share | t-1 | 0.152 [0.147, 0.156] | 2 | 0.147 | 0.156 | factor:noise |
+| push_drhist | ig | temporal | share | t-2 | 0.091 [0.089, 0.092] | 2 | 0.089 | 0.092 | factor:noise |
+| push_drhist | ig | temporal | share | t-3 | 0.068 [0.065, 0.072] | 2 | 0.065 | 0.072 | factor:noise |
+| push_drhist | ig | temporal | share | act | 0.092 [0.086, 0.098] | 2 | 0.086 | 0.098 | factor:noise |

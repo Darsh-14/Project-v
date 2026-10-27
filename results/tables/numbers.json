@@ -1,39 +1,41 @@
 {
   "X": {
-    "value": 0.3489189189189189,
-    "lo": 0.3489189189189189,
-    "hi": 0.3489189189189189,
+    "value": 0.3524324324324324,
+    "lo": 0.3414831081081081,
+    "hi": 0.363652027027027,
     "source": "results/robustness/robustness.csv",
     "description": "held-out success, push_nodr",
-    "n_seeds": 1,
+    "n_seeds": 2,
     "per_seed": {
-      "0": 0.3489189189189189
+      "0": 0.3489189189189189,
+      "1": 0.355945945945946
     }
   },
   "Y": {
-    "value": 0.2310810810810811,
-    "lo": 0.1787804054054054,
-    "hi": 0.2831182432432432,
+    "value": 0.2884684684684685,
+    "lo": 0.2477387387387387,
+    "hi": 0.3274797297297298,
     "source": "results/robustness/robustness.csv",
     "description": "held-out success, push_dr",
-    "n_seeds": 2,
+    "n_seeds": 3,
     "per_seed": {
       "0": 0.0618918918918918,
-      "1": 0.4002702702702702
+      "1": 0.4002702702702702,
+      "2": 0.4032432432432432
     }
   },
   "Z": {
-    "value": 0.7127952129489474,
-    "lo": 0.6894650419978504,
-    "hi": 0.7365125515675581,
+    "value": 0.7275560995029476,
+    "lo": 0.7020167595169147,
+    "hi": 0.752477885071867,
     "source": "results/c3/c3_push_dr_metrics.csv",
     "description": "ASM AUROC, T=10, push_dr (test)",
     "per_seed": {}
   },
   "W": {
-    "value": 0.7438183741571487,
-    "lo": 0.7219951404221799,
-    "hi": 0.764862540567104,
+    "value": 0.7453553382931946,
+    "lo": 0.7299265697210945,
+    "hi": 0.7604599881665467,
     "source": "results/c3/c3_push_dr_metrics.csv",
     "description": "best baseline AUROC, T=10, push_dr (test)",
     "per_seed": {},

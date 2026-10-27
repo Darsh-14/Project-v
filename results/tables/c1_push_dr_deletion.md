@@ -54,3 +54,57 @@
 | open_loop | 3 | 1 | 0.050 | goal+obj_pos+obj_rel | 100 |
 | open_loop | 4 | 1 | 0.050 | goal+obj_pos+obj_rel+obj_rot | 100 |
 | open_loop | 5 | 1 | 0.040 | goal+obj_pos+obj_rel+obj_rot+ee_pos | 100 |
+| grad | 0 | 2 | 0.860 |  | 100 |
+| grad | 1 | 2 | 0.710 | obj_velp | 100 |
+| grad | 2 | 2 | 0.030 | obj_velp+goal | 100 |
+| grad | 3 | 2 | 0.040 | obj_velp+goal+ee_vel | 100 |
+| grad | 4 | 2 | 0.080 | obj_velp+goal+ee_vel+obj_rel | 100 |
+| grad | 5 | 2 | 0.090 | obj_velp+goal+ee_vel+obj_rel+obj_pos | 100 |
+| grad_x_delta | 0 | 2 | 0.860 |  | 100 |
+| grad_x_delta | 1 | 2 | 0.070 | obj_rel | 100 |
+| grad_x_delta | 2 | 2 | 0.080 | obj_rel+obj_rot | 100 |
+| grad_x_delta | 3 | 2 | 0.070 | obj_rel+obj_rot+goal | 100 |
+| grad_x_delta | 4 | 2 | 0.080 | obj_rel+obj_rot+goal+obj_pos | 100 |
+| grad_x_delta | 5 | 2 | 0.040 | obj_rel+obj_rot+goal+obj_pos+ee_pos | 100 |
+| ig | 0 | 2 | 0.860 |  | 100 |
+| ig | 1 | 2 | 0.070 | obj_rel | 100 |
+| ig | 2 | 2 | 0.060 | obj_rel+goal | 100 |
+| ig | 3 | 2 | 0.080 | obj_rel+goal+obj_pos | 100 |
+| ig | 4 | 2 | 0.080 | obj_rel+goal+obj_pos+obj_rot | 100 |
+| ig | 5 | 2 | 0.040 | obj_rel+goal+obj_pos+obj_rot+ee_pos | 100 |
+| smoothgrad | 0 | 2 | 0.860 |  | 100 |
+| smoothgrad | 1 | 2 | 0.120 | goal | 100 |
+| smoothgrad | 2 | 2 | 0.030 | goal+obj_velp | 100 |
+| smoothgrad | 3 | 2 | 0.040 | goal+obj_velp+ee_vel | 100 |
+| smoothgrad | 4 | 2 | 0.080 | goal+obj_velp+ee_vel+obj_rel | 100 |
+| smoothgrad | 5 | 2 | 0.090 | goal+obj_velp+ee_vel+obj_rel+obj_pos | 100 |
+| occlusion | 0 | 2 | 0.860 |  | 100 |
+| occlusion | 1 | 2 | 0.070 | obj_rel | 100 |
+| occlusion | 2 | 2 | 0.060 | obj_rel+goal | 100 |
+| occlusion | 3 | 2 | 0.080 | obj_rel+goal+obj_pos | 100 |
+| occlusion | 4 | 2 | 0.080 | obj_rel+goal+obj_pos+ee_pos | 100 |
+| occlusion | 5 | 2 | 0.040 | obj_rel+goal+obj_pos+ee_pos+obj_rot | 100 |
+| kernelshap_grouped | 0 | 2 | 0.860 |  | 100 |
+| kernelshap_grouped | 1 | 2 | 0.070 | obj_rel | 100 |
+| kernelshap_grouped | 2 | 2 | 0.070 | obj_rel+ee_pos | 100 |
+| kernelshap_grouped | 3 | 2 | 0.080 | obj_rel+ee_pos+obj_pos | 100 |
+| kernelshap_grouped | 4 | 2 | 0.080 | obj_rel+ee_pos+obj_pos+goal | 100 |
+| kernelshap_grouped | 5 | 2 | 0.040 | obj_rel+ee_pos+obj_pos+goal+obj_rot | 100 |
+| gwie_c | 0 | 2 | 0.860 |  | 100 |
+| gwie_c | 1 | 2 | 0.070 | obj_rel | 100 |
+| gwie_c | 2 | 2 | 0.060 | obj_rel+goal | 100 |
+| gwie_c | 3 | 2 | 0.080 | obj_rel+goal+obj_pos | 100 |
+| gwie_c | 4 | 2 | 0.080 | obj_rel+goal+obj_pos+ee_pos | 100 |
+| gwie_c | 5 | 2 | 0.080 | obj_rel+goal+obj_pos+ee_pos+obj_velr | 100 |
+| gwie_orig_port | 0 | 2 | 0.860 |  | 100 |
+| gwie_orig_port | 1 | 2 | 0.070 | obj_rel | 100 |
+| gwie_orig_port | 2 | 2 | 0.060 | obj_rel+goal | 100 |
+| gwie_orig_port | 3 | 2 | 0.080 | obj_rel+goal+obj_pos | 100 |
+| gwie_orig_port | 4 | 2 | 0.080 | obj_rel+goal+obj_pos+ee_pos | 100 |
+| gwie_orig_port | 5 | 2 | 0.040 | obj_rel+goal+obj_pos+ee_pos+obj_rot | 100 |
+| open_loop | 0 | 2 | 0.860 |  | 100 |
+| open_loop | 1 | 2 | 0.120 | goal | 100 |
+| open_loop | 2 | 2 | 0.060 | goal+obj_velr | 100 |
+| open_loop | 3 | 2 | 0.080 | goal+obj_velr+obj_rel | 100 |
+| open_loop | 4 | 2 | 0.080 | goal+obj_velr+obj_rel+obj_pos | 100 |
+| open_loop | 5 | 2 | 0.080 | goal+obj_velr+obj_rel+obj_pos+ee_pos | 100 |
