@@ -15,6 +15,16 @@ Deviations, fallbacks and decisions, newest first.
   - The held-out grid is unchanged (frozen on push_dr s1, hash `6e9b1e89…`).
   - The first download of the session output broke mid-way (Kaggle `IncompleteRead`). Missing
     files were fetched again with `--file-pattern`, and every checkpoint zip passed `testzip`.
+- **A2 met.** Nominal success over the sweep's 200 episodes: push_dr s1 0.850, s2 0.835, s0 0.055,
+  so 2 of 3 push_dr seeds reach >= 0.70. Push is no longer reported as partial. Gate G2's Reach
+  track stays in the report as additional three-seed evidence.
+- **A5 met.** Every Push condition now has two learned seeds (push_dr {1, 2}, push_drhist {0, 1},
+  push_nodr {0, 1}), so the C3 `ensemble` baseline is computed and Push C3 compares ASM against
+  all 5 baselines. push_dr s0 stays excluded from C1/C3/C4 and included in robustness.
+- All Push analyses (C1, C3, C4, robustness), tables, figures and GIFs were regenerated with the
+  new seeds. C1 reuses the cached seed-1 stages (`results/c1/partial/`).
+- The local session ended twice while analyses were running in the background, killing them. The
+  final runs were launched as a detached Windows process; no partial output was used.
 
 ## 2026-10-26 (Day 3)
 
