@@ -2,6 +2,20 @@
 
 Deviations, fallbacks and decisions, newest first.
 
+## 2026-10-27
+
+- **Additional Push seeds to address A2 and A5** (`pv-push-tqc-seeds2`, one T4×2 session):
+  push_dr s2, push_drhist s1, push_nodr s1, TQC+HER, capped at 760k steps to match the ~759k of
+  the first Push runs (equal training budget across seeds). All three finished (`finished=True`).
+  Training-eval nominal success at 750k (20 episodes): push_dr s2 0.70, push_drhist s1 0.75,
+  push_nodr s1 1.00. A2 is judged on the sweep's 200-episode nominal cell, not on these.
+  - These runs use the fixed DR RNG (`dr_rng`, 2026-10-25 entry); the first Push runs predate
+    that fix. Only the first reset of a run is seeded, so the effect on training is limited, but
+    the two groups of seeds are not bit-for-bit comparable in their DR draws.
+  - The held-out grid is unchanged (frozen on push_dr s1, hash `6e9b1e89…`).
+  - The first download of the session output broke mid-way (Kaggle `IncompleteRead`). Missing
+    files were fetched again with `--file-pattern`, and every checkpoint zip passed `testzip`.
+
 ## 2026-10-26 (Day 3)
 
 - **Push TQC training ended** (`pv-push-tqc-r1`, 7.5 h wall-clock cap, ~759k steps per run, no
