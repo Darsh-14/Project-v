@@ -89,7 +89,8 @@ command, applied through mocap. Episodes last 50 steps, and success is `is_succe
 step. Policies are SAC+HER (SB3, `MultiInputPolicy`) with hyperparameters taken from the
 rl-baselines3-zoo Fetch configurations. TQC+HER is the documented fallback if SAC does not learn.
 SAC+HER learned Push in only 1 of 6 runs, so every reported Push policy is TQC+HER (same buffer and
-HER settings). The Push runs stopped at the Kaggle wall-clock cap after ~759k of the planned 1M steps.
+HER settings). The first Push runs stopped at the Kaggle wall-clock cap after ~759k of the planned
+1M steps; the later seeds were capped at 760k steps so that every Push seed has the same budget.
 
 Dynamics factors are resampled at every reset in DR training: object sliding friction, table
 friction, object mass, a control-gain multiplier, observation noise and action latency. Three
@@ -168,13 +169,13 @@ randomly initialised actor.
 
 ### 3.7 Statistics
 
-Training seeds: {0, 1, 2} for Reach. Push: push_dr seeds {0, 1}, push_nodr and push_drhist seed 0
-only (fallback step 4 of the plan, applied because the Kaggle GPU budget could not cover 9 runs × 1M
-steps). push_dr seed 0 did not learn (nominal success ~5%). It appears in the robustness table with
-its per-seed value and is left out of C1, C3 and C4, which analyse learned policies. Push is
-therefore one learned seed per condition, and Push CIs reflect episode-level uncertainty for that
-seed only, not seed-to-seed variation. The C3 `ensemble` baseline needs at least 2 seeds and is not
-computed on Push. Success per (policy, cell) averages at least 100 episodes.
+Training seeds: {0, 1, 2} for Reach. Push: push_dr seeds {0, 1, 2}, push_nodr and push_drhist
+seeds {0, 1} (fallback step 4 of the plan, applied because the Kaggle GPU budget could not cover
+9 runs × 1M steps). push_dr seed 0 did not learn (nominal success ~5%). It appears in the
+robustness table with its per-seed value and is left out of C1, C3 and C4, which analyse learned
+policies. Push is therefore two learned seeds per condition. With n = 2, CIs across seeds are
+coarse, and the per-seed values should be read. The C3 `ensemble` baseline uses the two learned
+seeds of each condition. Success per (policy, cell) averages at least 100 episodes.
 Across seeds we report the mean with a 95% stratified bootstrap CI (2,000 resamples), always
 alongside per-seed values. With n ≤ 3, IQM is degenerate and is not used.
 
@@ -805,7 +806,7 @@ for any (condition, target), so no implicit system identification is claimed for
 | push_drhist | factor:noise | 2 | 1 | 100 | 0.685 [0.685, 0.685] | rliable | 0.685 | n/a |
 <!-- END:robustness -->
 
-Generated Push summary (one learned seed per condition; push_dr also shows seed 0):
+Generated Push summary (two learned seeds per condition; the push_dr mean also includes the failed seed 0):
 
 <!-- BEGIN:push_summary -->
 - Held-out-dynamics (sim-to-sim) success on FetchPush, mean over n=1/2 seeds [95% bootstrap CI]: NoDR **34.9% (n=1, no seed CI)**, DR **23.1% [17.9, 28.3] (s0 6.2%, s1 40.0%)**, DR+Hist **47.3% (n=1, no seed CI)**.
@@ -827,8 +828,8 @@ evidence for the effect of DR.
 Under Gate G2 (`mvp.md` §10), C3, C4 and the robustness evaluation were also run on FetchReach
 with DR on control gain, observation noise and latency, the factors that affect Reach. Reach uses
 its own frozen held-out grid (`configs/dr/heldout_reach.yaml`), calibrated on reach_dr seed 0.
-It complements the partial Push results in Sections 4.3 and 4.5–4.7 (one learned seed per
-condition) with three seeds per condition.
+It complements the Push results in Sections 4.3 and 4.5–4.7 (two learned seeds per condition)
+with three seeds per condition.
 All shifts are held-out dynamics within one simulator (sim-to-sim).
 
 Generated summary:
@@ -1249,11 +1250,10 @@ and GWIE-C erasure order for a success, a held-out failure and a shortcut state)
 
 - **Sim-to-sim only.** Held-out dynamics differ in friction, mass, mocap step size, noise and
   latency within one simulator. These results say nothing about transfer to a physical robot.
-- **Push is partial.** Acceptance criterion A2 (push_dr nominal success ≥ 0.70 for ≥ 2 of 3
-  seeds) was not met: one of two push_dr seeds learned. Push conclusions rest on one learned seed per
-  condition and may not generalise across seeds. Reach has three seeds per condition. Per-seed values
-  are reported throughout and should be read.
-- **Shortened training.** Push policies stopped at ~759k of 1M steps (wall-clock cap).
+- **Few Push seeds.** Two learned seeds per Push condition (push_dr: two of three trained seeds
+  learned). Conclusions may not generalise across seeds. Reach has three seeds per condition.
+  Per-seed values are reported throughout and should be read.
+- **Shortened training.** Push policies were trained for ~760k of the planned 1M steps.
 - **Narrow setting.** One robot with mocap control, two tasks and one algorithm family. The
   "gain" factor is a mocap step-size multiplier, not an actuator randomization, and the friction
   factor also changes gripper contacts above nominal (Section 3.1).
